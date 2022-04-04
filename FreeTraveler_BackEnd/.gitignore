@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 
 ### custom ignore list ###
-./src/main/resources/application.yml
+src/main/resources/application.yml
 
 ### STS ###
 .apt_generated
