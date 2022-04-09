@@ -17,8 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
 
+    private final LoginService loginService;
+
     @Autowired
-    LoginService loginService;
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     @PostMapping("/login")
     @ResponseBody
