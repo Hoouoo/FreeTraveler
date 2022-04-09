@@ -12,9 +12,11 @@ import team.capstonelongstone.freetraveler.account.domain.Account;
  */
 public interface LoginRepository extends JpaRepository<Account, Long> {
 
+    /**
+     * 사용자 아이디를 사용하여 account 객체 가져옴
+     */
     Account findByUserId(String userId);
-
-
+    
     /**
      * 비밀번호 업데이트
      */

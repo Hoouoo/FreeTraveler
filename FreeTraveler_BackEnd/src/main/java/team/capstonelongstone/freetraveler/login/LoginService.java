@@ -19,8 +19,12 @@ import java.util.Objects;
 @Service
 public class LoginService {
 
+    private final LoginRepository loginRepository;
+
     @Autowired
-    LoginRepository loginRepository;
+    public LoginService(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
+    }
 
     /**
      * 로그인 로직
@@ -34,7 +38,7 @@ public class LoginService {
         else{
             if(loginDTO.getUserPassword().equals(acount.getUserPassword())) { //로그인 성공
                 HttpSession session=request.getSession();
-                session.setAttribute("acount",acount);
+                session.setAttribute("account",acount);
                 return new ResponseEntity(HttpStatus.OK);
             }
             else{ //로그인 실패
