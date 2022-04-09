@@ -1,6 +1,8 @@
 package team.capstonelongstone.freetraveler.account;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.account.domain.RoleType;
@@ -15,22 +17,20 @@ import java.util.regex.Pattern;
 
 /**
  * @author 박성호
- * 설명~~~
+ * 회원가입 관련 Service
  */
 public class AccountService {
 
     private final AccountRepository accountRepository;
 
     /**
-     * 아이디 중복 조회
+     * 아이디 중복 조회 <br/>
+     * 아이디가 없는 경우 : return true <br/>
+     * 아이디가 있는 경우 : return false
      */
     public boolean isUsedId(String userId){
-        String targetUserId = accountRepository.findByUserId(userId).getUserId();
-
-        if (Objects.isNull(targetUserId)) {
-            return true;
-        }
-        return false;
+        Account targetUser = accountRepository.findByUserId(userId);
+        return Objects.isNull(targetUser);
     }
 
     /**
@@ -50,11 +50,20 @@ public class AccountService {
      * 회원가입 기능
      */
 
-    public void createAccount(AccountRequestDto accountRequestDto){
+    public ResponseEntity createAccount(AccountRequestDto accountRequestDto){
 
-        Account account = Account.builder().userId(accountRequestDto.getUserId())
-                .userPassword(accountRequestDto.getUserPassword()).roleType(RoleType.USER).build();
-        accountRepository.save(account);
+        if(isUsedId(accountRequestDto.getUserId())){
+            if (isValidPassword(accountRequestDto.getUserPassword())) {
+                Account account = Account.builder().userId(accountRequestDto.getUserId())
+                        .userPassword(accountRequestDto.getUserPassword()).roleType(RoleType.USER).build();
+                accountRepository.save(account);
+                return new ResponseEntity(HttpStatus.OK);
+            }else{
+                return new ResponseEntity("비밀번호 유효성 오류", HttpStatus.BAD_REQUEST);
 
+            }
+        }else{
+            return new ResponseEntity("중복되는 아이디", HttpStatus.BAD_REQUEST);
+        }
     }
 }

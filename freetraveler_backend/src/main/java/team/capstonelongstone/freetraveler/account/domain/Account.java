@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * @author  박성호
+ * Account 객체 Entity
+ */
+
 @Entity
 @Getter
 @NoArgsConstructor
