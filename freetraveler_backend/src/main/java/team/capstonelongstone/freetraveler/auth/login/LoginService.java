@@ -46,4 +46,20 @@ public class LoginService {
             }
         }
     }
+
+    /**
+     * 로그인 체크 여부 로직
+     */
+    public ResponseEntity checkLogin(HttpServletRequest request,HttpServletResponse response){
+        HttpSession session=request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        if(Objects.isNull(account)){
+            return new ResponseEntity("세션이 없습니다.", HttpStatus.valueOf(401));
+        }
+        else{
+            return new ResponseEntity(account.getUserId(), HttpStatus.OK);
+        }
+
+    }
 }
