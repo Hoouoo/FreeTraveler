@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import Footer from "./component/common/Footer";
 import Header from "./component/common/Header";
 import TabBar from "./component/common/TabBar";
+import ItemCard from "./component/list/itemcard";
 import Account from "./pages/AccountPage";
 import Home from "./pages/homepage";
 import MyPick from "./pages/MyPickPage";
