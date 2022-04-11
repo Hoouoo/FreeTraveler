@@ -1,11 +1,11 @@
-package team.capstonelongstone.freetraveler.auth.login;
+package team.capstonelongstone.freetraveler.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import team.capstonelongstone.freetraveler.account.domain.Account;
-import team.capstonelongstone.freetraveler.auth.login.dto.LoginDTO;
+import team.capstonelongstone.freetraveler.login.dto.LoginDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
