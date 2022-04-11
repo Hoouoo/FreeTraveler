@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import team.capstonelongstone.freetraveler.account.domain.Account;
-import team.capstonelongstone.freetraveler.auth.login.LoginRepository;
+import team.capstonelongstone.freetraveler.login.LoginRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

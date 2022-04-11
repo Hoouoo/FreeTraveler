@@ -1,4 +1,4 @@
-package team.capstonelongstone.freetraveler.auth.login;
+package team.capstonelongstone.freetraveler.login;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

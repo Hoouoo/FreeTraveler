@@ -1,4 +1,4 @@
-package team.capstonelongstone.freetraveler.auth.login.dto;
+package team.capstonelongstone.freetraveler.login.dto;
 
 
 /**
