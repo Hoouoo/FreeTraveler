@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 import team.capstonelongstone.freetraveler.password.PasswordService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,14 +20,16 @@ public class PasswordController {
 
     private final PasswordService passwordService;
 
+
     @Autowired
     public PasswordController(PasswordService passwordService) {
         this.passwordService = passwordService;
     }
 
-    @PostMapping("changePassword")
-    public ResponseEntity changePwdController(HttpServletRequest request, HttpServletResponse response, String password){
-        return passwordService.changePassword(request, response, password);
+    @CheckSession
+    @PutMapping("account/password")
+    public ResponseEntity changePwdController(HttpServletRequest request, HttpServletResponse response, String userPassword){
+        return passwordService.changePassword(request, response, userPassword);
     }
 
 }
