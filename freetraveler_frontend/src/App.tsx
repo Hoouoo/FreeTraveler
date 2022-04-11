@@ -6,8 +6,10 @@ import TabBar from "./component/common/TabBar";
 import ItemCard from "./component/list/itemcard";
 import Account from "./pages/AccountPage";
 import Home from "./pages/homepage";
+import LoginPage from "./pages/LoginPage";
 import MyPick from "./pages/MyPickPage";
 import Post from "./pages/PostPage";
+import RegisterPage from "./pages/RegisterPage";
 import Search from "./pages/SearchPage";
 
 function App() {
@@ -16,11 +18,13 @@ function App() {
       <Header />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/Home" component={Home} />
-        <Route path="/MyPick" component={MyPick} />
-        <Route path="/Post" component={Post} />
-        <Route path="/Account" component={Account} />
-        <Route path="/Search" component={Search} />
+        <Route path="/home" component={Home} />
+        <Route path="/myPick" component={MyPick} />
+        <Route path="/post" component={Post} />
+        <Route path="/account" component={Account} />
+        <Route path="/search" component={Search} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
       </Switch>
       <Footer />
       <TabBar />

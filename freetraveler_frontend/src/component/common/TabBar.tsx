@@ -51,23 +51,23 @@ const TabBar = (props: any) => {
   const history = useHistory();
   const [activeTabs, setActiveTabs] = useState(props.name);
   useEffect(() => {
-    switch (activeTabs) {
-      case "home":
-        history.push("/");
-        break;
-      case "pick":
-        history.push("/mypick");
-        break;
-      case "post":
-        history.push("/post");
-        break;
-      case "account":
-        history.push("/account");
-        break;
-      default:
-        history.push("/");
-        break;
-    }
+    // switch (activeTabs) {
+    //   case "home":
+    //     history.push("/");
+    //     break;
+    //   case "pick":
+    //     history.push("/mypick");
+    //     break;
+    //   case "post":
+    //     history.push("/post");
+    //     break;
+    //   case "account":
+    //     history.push("/account");
+    //     break;
+    //   default:
+    //     history.push("/");
+    //     break;
+    //}
   }, [activeTabs, history]);
 
   return (
