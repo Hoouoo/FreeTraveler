@@ -29,17 +29,17 @@ public class PasswordService {
     }
 
     @Transactional
-    public ResponseEntity changePassword(HttpServletRequest request, HttpServletResponse response,String password){
+    public ResponseEntity changePassword(HttpServletRequest request, HttpServletResponse response,String userPassword){
         // 영문자, 특수문자, 숫자 포함 8자 이상
         String pattern = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$";
 
-        if(! Pattern.matches(pattern, password)){
+        if(! Pattern.matches(pattern, userPassword)){
             return new ResponseEntity("8자 이상, 영문자, 특수문자, 숫자 포함해야 합니다.", HttpStatus.BAD_REQUEST);
         }
         else{
             HttpSession session = request.getSession();
             Account account = (Account) session.getAttribute("account");
-            loginRepository.passwordUpdate(account.getUserId(),password);
+            loginRepository.passwordUpdate(account.getUserId(),userPassword);
             return new ResponseEntity("비밀번호 변경 성공",HttpStatus.OK);
         }
     }
