@@ -25,6 +25,4 @@ public interface LoginRepository extends JpaRepository<Account, Long> {
     public void passwordUpdate(@Param("userId") String userId,
                                @Param("newPassword")String password);
 
-
-
 }
