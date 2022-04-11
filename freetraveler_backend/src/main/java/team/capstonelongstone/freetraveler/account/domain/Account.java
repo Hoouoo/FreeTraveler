@@ -22,15 +22,16 @@ public class Account extends BaseTime {
 
     String userId;
     String userPassword;
+    String userName;
 
     @Enumerated(EnumType.STRING)
     RoleType roleType;
 
     @Builder
-    public Account(Long id, String userId, String userPassword, RoleType roleType) {
-        this.id = id;
+    public Account(String userId, String userPassword, String userName, RoleType roleType) {
         this.userId = userId;
         this.userPassword = userPassword;
+        this.userName = userName;
         this.roleType = roleType;
     }
 }

@@ -54,7 +54,7 @@ public class AccountService {
 
         if(isUsedId(accountRequestDto.getUserId())){
             if (isValidPassword(accountRequestDto.getUserPassword())) {
-                Account account = Account.builder().userId(accountRequestDto.getUserId())
+                Account account = Account.builder().userId(accountRequestDto.getUserId()).userName(accountRequestDto.getUserName())
                         .userPassword(accountRequestDto.getUserPassword()).roleType(RoleType.USER).build();
                 accountRepository.save(account);
                 return new ResponseEntity(HttpStatus.OK);
