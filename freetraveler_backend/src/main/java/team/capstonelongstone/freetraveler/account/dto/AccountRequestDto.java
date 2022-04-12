@@ -14,5 +14,6 @@ public class AccountRequestDto {
 
     String userId;
     String userPassword;
+    String userName;
 }
 
