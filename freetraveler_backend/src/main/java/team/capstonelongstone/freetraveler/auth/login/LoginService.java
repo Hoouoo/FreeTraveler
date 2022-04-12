@@ -30,15 +30,15 @@ public class LoginService {
      * 로그인 로직
      */
     public ResponseEntity login(LoginDTO loginDTO, HttpServletResponse response, HttpServletRequest request){
-        Account acount = loginRepository.findByUserId(loginDTO.getUserId());
-        if (Objects.isNull(acount)){ //아이디 없을 때
+        Account account = loginRepository.findByUserId(loginDTO.getUserId());
+        if (Objects.isNull(account)){ //아이디 없을 때
             return new ResponseEntity("회원 아이디 없음",HttpStatus.BAD_REQUEST);
         }
 
         else{
-            if(loginDTO.getUserPassword().equals(acount.getUserPassword())) { //로그인 성공
+            if(loginDTO.getUserPassword().equals(account.getUserPassword())) { //로그인 성공
                 HttpSession session=request.getSession();
-                session.setAttribute("account",acount);
+                session.setAttribute("account",account);
                 return new ResponseEntity(HttpStatus.OK);
             }
             else{ //로그인 실패
