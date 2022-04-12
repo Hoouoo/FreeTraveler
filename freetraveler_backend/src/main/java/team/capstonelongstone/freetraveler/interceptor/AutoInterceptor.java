@@ -17,6 +17,11 @@ public class AutoInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        // HandlerMethod 타입인지 체크
+        if( handler instanceof HandlerMethod == false ) {
+            return true;
+        }
+
         // handler를 HandlerMethod 타입으로 다운캐스팅 / 요청을 처리할 메소드
         HandlerMethod handlerMethod=(HandlerMethod) handler;
 
