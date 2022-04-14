@@ -96,7 +96,7 @@ const HeaderStyled = styled.div`
   }
 `;
 
-function Header() {
+function Header({}) {
   const [isToggled, setIsToggled] = useState(false);
   const [searchToggled, setSearchToggled] = useState(false);
 
@@ -109,8 +109,6 @@ function Header() {
   function Logout() {
     dispatch(logout());
   }
-
-  console.log(user);
 
   return (
     <HeaderStyled>

@@ -31,6 +31,14 @@ const TabBarStyled = styled.div`
     bottom: 0;
     border-top: 1px solid rgb(230, 230, 230);
   }
+  .bn-tab-clear {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
   .bn-tab {
     width: 25%;
     height: 100%;
@@ -45,6 +53,17 @@ const TabBarStyled = styled.div`
     text-align: center;
     display: inline-block;
   }
+  @media screen and (max-width: 768px) { 
+    .bn-tab-clear { 
+
+    width: 0%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    } 
+  }
 `;
 
 const TabBar = (props: any) => {
@@ -52,27 +71,26 @@ const TabBar = (props: any) => {
   const [activeTabs, setActiveTabs] = useState(props.name);
   useEffect(() => {
     switch (activeTabs) {
-      // case "home":
-      //   history.push("/");
-      //   break;
-      // case "pick":
-      //   history.push("/mypick");
-      //   break;
-      // case "post":
-      //   history.push("/post");
-      //   break;
-      // case "account":
-      //   history.push("/account");
-      //   break;
-      // default:
-      //   history.push("/");
-      //   break;
+      case "home":
+        history.push("/");
+        break;
+      case "pick":
+        history.push("/mypick");
+        break;
+      case "post":
+        history.push("/post");
+        break;
+      case "account":
+        history.push("/account");
+        break;
+      default:break;
     }
   }, [activeTabs, history]);
 
   return (
     <TabBarStyled>
       <div className="bottom-nav">
+        
         <div className="bn-tab">
           <div className="box">
             {activeTabs === "home" ? (

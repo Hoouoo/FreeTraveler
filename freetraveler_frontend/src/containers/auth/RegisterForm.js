@@ -60,7 +60,7 @@ const RegisterForm = ({ history }) => {
 
   useEffect(() => {
     if (user) {
-      //history.push("/");
+      history.push("/");
     }
   }, [user, history]);
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Footer from "./component/common/Footer";
+import FrontRouter from "./component/common/FrontRouter";
 import Header from "./component/common/Header";
 import TabBar from "./component/common/TabBar";
 import ItemCard from "./component/list/itemcard";
@@ -15,6 +16,7 @@ import Search from "./pages/SearchPage";
 function App() {
   return (
     <div>
+      <FrontRouter/>
       <Header />
       <Switch>
         <Route exact path="/" component={Home} />

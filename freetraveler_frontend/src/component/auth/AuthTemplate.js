@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import palette from "../../lib/styles/palette";
+import ftlogo from "../../resource/img/ftlogo.png";
 
 /**
  * 회원가입 또는 로그인 페이지의 레이아웃을 담당하는 컴포넌트입니다.
@@ -18,7 +19,7 @@ const AuthTemplateBlock = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
 `;
 
@@ -32,18 +33,49 @@ const WhiteBox = styled.div`
   }
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
   padding: 2rem;
-  width: 360px;
+  height: 100%;
+  width: 700px;
   background: white;
   border-radius: 2px;
+
+  @media screen and (max-width: 768px) {
+    .logo-area {
+      display: block;
+      padding-bottom: 2rem;
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
+    padding: 2rem;
+    width: 280px;
+    background: white;
+    border-radius: 2px;
+  }
+`;
+const LogoStyled = styled.div`
+  .logo__center {
+    height: 30px;
+  }
+
+  .logo {
+    margin: 0 1rem;
+    font-size: 2rem;
+    text-align: center;
+  }
 `;
 
 const AuthTemplate = ({ children }) => {
   return (
     <AuthTemplateBlock>
       <WhiteBox>
-        <div className="logo-area">
-          <Link to="/">REACTERS</Link>
-        </div>
+        <LogoStyled>
+          <div className="logo">
+            <Link to="/">
+              <img className="logo__center" src={ftlogo} />
+            </Link>
+          </div>
+        </LogoStyled>
         {children}
       </WhiteBox>
     </AuthTemplateBlock>

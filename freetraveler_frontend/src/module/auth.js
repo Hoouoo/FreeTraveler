@@ -8,6 +8,7 @@ import { takeLatest } from "redux-saga/effects";
 
 const CHANGE_FEILD = "auth/CHANGE_FEILD";
 const INITIALIZE_FORM = "auth/INITIALIZE_FORM";
+const LOGOUT = "auth/LOGOUT";
 
 const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] =
   createRequestActionTypes("auth/REGISTER");
@@ -49,6 +50,7 @@ const initialState = {
     username: "",
     password: "",
     passwordConfirm: "",
+    name: "",
   },
   login: {
     username: "",
@@ -87,6 +89,10 @@ const auth = handleActions(
     [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       authError: error,
+    }),
+    [LOGOUT]: (state) => ({
+      ...state,
+      auth: null,
     }),
   },
   initialState

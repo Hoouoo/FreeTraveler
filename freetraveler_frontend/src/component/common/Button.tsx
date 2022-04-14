@@ -3,11 +3,12 @@ import styled from "styled-components";
 import palette from "../../lib/styles/palette";
 
 const StyledButton = styled.button`
+  width: 100%;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
   font-weight: bold;
-  padding: 0.25rem 1rem;
+  padding: 0.25rem 5rem;
   color: white;
   outline: none;
   cusur: pointer;
