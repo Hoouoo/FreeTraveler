@@ -5,6 +5,8 @@ import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import ftlogo from "../../resource/img/ftlogo.png";
 import { Link } from "react-router-dom";
 import { MdOutlineSearch } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../module/user";
 
 const HeaderStyled = styled.div`
   max-width: 100%;
@@ -65,14 +67,14 @@ const HeaderStyled = styled.div`
     flex-wrap: wrap;
 
     .header__right {
-      display: ${(props: any) => (props.searchToggled ? "flex" : "none")};
+      display: ${(props) => (props.searchToggled ? "flex" : "none")};
       flex-direction: column;
       width: 100%;
       background-color: black;
     }
 
     .header__menulist {
-      display: ${(props: any) => (props.isToggled ? "flex" : "none")};
+      display: ${(props) => (props.isToggled ? "flex" : "none")};
       flex-direction: column;
       width: 100%;
       background-color: black;
@@ -98,6 +100,18 @@ function Header() {
   const [isToggled, setIsToggled] = useState(false);
   const [searchToggled, setSearchToggled] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
+  }));
+
+  function Logout() {
+    dispatch(logout());
+  }
+
+  console.log(user);
+
   return (
     <HeaderStyled>
       {/* 햄버거 버튼(bar) */}
@@ -119,7 +133,6 @@ function Header() {
       <div className="logo">
         <img className="logo__center" src={ftlogo} />
       </div>
-
       {/* Search 버튼 */}
       {!searchToggled ? (
         <div
@@ -147,7 +160,16 @@ function Header() {
 
       {/* 오른쪽 메뉴 리스트 */}
       <ul className="header__right">
-        <li>Login</li>
+        {user == null && (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
+        {user !== null && (
+          <li>
+            <button onClick={Logout}>Logout</button>
+          </li>
+        )}
         <li>Search</li>
       </ul>
     </HeaderStyled>
