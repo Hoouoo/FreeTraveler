@@ -1,4 +1,4 @@
-package team.capstonelongstone.freetraveler.password;
+package team.capstonelongstone.freetraveler.auth.password;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

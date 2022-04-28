@@ -19,7 +19,7 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/account")
-    public ResponseEntity joinAccount(AccountRequestDto accountRequestDto) {
+    public ResponseEntity joinAccount(@RequestBody AccountRequestDto accountRequestDto) {
         return accountService.createAccount(accountRequestDto);
     }
 }
