@@ -10,6 +10,8 @@ import team.capstonelongstone.freetraveler.auth.login.dto.LoginDTO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,6 +33,10 @@ public class LoginService {
      */
     public ResponseEntity login(LoginDTO loginDTO, HttpServletResponse response, HttpServletRequest request){
         Account account = loginRepository.findByUserId(loginDTO.getUserId());
+
+        Map userName=new HashMap<String,LoginDTO>();
+        userName.put("userId",account.getUserName());
+
         if (Objects.isNull(account)){ //아이디 없을 때
             return new ResponseEntity("회원 아이디 없음",HttpStatus.BAD_REQUEST);
         }
@@ -39,7 +45,7 @@ public class LoginService {
             if(loginDTO.getUserPassword().equals(account.getUserPassword())) { //로그인 성공
                 HttpSession session=request.getSession();
                 session.setAttribute("account",account);
-                return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity(userName,HttpStatus.OK); //이름
             }
             else{ //로그인 실패
                 return new ResponseEntity("로그인 실패",HttpStatus.BAD_REQUEST);
@@ -54,11 +60,14 @@ public class LoginService {
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
 
+        Map userId=new HashMap<String,LoginDTO>();
+        userId.put("userId",account.getUserId());
+
         if(Objects.isNull(account)){
             return new ResponseEntity("세션이 없습니다.", HttpStatus.valueOf(401));
         }
         else{
-            return new ResponseEntity(account.getUserId(), HttpStatus.OK);
+            return new ResponseEntity(userId, HttpStatus.OK);
         }
 
     }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +27,8 @@ public class PasswordController {
 
     @CheckSession
     @PutMapping("account/password")
-    public ResponseEntity changePwdController(HttpServletRequest request, HttpServletResponse response, String userPassword){
-        return passwordService.changePassword(request, response, userPassword);
+    public ResponseEntity changePwdController(HttpServletRequest request, HttpServletResponse response,@RequestBody PasswordDTO passwordDTO){
+        return passwordService.changePassword(request, response, passwordDTO.getUserPassword());
     }
 
 }
