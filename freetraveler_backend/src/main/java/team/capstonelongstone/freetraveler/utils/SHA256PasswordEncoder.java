@@ -30,8 +30,4 @@ public class SHA256PasswordEncoder {
             return "405";
         }
     }
-
-    public boolean match(String target, String encryption) {
-        return encode(target).equals(encryption);
-    }
 }
