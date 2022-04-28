@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import palette from "../../lib/styles/palette";
 import ftlogo from "../../resource/img/ftlogo.png";
+import { useHistory } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
 
 /**
  * 회원가입 또는 로그인 페이지의 레이아웃을 담당하는 컴포넌트입니다.
@@ -66,9 +68,17 @@ const LogoStyled = styled.div`
 `;
 
 const AuthTemplate = ({ children }) => {
+  const history = useHistory();
   return (
     <AuthTemplateBlock>
       <WhiteBox>
+        <IoChevronBack
+          size="20"
+          color="#000"
+          onClick={() => {
+            history.goBack();
+          }}
+        />
         <LogoStyled>
           <div className="logo">
             <Link to="/">

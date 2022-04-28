@@ -87,17 +87,24 @@ const ButtonWithMarginTop = styled(Button)`
   margin-top: 1rem;
 `;
 
+const ErrorMesageBox = styled.div`
+  color: red;
+  margin-bottom: 20px;
+  font-size: 10pt;
+`;
+
 const textMap = {
   login: "로그인",
   register: "회원가입",
 };
 
-const AuthForm = ({ type, form, onChange, onSubmit }) => {
+const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
   const text = textMap[type];
   return (
     <AuthFormBlock>
       <h3>{text}</h3>
       <form onSubmit={onSubmit}>
+        <ErrorMesageBox>{error}</ErrorMesageBox>
         <LoginIdInput
           autoComplete="username"
           name="username"

@@ -1,11 +1,11 @@
 import React from 'react';
 
-const MyPick = () => {
+const Pick = () => {
     return (
         <div>
-            <div className="MyPick">마이픽</div>
+            <div className="Pick">마이픽</div>
         </div>
     );
 };
 
-export default MyPick;
+export default Pick;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeField, initializeForm, login } from "../../module/auth";
 import AuthForm from "../../component/auth/AuthForm";
@@ -7,6 +7,8 @@ import { check } from "../../module/user";
 
 const LoginForm = ({ history }) => {
   const dispatch = useDispatch();
+  const [error, setError] = useState(null);
+
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     form: auth.login,
     auth: auth.auth,
@@ -38,10 +40,10 @@ const LoginForm = ({ history }) => {
     dispatch(initializeForm("login"));
   }, [dispatch]);
 
+  //로그인 오류 처리
   useEffect(() => {
     if (authError) {
-      console.log("오류 발생");
-      console.log(authError);
+      setError("로그인 실패");
       return;
     }
     if (auth) {
@@ -50,6 +52,7 @@ const LoginForm = ({ history }) => {
     }
   }, [auth, authError, dispatch]);
 
+  //로그인되면 자동으로 홈 화면 이동
   useEffect(() => {
     if (user) {
       history.push("/");
@@ -62,6 +65,7 @@ const LoginForm = ({ history }) => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      error={error}
     />
   );
 };

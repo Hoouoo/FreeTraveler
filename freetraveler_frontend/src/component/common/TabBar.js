@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   RiHomeSmile2Line,
@@ -40,7 +42,7 @@ const TabBarStyled = styled.div`
     align-items: center;
   }
   .bn-tab {
-    width: 25%;
+    width: 23%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -53,47 +55,60 @@ const TabBarStyled = styled.div`
     text-align: center;
     display: inline-block;
   }
-  @media screen and (max-width: 768px) { 
-    .bn-tab-clear { 
-
-    width: 0%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    } 
+  @media screen and (max-width: 768px) {
+    .bn-tab-clear {
+      width: 0%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 `;
 
-const TabBar = (props: any) => {
+const TabBar = (props) => {
   const history = useHistory();
-  const [activeTabs, setActiveTabs] = useState(props.name);
-  useEffect(() => {
-    switch (activeTabs) {
-      case "home":
-        history.push("/");
-        break;
-      case "pick":
-        history.push("/mypick");
-        break;
-      case "post":
-        history.push("/post");
-        break;
-      case "account":
-        history.push("/account");
-        break;
-      default:break;
-    }
-  }, [activeTabs, history]);
+  const location = useLocation();
 
+  const [activeTabs, setActiveTabs] = useState(props.name);
+
+  const tabbarPath = ["/", "/home", "/pick", "/post", "/account"];
+
+  const { user } = useSelector(({ user }) => ({
+    user: user.user,
+  }));
+
+  useEffect(() => {
+    if (user != null) {
+      switch (activeTabs) {
+        case "home":
+          history.push("/");
+          break;
+        case "pick":
+          history.push("/pick");
+          break;
+        case "post":
+          history.push("/post");
+          break;
+        case "account":
+          history.push("/account");
+          break;
+        default:
+          break;
+      }
+    }
+  }, [activeTabs, user]);
+
+  if (!tabbarPath.includes(history.location.pathname)) {
+    return <></>;
+  }
   return (
     <TabBarStyled>
       <div className="bottom-nav">
-        
         <div className="bn-tab">
           <div className="box">
-            {activeTabs === "home" ? (
+            {location.pathname == "/home" || location.pathname == "/" ? (
               <RiHomeSmile2Fill
                 size="25"
                 color="#000"
@@ -111,7 +126,7 @@ const TabBar = (props: any) => {
         </div>
         <div className="bn-tab">
           <div className="box">
-            {activeTabs === "pick" ? (
+            {location.pathname == "/pick" ? (
               <RiRoadMapFill
                 size="25"
                 color="#000"
@@ -129,7 +144,7 @@ const TabBar = (props: any) => {
         </div>
         <div className="bn-tab">
           <div className="box">
-            {activeTabs === "post" ? (
+            {location.pathname == "/post" ? (
               <RiFileList2Fill
                 size="25"
                 color="#000"
@@ -147,7 +162,7 @@ const TabBar = (props: any) => {
         </div>
         <div className="bn-tab">
           <div className="box">
-            {activeTabs === "account" ? (
+            {location.pathname == "/account" ? (
               <RiUser5Fill
                 size="25"
                 color="#000"

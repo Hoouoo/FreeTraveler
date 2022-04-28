@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AuthForm from "../../component/auth/AuthForm";
 import { changeField, initializeForm, register } from "../../module/auth";
@@ -9,6 +9,8 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const RegisterForm = ({ history }) => {
   const dispatch = useDispatch();
+  const [error, setError] = useState(null);
+
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     form: auth.register,
     auth: auth.auth,
@@ -31,12 +33,12 @@ const RegisterForm = ({ history }) => {
   //폼 이벤트 등록 핸들러
   const onSubmit = (e) => {
     e.preventDefault();
-    const { username, password, passwordConfirm } = form;
+    const { username, password, passwordConfirm, name } = form;
     if (password !== passwordConfirm) {
       //Todo: 오류처리
       return;
     }
-    dispatch(register({ username, password }));
+    dispatch(register({ username, password, name }));
   };
 
   //컴포넌트가 처음 렌더링될 때 form을 초기화함
@@ -47,13 +49,13 @@ const RegisterForm = ({ history }) => {
   // 회원가입 성공/실패 처리
   useEffect(() => {
     if (authError) {
-      console.log("오류발생");
-      console.log(auth);
+      setError("유효성 안맞음.");
       return;
     }
     if (auth) {
       console.log("회원가입 성공");
       console.log(auth);
+      alert("회원가입 성공!");
       dispatch(check());
     }
   }, [auth, authError, dispatch]);
@@ -70,6 +72,7 @@ const RegisterForm = ({ history }) => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      error={error}
     />
   );
 };
