@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.account.domain.RoleType;
 import team.capstonelongstone.freetraveler.account.dto.AccountRequestDto;
+import team.capstonelongstone.freetraveler.utils.SHA256PasswordEncoder;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -22,7 +23,6 @@ import java.util.regex.Pattern;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-
     /**
      * 아이디 중복 조회 <br/>
      * 아이디가 없는 경우 : return true <br/>
@@ -51,11 +51,16 @@ public class AccountService {
      */
 
     public ResponseEntity createAccount(AccountRequestDto accountRequestDto){
-
+        SHA256PasswordEncoder passwordEncoder = new SHA256PasswordEncoder();
         if(isUsedId(accountRequestDto.getUserId())){
             if (isValidPassword(accountRequestDto.getUserPassword())) {
+                String targetPassword = passwordEncoder.encode(accountRequestDto.getUserPassword());
+                System.out.println(targetPassword);
+                if(targetPassword.equals("405")){
+                    return new ResponseEntity("비밀번호 암호화 오류", HttpStatus.BAD_REQUEST);
+                }
                 Account account = Account.builder().userId(accountRequestDto.getUserId()).userName(accountRequestDto.getUserName())
-                        .userPassword(accountRequestDto.getUserPassword()).roleType(RoleType.USER).build();
+                        .userPassword(targetPassword).roleType(RoleType.USER).build();
                 accountRepository.save(account);
                 return new ResponseEntity(HttpStatus.OK);
             }else{
