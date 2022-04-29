@@ -8,7 +8,7 @@ const ItemCardStyled = styled.div`
   .back {
     display: flex;
     align-items: center;
-    width: 75vh;
+    width: 100%;
     height: 100%;
     margin: 0px auto;
   }

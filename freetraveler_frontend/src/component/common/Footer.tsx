@@ -3,6 +3,9 @@ import styled from "styled-components";
 import footerlogo from "../../resource/img/footerlogo.png";
 
 const FooterStyled = styled.div`
+
+  padding-bottom: 56px;
+
   .footer__center {
     padding: 10px 0;
     font-size: 9px;

@@ -9,13 +9,13 @@ import Account from "./pages/AccountPage";
 import Home from "./pages/homepage";
 import LoginPage from "./pages/LoginPage";
 import Pick from "./pages/MyPickPage";
-import Post from "./pages/PostPage";
+import Post from "./pages/PostPage.js";
 import RegisterPage from "./pages/RegisterPage";
 import Search from "./pages/SearchPage";
 
 function App() {
   return (
-    <div>
+    <>
       <FrontRouter/>
       <Header />
       <Switch>
@@ -26,11 +26,10 @@ function App() {
         <Route path="/account" component={Account} />
         <Route path="/search" component={Search} />
         <Route path="/login" component={LoginPage} />
-        <Route path="/register" component={RegisterPage} />
       </Switch>
       <Footer />
       <TabBar />
-    </div>
+    </>
   );
 }
 

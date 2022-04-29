@@ -25,13 +25,15 @@ const TabBarStyled = styled.div`
   }
   .bottom-nav {
     width: 100%;
-    height: 50px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
     bottom: 0;
     border-top: 1px solid rgb(230, 230, 230);
+    background-color: lightgreen;
+    padding-top: 5px;
   }
   .bn-tab-clear {
     width: 25%;
@@ -42,12 +44,13 @@ const TabBarStyled = styled.div`
     align-items: center;
   }
   .bn-tab {
-    width: 23%;
+    width: 22%;
     height: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
   }
   .box {
     width: 100%;

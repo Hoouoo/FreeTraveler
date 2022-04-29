@@ -12,8 +12,8 @@ export default function FrontRouter() {
     user: user.user,
   }));
 
-  //로그인 안되었을 때 접근 불가 영역
-  const excludePath = ["/", "/login", "/register"];
+  //로그인 안되었을 때 접근 가능 영역
+  const excludePath = ["/", "/login", "/register", "/post"];
 
   //로그인 시 접근 불가 영역
   const includePath = ["/login", "/register"];
