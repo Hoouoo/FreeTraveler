@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { RiThumbUpLine } from "react-icons/ri";
 
 const ItemCardStyled = styled.div`
-
   background-color: white;
   margin: 10px;
   border-radius: 10px;
@@ -56,25 +55,37 @@ const ItemCardStyled = styled.div`
   }
 `;
 
-function ItemCard({}) {
+function ItemCard({
+  img = "이미지",
+  name = "이름",
+  how = "여행방법",
+  days = "여행일수",
+  cost = "여행비용",
+  desc = "경험자의 한마디",
+}) {
   return (
     <ItemCardStyled>
       <div className="back">
         <div className="feed_name">
           {/* 대표 사진 :  /css - profile_box */}
           <div className="profile_box">
-            {/* / <img className="profile_img"> */}
-            대표 사진
+            <img className="profile_img" src={img /*이미지*/} />
           </div>
 
           <div className="name_content">
-            대표 제목
+            {name /*이름*/}
             {/* 대표 제목 :  Title /  css - feed_name */}
-            <span className="feed_name_txt"> 여행 방법 </span>
+            <span className="feed_name_txt"> {how /*여행방법*/} </span>
             {/* 여행 방법 :  transfortation /  css - name_content_txt*/}
-            <span className="name_content_txt"> 여행일수 / 여행 비용</span>
-            <span className="name_content_txt"> <RiThumbUpLine size="12" color="#000" />
-            (+1000)  경험자의 한 마디~~~~~~~</span>
+            <span className="name_content_txt">
+              {" "}
+              {days /*여행일수*/} / {cost /*여행비용*/}
+            </span>
+            <span className="name_content_txt">
+              {" "}
+              <RiThumbUpLine size="12" color="#000" />
+              {desc /*경험자의 한마디*/}
+            </span>
           </div>
         </div>
       </div>

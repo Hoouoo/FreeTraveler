@@ -5,7 +5,7 @@ import Footer from "./component/common/Footer";
 import FrontRouter from "./component/common/FrontRouter";
 import Header from "./component/common/Header";
 import TabBar from "./component/common/TabBar";
-import ItemCard from "./component/list/itemcard";
+import ItemCard from "./component/list/ItemCard";
 import Account from "./pages/AccountPage";
 import Home from "./pages/homepage";
 import LoginPage from "./pages/LoginPage";

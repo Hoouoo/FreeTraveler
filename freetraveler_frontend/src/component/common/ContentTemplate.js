@@ -33,7 +33,7 @@ const ContentTemplate = ({ children }) => {
   const history = useHistory();
   return (
     <>
-      <ContentTemplateBlock>{children}</ContentTemplateBlock>;
+      <ContentTemplateBlock>{children}</ContentTemplateBlock>
     </>
   );
 };
