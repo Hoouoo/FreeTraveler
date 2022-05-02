@@ -4,21 +4,23 @@ import footerlogo from "../../resource/img/footerlogo.png";
 
 const FooterStyled = styled.div`
 
-  padding-bottom: 56px;
+  width: 100%;
+  height: 200px;
+  background-color: #f1f1f1;
 
   .footer__center {
-    padding: 10px 0;
+    padding: 45px 0;
     font-size: 9px;
-    background-color: #f1f1f1;
     text-align: center;
     color: #888;
   }
   .footer__left {
     padding: 10px 0;
+    padding-top: 25px;
+    padding-left: 25px;
     border-top: 1px solid #d9d9d9;
     font-size: 12px;
-    background-color: #f1f1f1;
-    text-align: left;
+    text-align: center;
     color: #6b6b6b;
   }
   .txt__left {

@@ -145,7 +145,7 @@ const HeaderStyled = styled.div`
   }
 
   .navbar-toggle {
-    background-color: #00000;
+    background-color: #000000;
     width: 100%;
     height: 80px;
     display: flex;

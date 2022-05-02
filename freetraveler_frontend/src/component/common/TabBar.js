@@ -18,6 +18,7 @@ import {
 } from "react-icons/ri";
 
 const TabBarStyled = styled.div`
+  box-shadow: 0 1 8px rgba(0, 0, 0, 0.025);
   * {
     padding: 0;
     margin: 0;
@@ -32,8 +33,8 @@ const TabBarStyled = styled.div`
     position: fixed;
     bottom: 0;
     border-top: 1px solid rgb(230, 230, 230);
-    background-color: lightgreen;
     padding-top: 5px;
+    background-color: white;
   }
   .bn-tab-clear {
     width: 25%;

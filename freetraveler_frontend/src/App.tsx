@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import ContentTemplate from "./component/common/ContentTemplate";
 import Footer from "./component/common/Footer";
 import FrontRouter from "./component/common/FrontRouter";
 import Header from "./component/common/Header";
@@ -19,15 +20,17 @@ function App() {
       <FrontRouter/>
       <Header />
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/home" component={Home} />
-        <Route path="/Pick" component={Pick} />
-        <Route path="/post" component={Post} />
-        <Route path="/account" component={Account} />
-        <Route path="/search" component={Search} />
-        <Route path="/login" component={LoginPage} />
+        <ContentTemplate>
+          <Route exact path="/" component={Home} />
+          <Route path="/home" component={Home} />
+          <Route path="/Pick" component={Pick} />
+          <Route path="/post" component={Post} />
+          <Route path="/account" component={Account} />
+          <Route path="/search" component={Search} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/register" component={RegisterPage}/>
+        </ContentTemplate>
       </Switch>
-      <Footer />
       <TabBar />
     </>
   );

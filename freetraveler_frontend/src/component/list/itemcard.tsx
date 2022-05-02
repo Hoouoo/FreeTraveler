@@ -5,6 +5,12 @@ import styled from "styled-components";
 import { RiThumbUpLine } from "react-icons/ri";
 
 const ItemCardStyled = styled.div`
+
+  background-color: white;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+
   .back {
     display: flex;
     align-items: center;
