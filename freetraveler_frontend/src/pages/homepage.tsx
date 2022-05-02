@@ -7,8 +7,8 @@ import ItemCardGenerator from "../component/list/ItemCardGenerator";
 
 function Home() {
   const gen = new ItemCardGenerator();
-  gen.addItemCard({img:"화와이 이미지", name:"하와이", how:"도보", days:"5일", cost:"100만원", desc:"하와이는 와이키키"})
-  
+  gen.addItemCard({img:"http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+   name:"하와이", how:"비행기, 자동차, 도보", days:"5일", cost:"100만원", desc:"하와이는 와이키키를 추천합니다."});
   return (
     <>
         {gen.render()}
