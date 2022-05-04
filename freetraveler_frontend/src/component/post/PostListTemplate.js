@@ -33,7 +33,16 @@ const PostListBox = styled.div`
 export default function PostListTemplate({ children }) {
   return (
     <>
-      <PostListBox>{children}</PostListBox>
+      <PostListBox>
+        <div>포스트</div>
+        <div>글쓰기</div>
+        {children}
+        <div>
+          <span>앞으로 </span>
+          <span>뒤로 </span>
+          <span>1/10페이지</span>
+        </div>
+      </PostListBox>
     </>
   );
 }

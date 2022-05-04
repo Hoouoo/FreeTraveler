@@ -10,7 +10,8 @@ import Account from "./pages/AccountPage";
 import Home from "./pages/homepage";
 import LoginPage from "./pages/LoginPage";
 import Pick from "./pages/MyPickPage";
-import Post from "./pages/PostPage.js";
+import PostListPage from "./pages/PostListPage.js";
+import Post from "./pages/PostListPage.js";
 import RegisterPage from "./pages/RegisterPage";
 import Search from "./pages/SearchPage";
 
@@ -24,7 +25,7 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path="/home" component={Home} />
           <Route path="/Pick" component={Pick} />
-          <Route path="/post" component={Post} />
+          <Route path="/post" component={PostListPage} />
           <Route path="/account" component={Account} />
           <Route path="/search" component={Search} />
           <Route path="/login" component={LoginPage} />

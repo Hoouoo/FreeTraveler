@@ -21,7 +21,7 @@ export default function FrontRouter() {
   useEffect(() => {
     if (user === null) {
       if (!excludePath.includes(history.location.pathname)) {
-        history.push("/");
+        history.push("/login");
       }
     } else {
       if (includePath.includes(history.location.pathname)) {
