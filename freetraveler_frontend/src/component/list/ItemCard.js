@@ -83,9 +83,85 @@ const ItemCardStyled = styled.div`
     text-decoration: none; */
     text-align: right;
   }
+
+  @media screen and (max-width: 612px) {
+    .itemcard {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      margin: 0px auto;
+    }
+    .profile_box {
+      width: 50px;
+      height: 50px;
+      border-radius: 70%;
+      overflow: hidden;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.125);
+    }
+    .profile_img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .content {
+      padding: 0px 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .content_name {
+      font-size: 12px;
+      /* color: lightgray; */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 200px;
+    }
+
+    .content_cost {
+      font-size: 12px;
+      /* color: lightgray; */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 200px;
+    }
+
+    .content_trans {
+      font-size: 12px;
+      /* color: lightgray; */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 200px;
+    }
+
+    .content_comment {
+      font-size: 12px;
+      /* color: lightgray; */
+      width: 200px;
+      height: max-content;
+
+      /* 최대 두줄 표시 */
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .link_txt {
+      font-size: 12px;
+      /* font-weight: bold;
+    text-decoration: none; */
+      text-align: right;
+    }
+  }
 `;
 
 function ItemCard({
+  id = "id",
   img = "이미지",
   name = "이름",
   how = "여행방법",

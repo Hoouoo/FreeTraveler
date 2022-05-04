@@ -10,22 +10,7 @@ class ItemCardGenerator {
   //단일 아이템 카드 삽입
   addItemCard(itemcard) {
     this._array[this._index] = (
-      <ItemCard
-        img={itemcard.img}
-        name={itemcard.name}
-        how={itemcard.how}
-        days={itemcard.days}
-        cost={itemcard.cost}
-        desc={itemcard.desc}
-      />
-    );
-    this._index++;
-  }
-
-  //아이템 카드 배열 삽입
-  addItemCardArray(array) {
-    array.forEach((itemcard) => {
-      this._array[this._index] = (
+      <li id={"itemcard_" + itemcard.id}>
         <ItemCard
           img={itemcard.img}
           name={itemcard.name}
@@ -34,6 +19,25 @@ class ItemCardGenerator {
           cost={itemcard.cost}
           desc={itemcard.desc}
         />
+      </li>
+    );
+    this._index++;
+  }
+
+  //아이템 카드 배열 삽입
+  addItemCardArray(array) {
+    array.forEach((itemcard) => {
+      this._array[this._index] = (
+        <li id={"itemcard_" + itemcard.id}>
+          <ItemCard
+            img={itemcard.img}
+            name={itemcard.name}
+            how={itemcard.how}
+            days={itemcard.days}
+            cost={itemcard.cost}
+            desc={itemcard.desc}
+          />
+        </li>
       );
       this._index++;
     });
@@ -47,7 +51,7 @@ class ItemCardGenerator {
 
   //렌더링
   render() {
-    return this._array;
+    return <ul id="itemcard_list">{this._array}</ul>;
   }
 }
 

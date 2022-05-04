@@ -84,24 +84,24 @@ const TabBar = (props) => {
   }));
 
   useEffect(() => {
-    if (user != null) {
-      switch (activeTabs) {
-        case "home":
-          history.push("/");
-          break;
-        case "pick":
-          history.push("/pick");
-          break;
-        case "post":
-          history.push("/post");
-          break;
-        case "account":
-          history.push("/account");
-          break;
-        default:
-          break;
-      }
+    //if (user != null) {
+    switch (activeTabs) {
+      case "home":
+        history.push("/");
+        break;
+      case "pick":
+        history.push("/pick");
+        break;
+      case "post":
+        history.push("/post");
+        break;
+      case "account":
+        history.push("/account");
+        break;
+      default:
+        break;
     }
+    //}
   }, [activeTabs, user]);
 
   if (!tabbarPath.includes(history.location.pathname)) {
