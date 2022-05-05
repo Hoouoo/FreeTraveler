@@ -4,13 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import ftlogo from "../../resource/img/ftlogo.png";
 import { Link, useHistory } from "react-router-dom";
-import { MdOutlineSearch, MdOutlineAccountCircle } from "react-icons/md";
-import { VscAccount } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../module/user";
 import { IoChevronBack } from "react-icons/io5";
-import { FaBars } from "react-icons/fa";
-import { BsPersonBoundingBox } from "react-icons/bs";
 
 const HeaderStyled = styled.div`
   max-width: 100%;
@@ -20,28 +16,25 @@ const HeaderStyled = styled.div`
   align-items: center;
   color: #000000;
   background-color: #ffffff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 5px rgba(255, 255, 255, 1);
   position: fixed;
   width: 100%;
+  border-bottom: 1px solid rgb(230, 230, 230);
 
   .logo__center {
     width: auto;
-    height: 30px;
+    height: 35px;
+    margin-left: 150px;
   }
 
   .logo {
-    margin: 0 1rem;
     font-size: 2rem;
     text-align: center;
   }
 
-  .header__menulist {
-    list-style: none;
-    display: flex;
-  }
-
   .header__left {
     display: flex;
+    margin-left: 15px;
   }
 
   .header__right {
@@ -87,71 +80,6 @@ const HeaderStyled = styled.div`
     text-decoration: none;
   }
 
-  .navbar {
-    height: 10px;
-    display: flex;
-    justify-items: center;
-    align-items: center;
-  }
-
-  .menu-bars {
-    margin-left: 2rem;
-    font-size: 2rem;
-    background: none;
-  }
-
-  .nav-menu {
-    background-color: #ffff;
-    width: 200px;
-    height: 100vh;
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: -80%;
-    transition: 850ms;
-  }
-
-  .nav-menu.active {
-    left: 0;
-    transition: 350ms;
-  }
-
-  .nav-text {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 8px 0px 8px 16px;
-    list-style: none;
-    height: 60px;
-  }
-  .nav-text a {
-    text-decoration: none;
-    color: #000000;
-    font-size: 18px;
-    width: 95%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    border-radius: 4px;
-  }
-
-  .nav-text a:hover {
-    background-color: #d3d3d3;
-  }
-
-  .nav-menu-items {
-    width: 100%;
-  }
-
-  .navbar-toggle {
-    background-color: #000000;
-    width: 100%;
-    height: 80px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
   span {
     margin-left: 16px;
   }
@@ -159,18 +87,17 @@ const HeaderStyled = styled.div`
   @media screen and (max-width: 768px) {
     flex-wrap: wrap;
 
-    .header__right {
-      display: ${(props) => (props.searchToggled ? "flex" : "none")};
-      flex-direction: column;
-      width: 100%;
-      background-color: black;
+    .logo__center {
+      width: auto;
+      height: 30px;
+      margin-left: 45px;
     }
 
-    .header__menulist {
+    .header__right {
       display: ${(props) => (props.isToggled ? "flex" : "none")};
       flex-direction: column;
       width: 100%;
-      background-color: black;
+      background-color: white;
     }
 
     .header__menulist li,
@@ -191,10 +118,10 @@ const HeaderStyled = styled.div`
 
 function Header({}) {
   const [isToggled, setIsToggled] = useState(false);
-  const [searchToggled, setSearchToggled] = useState(false);
+  // const [searchToggled, setSearchToggled] = useState(false);
 
   const [sidebar, setSidebar] = useState(false);
-  const showSidebar = () => setSidebar(!sidebar);
+  // const showSidebar = () => setSidebar(!sidebar);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -209,78 +136,31 @@ function Header({}) {
   }
 
   return (
-    <HeaderStyled>
-      {/* 햄버거 버튼(bar) */}
-      <div
-        className="toggle"
-        onClick={() => {
-          setIsToggled(!isToggled);
-        }}
-      >
-        {/* <FontAwesomeIcon icon={!isToggled ? faBars : faTimes} /> */}
-        <div className="header__left">
-          <IoChevronBack
-            size="20"
-            color="#000"
-            onClick={() => {
-              history.goBack();
-            }}
-          />
-        </div>
+    <HeaderStyled isToggled={isToggled}>
+      <div className="header__left">
+        <IoChevronBack
+          size="20"
+          color="#000"
+          onClick={() => {
+            history.goBack();
+          }}
+        />
       </div>
 
-      {/* 메뉴 리스트 -- 아직 추가 안 함.*/}
-      <ul className="header__menulist">
-        <div className="header__left">
-          <IoChevronBack
-            size="20"
-            color="#000"
-            onClick={() => {
-              history.goBack();
-            }}
-          />
-        </div>
-      </ul>
       {/* logo */}
       <div className="logo">
         <img className="logo__center" src={ftlogo} />
       </div>
 
       {/* 네비게이션 토글 코드*/}
-      <div className="user">
-        <div className="navbar">
-          <Link to="#" className="menu-bars">
-            <FaBars size="20" onClick={showSidebar} />
-          </Link>
-        </div>
+      <div
+        className="toggle"
+        onClick={() => {
+          setIsToggled(!isToggled);
+        }}
+      >
+        <FontAwesomeIcon icon={!isToggled ? faBars : faTimes} />
       </div>
-      <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
-        <ul className="nav-menu-items" onClick={showSidebar}>
-          <li className="navbar-toggle"></li>
-          {user == null && (
-            <li className="nav-text">
-              <Link to={"/login"}>
-                <BsPersonBoundingBox />
-                <span>Login</span>
-              </Link>
-            </li>
-          )}
-          {user != null && (
-            <li className="nav-text">
-              <Link onClick={Logout}>
-                <BsPersonBoundingBox />
-                <span>Logout</span>
-              </Link>
-            </li>
-          )}
-          <li className="nav-text">
-            <Link to={"/search"}>
-              <MdOutlineSearch />
-              <span>Search</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
 
       {/* 오른쪽 메뉴 리스트 */}
       <ul className="header__right">

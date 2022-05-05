@@ -28,7 +28,7 @@ const FooterStyled = styled.div`
   }
   .logo {
     width: auto;
-    height: 18px;
+    height: 35px;
   }
 `;
 

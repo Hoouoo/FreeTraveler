@@ -4,10 +4,10 @@ import ItemCardGenerator from "../component/list/ItemCardGenerator";
 
 const PostListPage = () => {
   const gen = new ItemCardGenerator();
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i <= 14; i++) {
     gen.addItemCard({
       img: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-      name: i,
+      name: "제목이랍니다." + i,
       how: "비행기, 자동차, 도보",
       days: "5일",
       cost: "100만원",
