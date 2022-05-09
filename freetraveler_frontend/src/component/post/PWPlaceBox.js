@@ -18,11 +18,19 @@ const PostInput = styled.input`
   margin: 5px;
 `;
 
+const PlaceRemoveBtn = styled.button`
+  width: 150px;
+`;
+
 const PostSelect = styled.select``;
 
 const PostOption = styled.option``;
 
-export default function PWPlaceBox({ id }) {
+export default function PWPlaceBox({ id, gen }) {
+  const placeRemoveAction = function () {
+    gen.remove(id);
+  };
+
   return (
     <PWPlaceBoxTemplate>
       <PWForm>
@@ -37,6 +45,7 @@ export default function PWPlaceBox({ id }) {
           <PostOption value="car">자차</PostOption>
         </PostSelect>
       </PWForm>
+      <PlaceRemoveBtn onClick={() => placeRemoveAction()}>삭제</PlaceRemoveBtn>
     </PWPlaceBoxTemplate>
   );
 }

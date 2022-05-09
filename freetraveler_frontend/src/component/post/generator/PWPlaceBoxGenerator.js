@@ -8,47 +8,52 @@ const NoDotUl = styled.ul`
 `;
 
 class PWPlaceBoxGenerator {
-  constructor() {
+  constructor(places, setPlaces) {
     this._array = new Array();
-    this._index = -1;
+    this.places = places;
+    this.setPlaces = setPlaces;
   }
 
   //단일 아이템 카드 삽입
   addBox(box) {
-    this._index++;
-    this._array[this._index] = (
-      <li key={this._index} id={"pw_place_box_" + box.id}>
-        <PWPlaceBox id={box.id} />
+    this._array.push(
+      <li key={box.id} id={"pw_place_box_" + box.id}>
+        <PWPlaceBox id={box.id} gen={this} />
       </li>
     );
+
+    this.setPlaces(this.render());
   }
 
   //아이템 카드 배열 삽입
   addBoxArray(array) {
-    this._index++;
     array.forEach((box) => {
-      this._array[this._index] = (
-        <li key={this._index} id={"pw_place_box_" + box.id}>
-          <PWPlaceBox id={box.id} />
+      this._array.push(
+        <li key={box.id} id={"pw_place_box_" + box.id}>
+          <PWPlaceBox id={box.id} gen={this} />
         </li>
       );
     });
+
+    this.setPlaces(this.render());
   }
 
   removeTop() {
-    if (this._index >= 0) {
-      this._array[this._index] = null;
-      this._index--;
-    }
+    this._array.pop();
+
+    this.setPlaces(this.render());
   }
 
   remove(id) {
     this._array = this._array.filter((e) => {
-      if (!(e.id == id)) {
-        this._index--;
+      if (!(e.key == id)) {
         return true;
+      } else {
+        return false;
       }
     });
+
+    this.setPlaces(this.render());
   }
 
   //아이템 리스트 초기화

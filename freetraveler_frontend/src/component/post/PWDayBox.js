@@ -25,27 +25,15 @@ const PlaceAddBtn = styled.button`
   width: 150px;
 `;
 
-const PlaceRemoveBtn = styled.button`
-  width: 150px;
-`;
-
 export default function PWDayBox({ id, day }) {
-  var [gen, setGen] = useState(new PWPlaceBoxGenerator());
-  var [places, setPlaces] = useState(gen.render());
+  var [places, setPlaces] = useState();
   var [placeIndex, setPlaceIndex] = useState(0);
+  var [gen, setGen] = useState(new PWPlaceBoxGenerator(places, setPlaces));
 
   const placeAddAction = function () {
     gen.addBox({ id: placeIndex });
     setPlaceIndex(++placeIndex);
     setPlaces(gen.render());
-  };
-
-  const placeRemoveAction = function () {
-    if (placeIndex >= 0) {
-      gen.removeTop();
-      setPlaceIndex(--placeIndex);
-      setPlaces(gen.render());
-    }
   };
 
   return (
