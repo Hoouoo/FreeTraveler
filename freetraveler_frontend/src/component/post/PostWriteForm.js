@@ -5,7 +5,6 @@ import post, { changeField } from "../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
 import PostTemplate from "./PostTemplate";
 import palette from "../../lib/styles/palette";
-import PostButton from "./buttons/PostButton";
 import { Link } from "react-scroll";
 import { IoIosArrowUp } from "react-icons/io";
 import DayButton from "./buttons/DayButton";
@@ -28,15 +27,41 @@ const POWBox = styled.div`
 const PWOABox = styled.div`
   width: auto;
   height: 90vh;
+  padding: 35px;
+  margin-top: -10px;
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: white;
+  display: flex;
+  justify-content:center;
+  align-items: center; 
+  @media screen and (max-width: 612px) {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px;
+  }
 `;
 
 const PWDayBox = styled.div``;
 
 const PWForm = styled.form`
   width: auto;
+  /* padding: 50px; */
+  margin-top: -10px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 30px;
+  text-align: center; 
+
+  @media screen and (max-width: 612px) {
+    margin-left: 15%;
+    margin-right: 15%;
+  }
+  /* background-color: white; */
+  /* width: auto;
   height: 100%;
   padding: 50px;
-  text-align: center;
+  text-align: center; */
 `;
 
 const ScrollBar = styled.div`
@@ -236,7 +261,7 @@ export default function PostWriteForm({ id }) {
   };
 
   return (
-    <POWBox>
+    // <POWBox>
       <div id="scrollup">
         {OABox}
         <br />
@@ -247,6 +272,6 @@ export default function PostWriteForm({ id }) {
           <br />
         </PWForm>
       </div>
-    </POWBox>
+    // </POWBox>
   );
 }
