@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PWPlaceBoxGenerator from "./generator/PWPlaceBoxGenerator";
+import PostButton from "./buttons/PostButton";
 
 const PWDayBoxTemplate = styled.div`
   width: auto;
@@ -36,6 +37,7 @@ export default function PWDayBox({ id, day }) {
   };
 
   return (
+    <div id ={day}>
     <PWDayBoxTemplate>
       {day} 일차
       <PlaceAddBtn type="button" onClick={() => placeAddAction()}>
@@ -43,5 +45,6 @@ export default function PWDayBox({ id, day }) {
       </PlaceAddBtn>
       {places}
     </PWDayBoxTemplate>
+    </div>
   );
 }

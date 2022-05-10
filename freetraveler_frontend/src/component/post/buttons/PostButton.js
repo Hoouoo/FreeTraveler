@@ -27,10 +27,21 @@ const StyledButton = styled.button`
   &:active {
     background: rgb(0, 241, 175);
   }
-
   /* 기타 */
   & + & {
     margin-left: 1rem;
+  }
+  .bottom_button_container {
+    position: fixed;
+    right: 1.2rem;
+    bottom: 0px;
+    z-index: 10;
+    transform: translateY(-5rem);
+    transition-duration: 0.25s, 0.25s;
+    transition-timing-function: cubic-bezier(0.75, 0.25, 0.25, 0.75),
+      cubic-bezier(0.75, 0.25, 0.25, 0.75);
+    transition-delay: initial, initial;
+    transition-property: transform, transform;
   }
 `;
 

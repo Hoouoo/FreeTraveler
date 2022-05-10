@@ -4,8 +4,19 @@ import styled from "styled-components";
 import { changeField } from "../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
 import PostTemplate from "./PostTemplate";
+import palette from "../../lib/styles/palette";
+import PostButton from "./buttons/PostButton";
+import { Link } from "react-scroll";
 
-const PWOABox = styled.div``;
+const PWOABox = styled.div`
+  width: auto;
+  height: 100%;
+  padding: 35px;
+  margin-top: -10px;
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: white;
+`;
 
 const PWDayBox = styled.div``;
 
@@ -16,9 +27,47 @@ const PWForm = styled.form`
   text-align: center;
 `;
 
+const ScrollBar = styled.div`
+  justify-content: center;
+  align-items: flex-end;
+  align-content: center;
+  position: fixed;
+  right: 1.2rem;
+  bottom: 0px;
+  z-index: 10;
+  transform: translateY(-5rem);
+  transition-duration: 0.25s, 0.25s;
+  transition-timing-function: cubic-bezier(0.75, 0.25, 0.25, 0.75),
+    cubic-bezier(0.75, 0.25, 0.25, 0.75);
+  transition-delay: initial, initial;
+  transition-property: transform, transform;
+`;
+
 const PostInput = styled.input`
   font-size: 15px;
   margin: 5px;
+  width: 100%;
+  margin-left: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const TitleInput = styled.input`
+  outline: none;
+  border: none;
+  font-size: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid ${palette.gray[4]};
+  margin-bottom: 1rem;
+  width: 100%;
+`;
+
+const PostObjectTitle = styled.div`
+  text-align: left;
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  width: 100%;
 `;
 
 const DayAddBtn = styled.button`
@@ -52,44 +101,33 @@ export default function PostWriteForm({ id }) {
   const OABox = (
     <PWOABox>
       <PWForm>
-        <PostInput
-          type="text"
-          name="wname"
-          placeholder="포스트 제목"
-          onChange={onChange}
-        />
-        <br />
-        <PostInput
-          name="wcost"
-          type="text"
-          placeholder="여행 비용"
-          onChange={onChange}
-        />{" "}
-        <br />
-        <PostInput
-          name="wdays"
-          type="text"
-          placeholder="여행 일수"
-          onChange={onChange}
-        />{" "}
-        <br />
-        <PostInput
-          name="wtrans"
-          type="text"
-          placeholder="여행 방법"
-          onChange={onChange}
-        />{" "}
-        <br />
-        <PostInput
-          name
-          wcommenttype="text"
-          placeholder="경험자의 한마디"
-          onChange={onChange}
-        />{" "}
-        <br />
+        <TitleInput type="text" placeholder="포스트 제목" />
+        <PostObjectTitle> 여행 비용 </PostObjectTitle>
+        <PostInput type="text" placeholder="여행 비용" />
+        <PostObjectTitle> 여행 일수 </PostObjectTitle>
+        <PostInput type="text" placeholder="여행 일수" />
+        <PostObjectTitle> 여행 방법 </PostObjectTitle>
+        <PostInput type="text" placeholder="여행 방법" />
+        <PostObjectTitle> 경험자의 한마디 </PostObjectTitle>
+        <PostInput type="text" placeholder="경험자의 한마디" />
       </PWForm>
     </PWOABox>
   );
+
+  const dayRender = () => {
+    const dayInputIndex = [];
+    for (let i = 1; i <= dayIndex; i++) {
+      dayInputIndex.push(
+        <Link to={i-1} spy={true} smooth={true}>
+          <span key={i}>{i + "일차"}</span>
+          <br />
+        </Link>
+      );
+    }
+    return dayInputIndex;
+  };
+
+  const DBox = <ScrollBar>{dayRender()}</ScrollBar>;
 
   const dayAddAction = function () {
     gen.addBox({ id: dayIndex, day: dayIndex + 1 });
@@ -117,6 +155,7 @@ export default function PostWriteForm({ id }) {
       <DayRemoveBtn onClick={() => dayRemoveAction()}>하루 삭제</DayRemoveBtn>
       <br />
       <PWForm method="post" onSubmit={onSubmit}>
+        {DBox}
         {days}
         <PostInput type="submit" />
         <br />

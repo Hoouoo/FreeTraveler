@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PostButton from "./buttons/PostButton";
 import { IoChevronForwardSharp } from "react-icons/io5";
+import palette from "../../lib/styles/palette";
 
 const PostListBox = styled.div`
   width: auto;
@@ -22,7 +23,7 @@ const PostListBox = styled.div`
     margin-left: 10px;
     font-size: 1.4 rem;
     font-weight: 700;
-    color: rgb(97, 97, 97);
+    color: ${palette.gray[10]};
   }
 
   /* nav 버튼 */
