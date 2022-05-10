@@ -1,16 +1,12 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { changeField } from "../../module/posting";
 
 const PWPlaceBoxTemplate = styled.div`
   width: auto;
   margin: 15px;
-  background-color: lightgreen;
-`;
-
-const PWForm = styled.form`
-  width: auto;
-  height: auto;
-  padding: 15px;
+  background-color: lightgray;
 `;
 
 const PostInput = styled.input`
@@ -26,25 +22,77 @@ const PostSelect = styled.select``;
 
 const PostOption = styled.option``;
 
-export default function PWPlaceBox({ id, gen }) {
+export default function PWPlaceBox({ did, pid, gen }) {
   const placeRemoveAction = function () {
-    gen.remove(id);
+    gen.remove(pid);
+  };
+
+  const dispatch = useDispatch();
+
+  //인풋 변경 이벤트 핸들러
+  const onChange = (e) => {
+    const { value, name, type, files } = e.target;
+
+    console.log(files);
+
+    if (type != "file") {
+      dispatch(
+        changeField({
+          form: "post",
+          key: name,
+          value,
+        })
+      );
+    } else {
+      dispatch(
+        changeField({
+          form: "post",
+          key: name,
+          value: files[0],
+        })
+      );
+    }
   };
 
   return (
     <PWPlaceBoxTemplate>
-      <PWForm>
-        <PostInput type="text" placeholder="이름"></PostInput>
-        <PostInput type="text" placeholder="위치"></PostInput>
-        <PostInput type="text" placeholder="비용"></PostInput>
-        <PostInput type="file" placeholder="사진"></PostInput>
-        <PostInput type="text" placeholder="내용"></PostInput>
-        <PostSelect>
-          <PostOption value="walk">도보</PostOption>
-          <PostOption value="public">대중교통</PostOption>
-          <PostOption value="car">자차</PostOption>
-        </PostSelect>
-      </PWForm>
+      <div>{pid}</div>
+      <PostInput
+        name={did + "_" + pid + "_name"}
+        type="text"
+        placeholder="이름"
+        onChange={onChange}
+      ></PostInput>
+      <PostInput
+        name={did + "_" + pid + "_loc"}
+        type="text"
+        placeholder="위치"
+        onChange={onChange}
+      ></PostInput>
+      <PostInput
+        name={did + "_" + pid + "_cost"}
+        type="text"
+        placeholder="비용"
+        onChange={onChange}
+      ></PostInput>
+      <PostInput
+        name={did + "_" + pid + "_img"}
+        type="file"
+        placeholder="사진"
+        onChange={onChange}
+      ></PostInput>
+      <PostInput
+        name={did + "_" + pid + "_content"}
+        type="text"
+        placeholder="내용"
+        onChange={onChange}
+      ></PostInput>
+      <PostSelect name={did + "_" + pid + "_trans"} onChange={onChange}>
+        <PostOption value="none">----</PostOption>
+        <PostOption value="walk">도보</PostOption>
+        <PostOption value="public">대중교통</PostOption>
+        <PostOption value="car">자차</PostOption>
+      </PostSelect>
       <PlaceRemoveBtn onClick={() => placeRemoveAction()}>삭제</PlaceRemoveBtn>
     </PWPlaceBoxTemplate>
   );

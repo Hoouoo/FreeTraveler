@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PWPlaceBoxGenerator from "./generator/PWPlaceBoxGenerator";
 
@@ -27,20 +27,20 @@ const PlaceAddBtn = styled.button`
 
 export default function PWDayBox({ id, day }) {
   var [places, setPlaces] = useState();
-  var [placeIndex, setPlaceIndex] = useState(0);
+
   var [gen, setGen] = useState(new PWPlaceBoxGenerator(places, setPlaces));
 
   const placeAddAction = function () {
-    gen.addBox({ id: placeIndex });
-    setPlaceIndex(++placeIndex);
+    gen.addBox({ did: id });
     setPlaces(gen.render());
   };
 
   return (
     <PWDayBoxTemplate>
       {day} 일차
-      <PlaceAddBtn onClick={() => placeAddAction()}>장소 추가</PlaceAddBtn>
-      <PWForm></PWForm>
+      <PlaceAddBtn type="button" onClick={() => placeAddAction()}>
+        장소 추가
+      </PlaceAddBtn>
       {places}
     </PWDayBoxTemplate>
   );
