@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import styled from "styled-components";
 import PWDayBox from "../PWDayBox";
 import PWPlaceBox from "../PWPlaceBox";
@@ -6,6 +6,7 @@ import PWPlaceBox from "../PWPlaceBox";
 class PWPlaceBoxGenerator {
   constructor(places, setPlaces) {
     this._array = new Array();
+    this._stateArray = new Array();
     this._index = -1;
 
     this.places = places;
@@ -23,6 +24,11 @@ class PWPlaceBoxGenerator {
         gen={this}
       />
     );
+
+    this._array.forEach((e) => {
+      console.log(e);
+    });
+
     this.setPlaces(this.render());
   }
 
@@ -51,13 +57,10 @@ class PWPlaceBoxGenerator {
   }
 
   remove(key) {
-    this._array = this._array.filter((e) => {
-      if (!(e.key == key)) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    this._array[key] = <></>;
+    this._stateArray = this._stateArray
+      .slice(0, key)
+      .concat(this._stateArray.slice(key + 1, this._stateArray.length));
 
     var tempArray = new Array();
 
@@ -77,11 +80,15 @@ class PWPlaceBoxGenerator {
   }
 
   //폼데이터 추출
-  getFormData() {
+  getData() {
     var formData = new FormData();
-    for (var i = 0; i < this._array.length; i++) {
-      const e = this._array[i];
+    var data = { data: [] };
+    for (var i = 0; i < this._stateArray.length; i++) {
+      const e = this._stateArray[i];
+      data = { data: [...data.data, e] };
     }
+
+    return data;
   }
 
   //렌더링

@@ -23,35 +23,77 @@ const PostSelect = styled.select``;
 const PostOption = styled.option``;
 
 export default function PWPlaceBox({ did, pid, gen }) {
+  //const stateName = did + "_" + pid + "_state";
+  let state = {
+    // [stateName]: {
+    name: "",
+    loc: "",
+    cost: "",
+    img: "",
+    content: "",
+    trans: "",
+    // },
+  };
+
   const placeRemoveAction = function () {
     gen.remove(pid);
   };
 
-  const dispatch = useDispatch();
+  const stateSave = function () {
+    gen._stateArray[pid] = state;
+  };
 
   //인풋 변경 이벤트 핸들러
   const onChange = (e) => {
-    const { value, name, type, files } = e.target;
+    const { value, name, files } = e.target;
 
-    console.log(files);
+    // if (name == did + "_" + pid + "_name") {
+    //   state[stateName].name = value;
+    // } else if (name == did + "_" + pid + "_loc") {
+    //   state[stateName].loc = value;
+    // } else if (name == did + "_" + pid + "_cost") {
+    //   state[stateName].cost = value;
+    // } else if (name == did + "_" + pid + "_img") {
+    //   state[stateName].img = files;
+    // } else if (name == did + "_" + pid + "_content") {
+    //   state[stateName].content = value;
+    // } else if (name == did + "_" + pid + "_trans") {
+    //   state[stateName].trans = value;
+    // }
 
-    if (type != "file") {
-      dispatch(
-        changeField({
-          form: "post",
-          key: name,
-          value,
-        })
-      );
-    } else {
-      dispatch(
-        changeField({
-          form: "post",
-          key: name,
-          value: files[0],
-        })
-      );
+    if (name == did + "_" + pid + "_name") {
+      state.name = value;
+    } else if (name == did + "_" + pid + "_loc") {
+      state.loc = value;
+    } else if (name == did + "_" + pid + "_cost") {
+      state.cost = value;
+    } else if (name == did + "_" + pid + "_img") {
+      state.img = files;
+    } else if (name == did + "_" + pid + "_content") {
+      state.content = value;
+    } else if (name == did + "_" + pid + "_trans") {
+      state.trans = value;
     }
+
+    stateSave();
+
+    // if (type != "file") {
+    //   dispatch(
+    //     changeField({
+    //       form: "post",
+    //       key: name,
+    //       value,
+    //     })
+    //   );
+    // } else {
+    //   dispatch(
+    //     changeField({
+    //       form: "post",
+    //       key: name,
+    //       value: files[0],
+    //     })
+    //   );
+    // }
   };
 
   return (

@@ -32,12 +32,10 @@ const initialState = {
   meta: {},
 };
 
-export const post = createAction(POST, (data) => ({
-  data,
-}));
+export const post = createAction(POST, (data) => data);
 
 //사가 생성
-const postSaga = createRequestSaga(POST, "post/POST");
+const postSaga = createRequestSaga(POST, postAPI.post);
 export function* postingSaga() {
   yield takeLatest(POST, postSaga);
 }

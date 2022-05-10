@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <PostWriteContainer id="id" mode="mode"/>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

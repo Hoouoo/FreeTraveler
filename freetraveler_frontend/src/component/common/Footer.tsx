@@ -7,6 +7,7 @@ const FooterStyled = styled.div`
   width: 100%;
   height: 200px;
   background-color: #f1f1f1;
+  bottom : 0;
 
   .footer__center {
     padding: 45px 0;

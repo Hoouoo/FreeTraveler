@@ -1,14 +1,16 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { changeField } from "../../module/posting";
+import post, { changeField } from "../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
 import PostTemplate from "./PostTemplate";
 import palette from "../../lib/styles/palette";
 import PostButton from "./buttons/PostButton";
 import { Link } from "react-scroll";
+import { IoIosArrowUp } from "react-icons/io";
+import DayButton from "./buttons/DayButton";
 
-const PWOABox = styled.div`
+const POWBox = styled.div`
   width: auto;
   height: 100%;
   padding: 35px;
@@ -16,6 +18,16 @@ const PWOABox = styled.div`
   margin-left: 10%;
   margin-right: 10%;
   background-color: white;
+  @media screen and (max-width: 612px) {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px;
+  }
+`;
+
+const PWOABox = styled.div`
+  width: auto;
+  height: 90vh;
 `;
 
 const PWDayBox = styled.div``;
@@ -33,7 +45,7 @@ const ScrollBar = styled.div`
   align-content: center;
   position: fixed;
   right: 1.2rem;
-  bottom: 0px;
+  bottom: 40%;
   z-index: 10;
   transform: translateY(-5rem);
   transition-duration: 0.25s, 0.25s;
@@ -45,10 +57,16 @@ const ScrollBar = styled.div`
 
 const PostInput = styled.input`
   font-size: 15px;
-  margin: 5px;
+  margin: 0 40px 6px;
+  outline-color: ${palette.mint[0]};
+  border-color: ${palette.mint[0]};
+  border: none;
   width: 100%;
+  height: 30px;
   margin-left: 0.5rem;
   margin-bottom: 1rem;
+  border-bottom: 1px solid ${palette.mint[0]};
+  /* border: 1px solid rgba(var(--c8c, 168, 168, 168), 1); */
 `;
 
 const TitleInput = styled.input`
@@ -70,12 +88,14 @@ const PostObjectTitle = styled.div`
   width: 100%;
 `;
 
-const DayAddBtn = styled.button`
-  width: 150px;
+const DayAddBtn = styled.div`
+  width: 100%;
+  text-align: center;
 `;
 
-const DayRemoveBtn = styled.button`
-  width: 150px;
+const DayRemoveBtn = styled.div`
+  width: 100%;
+  text-align: center;
 `;
 
 export default function PostWriteForm({ id }) {
@@ -83,33 +103,81 @@ export default function PostWriteForm({ id }) {
   var [days, setDays] = useState(gen.render());
   var [dayIndex, setDayIndex] = useState(0);
 
+  var [postName, setPostName] = useState("");
+  var [totalCost, setTotalCost] = useState("");
+  var [totalDays, setTotalDays] = useState("");
+  var [totalTrans, setTotalTrans] = useState("");
+  var [comment, setComment] = useState("");
+
   const dispatch = useDispatch();
 
   //인풋 변경 이벤트 핸들러
-  const onChange = (e) => {
-    console.log("hi");
-    const { value, name } = e.target;
-    dispatch(
-      changeField({
-        form: "wpost",
-        key: name,
-        value,
-      })
-    );
+  const onChange = (event) => {
+    const { value, name } = event.target;
+    switch (name) {
+      case "postName":
+        console.log(value);
+        setPostName(value);
+        break;
+      case "totalCost":
+        setTotalCost(value);
+        break;
+      case "totalDays":
+        setTotalDays(value);
+        break;
+      case "totalTrans":
+        setTotalTrans(value);
+        break;
+      case "comment":
+        setComment(value);
+        break;
+    }
   };
 
   const OABox = (
     <PWOABox>
       <PWForm>
-        <TitleInput type="text" placeholder="포스트 제목" />
+        <TitleInput
+          name="postName"
+          type="text"
+          placeholder="포스트 제목"
+          onChange={onChange}
+        />
         <PostObjectTitle> 여행 비용 </PostObjectTitle>
-        <PostInput type="text" placeholder="여행 비용" />
+        <PostInput
+          name="totalCost"
+          type="text"
+          placeholder="여행 비용"
+          onChange={onChange}
+        />
         <PostObjectTitle> 여행 일수 </PostObjectTitle>
-        <PostInput type="text" placeholder="여행 일수" />
+        <PostInput
+          name="totalDays"
+          type="text"
+          placeholder="여행 일수"
+          onChange={onChange}
+        />
         <PostObjectTitle> 여행 방법 </PostObjectTitle>
-        <PostInput type="text" placeholder="여행 방법" />
+        <PostInput
+          name="totalTrans"
+          type="text"
+          placeholder="여행 방법"
+          onChange={onChange}
+        />
         <PostObjectTitle> 경험자의 한마디 </PostObjectTitle>
-        <PostInput type="text" placeholder="경험자의 한마디" />
+        <PostInput
+          name="comment"
+          type="text"
+          placeholder="경험자의 한마디"
+          onChange={onChange}
+        />
+
+        <DayButton type="button" onClick={() => dayAddAction()}>
+          <DayAddBtn>하루 추가</DayAddBtn>
+        </DayButton>
+        <DayButton type="button" onClick={() => dayRemoveAction()}>
+          <DayRemoveBtn>하루 삭제</DayRemoveBtn>
+        </DayButton>
       </PWForm>
     </PWOABox>
   );
@@ -118,8 +186,8 @@ export default function PostWriteForm({ id }) {
     const dayInputIndex = [];
     for (let i = 1; i <= dayIndex; i++) {
       dayInputIndex.push(
-        <Link to={i-1} spy={true} smooth={true}>
-          <span key={i}>{i + "일차"}</span>
+        <Link to={i} spy={true} smooth={true}>
+          <span key={i}>{i + " DAY"}</span>
           <br />
         </Link>
       );
@@ -127,10 +195,17 @@ export default function PostWriteForm({ id }) {
     return dayInputIndex;
   };
 
-  const DBox = <ScrollBar>{dayRender()}</ScrollBar>;
+  const DBox = (
+    <ScrollBar>
+      {dayRender()}
+      <Link to={"scrollup"} spy={true} smooth={false}>
+        <IoIosArrowUp size="25" color="#000" />
+      </Link>
+    </ScrollBar>
+  );
 
   const dayAddAction = function () {
-    gen.addBox({ id: dayIndex, day: dayIndex + 1 });
+    gen.addBox({ id: dayIndex, day: dayIndex + 1, gen });
     setDayIndex(++dayIndex);
     setDays(gen.render());
   };
@@ -143,23 +218,35 @@ export default function PostWriteForm({ id }) {
     }
   };
 
+  const testlog = function () {
+    console.log("test");
+  };
+
   // 폼 등록 이벤트 핸들러
   const onSubmit = (e) => {
     e.preventDefault();
+    var formData = gen.getFormData();
+    formData.append("postName", postName);
+    formData.append("totalCost", totalCost);
+    formData.append("totalDays", totalDays);
+    formData.append("totalTrans", totalTrans);
+    formData.append("comment", comment);
+
+    dispatch(post(formData));
   };
 
   return (
-    <div>
-      {OABox}
-      <DayAddBtn onClick={() => dayAddAction()}>하루 추가</DayAddBtn>
-      <DayRemoveBtn onClick={() => dayRemoveAction()}>하루 삭제</DayRemoveBtn>
-      <br />
-      <PWForm method="post" onSubmit={onSubmit}>
-        {DBox}
-        {days}
-        <PostInput type="submit" />
+    <POWBox>
+      <div id="scrollup">
+        {OABox}
         <br />
-      </PWForm>
-    </div>
+        <PWForm method="post" onSubmit={onSubmit}>
+          {DBox}
+          {days}
+          <PostInput type="submit" />
+          <br />
+        </PWForm>
+      </div>
+    </POWBox>
   );
 }
