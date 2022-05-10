@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import PWPlaceBoxGenerator from "./generator/PWPlaceBoxGenerator";
+import PostButton from "./buttons/PostButton";
 
 const PWDayBoxTemplate = styled.div`
   width: auto;
@@ -49,11 +50,13 @@ export default function PWDayBox({ id, day }) {
   };
 
   return (
-    <PWDayBoxTemplate>
-      {day} 일차
-      <PlaceAddBtn onClick={() => placeAddAction()}>장소 추가</PlaceAddBtn>
-      <PWForm></PWForm>
-      {places}
-    </PWDayBoxTemplate>
+    <div id={day}>
+      <PWDayBoxTemplate>
+        {day} 일차
+        <PlaceAddBtn onClick={() => placeAddAction()}>장소 추가</PlaceAddBtn>
+        <PWForm></PWForm>
+        {places}
+      </PWDayBoxTemplate>
+    </div>
   );
 }
