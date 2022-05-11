@@ -2,20 +2,77 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { changeField } from "../../module/posting";
+import placelogo from "../../resource/img/placelogo2.png";
+import Button from "./buttons/DayButton";
+import { FormControl, TextField, NativeSelect } from "@mui/material";
 
 const PWPlaceBoxTemplate = styled.div`
   width: auto;
   margin: 15px;
-  background-color: lightgray;
+  background-color: white;
+
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  
+  padding: 1.1rem;
+  border-width: 0px;
+  border-style: solid;
+  border-bottom-left-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .logo {
+    width: 100px;
+    height: auto;
+    margin-left: -13px;
+    margin-bottom: 10px;
+  }
+
+  .button {
+    width: 60%;
+    margin-top: 15px;
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+
+  @media screen and (max-width: 612px) {
+    .button {
+      width: 70%;
+      margin-top: 15px;
+      padding-left: 15%;
+      padding-right: 15%;
+    }
+  }
+  @media screen and (min-width: 1012px) {
+    .button {
+      width: 30%;
+      margin-top: 15px;
+      padding-left: 35%;
+      padding-right: 35%;
+    }
+  }
 `;
 
-const PostInput = styled.input`
-  font-size: 15px;
-  margin: 5px;
+const PostInputTitle = styled.div`
+  text-align: left;
+  margin-top: 1rem;
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+  width: 100%;
 `;
 
-const PlaceRemoveBtn = styled.button`
-  width: 150px;
+const PostInput = styled.div`
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+`;
+
+const PlaceRemoveBtn = styled.div`
+  width: 100%;
+  text-align: center;
 `;
 
 const PostSelect = styled.select``;
@@ -98,44 +155,92 @@ export default function PWPlaceBox({ did, pid, gen }) {
 
   return (
     <PWPlaceBoxTemplate>
-      <div>{pid}</div>
-      <PostInput
-        name={did + "_" + pid + "_name"}
-        type="text"
-        placeholder="이름"
-        onChange={onChange}
-      ></PostInput>
-      <PostInput
-        name={did + "_" + pid + "_loc"}
-        type="text"
-        placeholder="위치"
-        onChange={onChange}
-      ></PostInput>
-      <PostInput
-        name={did + "_" + pid + "_cost"}
-        type="text"
-        placeholder="비용"
-        onChange={onChange}
-      ></PostInput>
-      <PostInput
-        name={did + "_" + pid + "_img"}
-        type="file"
-        placeholder="사진"
-        onChange={onChange}
-      ></PostInput>
-      <PostInput
-        name={did + "_" + pid + "_content"}
-        type="text"
-        placeholder="내용"
-        onChange={onChange}
-      ></PostInput>
-      <PostSelect name={did + "_" + pid + "_trans"} onChange={onChange}>
-        <PostOption value="none">----</PostOption>
-        <PostOption value="walk">도보</PostOption>
-        <PostOption value="public">대중교통</PostOption>
-        <PostOption value="car">자차</PostOption>
-      </PostSelect>
-      <PlaceRemoveBtn onClick={() => placeRemoveAction()}>삭제</PlaceRemoveBtn>
+      <img className="logo" src={placelogo} />
+      <PostInputTitle>이름</PostInputTitle>
+      <PostInput>
+        <FormControl fullWidth>
+          <TextField
+            name={did + "_" + pid + "_name"}
+            type="text"
+            placeholder="ex) 가게명, 명소명"
+            onChange={onChange}
+            variant="standard"
+          />
+        </FormControl>
+      </PostInput>
+
+      <PostInputTitle>위치</PostInputTitle>
+      <PostInput>
+        <FormControl fullWidth>
+          <TextField
+            name={did + "_" + pid + "_loc"}
+            type="text"
+            placeholder="위치"
+            onChange={onChange}
+            variant="standard"
+          />
+        </FormControl>
+      </PostInput>
+
+      <PostInputTitle>비용</PostInputTitle>
+      <PostInput>
+        <FormControl fullWidth>
+          <TextField
+            name={did + "_" + pid + "_cost"}
+            type="text"
+            placeholder="비용"
+            onChange={onChange}
+            variant="standard"
+          />
+        </FormControl>
+      </PostInput>
+
+      <PostInputTitle>사진</PostInputTitle>
+      <PostInput>
+        <FormControl fullWidth>
+          <TextField
+            name={did + "_" + pid + "_img"}
+            type="file"
+            placeholder="사진"
+            onChange={onChange}
+            variant="outlined"
+          ></TextField>
+        </FormControl>
+      </PostInput>
+
+      <PostInputTitle>내용</PostInputTitle>
+      <PostInput>
+        <FormControl fullWidth>
+          <TextField
+            name={did + "_" + pid + "_content"}
+            type="text"
+            placeholder="내용"
+            onChange={onChange}
+            variant="standard"
+          ></TextField>
+        </FormControl>
+      </PostInput>
+
+      <PostInputTitle>이동수단</PostInputTitle>
+      <PostInput>
+        <FormControl fullWidth>
+          <NativeSelect
+            name={did + "_" + pid + "_trans"}
+            onChange={onChange}
+            defaultValue="none"
+          >
+            <option value="none">----</option>
+            <option value="walk">도보</option>
+            <option value="public">대중교통</option>
+            <option value="car">자차</option>
+          </NativeSelect>
+        </FormControl>
+      </PostInput>
+      <div className="button">
+        <Button type="button" onClick={() => placeRemoveAction()}>
+          <PlaceRemoveBtn>삭제</PlaceRemoveBtn>
+        </Button>
+      </div>
     </PWPlaceBoxTemplate>
   );
 }

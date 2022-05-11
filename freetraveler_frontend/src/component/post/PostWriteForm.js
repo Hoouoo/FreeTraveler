@@ -78,6 +78,12 @@ const ScrollBar = styled.div`
     cubic-bezier(0.75, 0.25, 0.25, 0.75);
   transition-delay: initial, initial;
   transition-property: transform, transform;
+  .original_header{
+    color: white;
+  }
+  .change_header{
+    color: black;
+  }
 `;
 
 const PostInput = styled.input`
@@ -135,6 +141,16 @@ export default function PostWriteForm({ id }) {
   var [comment, setComment] = useState("");
 
   const dispatch = useDispatch();
+
+  //리모컨 scroll 이벤트
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const pageHeight = window.innerHeight;
+  const updateScroll = () => {
+      setScrollPosition(window.scrollY || document.documentElement.scrollTop);
+  }
+  useEffect(()=>{
+      window.addEventListener('scroll', updateScroll);
+  });
 
   //인풋 변경 이벤트 핸들러
   const onChange = (event) => {
@@ -212,7 +228,7 @@ export default function PostWriteForm({ id }) {
     for (let i = 1; i <= dayIndex; i++) {
       dayInputIndex.push(
         <Link to={i} spy={true} smooth={true}>
-          <span key={i}>{i + " DAY"}</span>
+            <span key={i} className={((scrollPosition < pageHeight) && (i == 1))? "original_header" : "change_header"}>{i + " DAY"}</span>
           <br />
         </Link>
       );
@@ -222,7 +238,9 @@ export default function PostWriteForm({ id }) {
 
   const DBox = (
     <ScrollBar>
+      <div className={scrollPosition < pageHeight ? "original_header" : "change_header"}>{scrollPosition}
       {dayRender()}
+      </div>
       <Link to={"scrollup"} spy={true} smooth={false}>
         <IoIosArrowUp size="25" color="#000" />
       </Link>

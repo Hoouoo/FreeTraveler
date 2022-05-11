@@ -50,6 +50,7 @@ const PWDayBoxTemplate = styled.div`
 const DayTitleLine = styled.div`
   justify-content: space-between;
 `;
+
 const DayTitle = styled.div`
   padding-left: 1rem;
   float: left;
@@ -58,6 +59,7 @@ const DayTitle = styled.div`
   line-height: 1.9rem;
   color: rgb(26, 26, 26);
 `;
+
 const PWForm = styled.form`
   width: auto;
   height: 100%;
