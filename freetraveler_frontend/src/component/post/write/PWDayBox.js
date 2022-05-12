@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PWPlaceBoxGenerator from "./generator/PWPlaceBoxGenerator";
-import PostButton from "./buttons/PostButton";
+import PostButton from "../buttons/PostButton";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
 const PWDayBoxTemplate = styled.div`

@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { changeField } from "../../module/posting";
-import placelogo from "../../resource/img/placelogo2.png";
-import Button from "./buttons/DayButton";
+import { changeField } from "../../../module/posting";
+import placelogo from "../../../resource/img/placelogo2.png";
+import Button from "../buttons/DayButton";
 import { FormControl, TextField, NativeSelect } from "@mui/material";
 
 const PWPlaceBoxTemplate = styled.div`
@@ -12,7 +12,7 @@ const PWPlaceBoxTemplate = styled.div`
   background-color: white;
 
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  
+
   padding: 1.1rem;
   border-width: 0px;
   border-style: solid;

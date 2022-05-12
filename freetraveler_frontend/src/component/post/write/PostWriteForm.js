@@ -1,13 +1,13 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import post, { changeField } from "../../module/posting";
+import post, { changeField } from "../../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
-import PostTemplate from "./PostTemplate";
-import palette from "../../lib/styles/palette";
+import PostTemplate from "../PostTemplate";
+import palette from "../../../lib/styles/palette";
 import { Link } from "react-scroll";
 import { IoIosArrowUp } from "react-icons/io";
-import DayButton from "./buttons/DayButton";
+import DayButton from "../buttons/DayButton";
 
 const POWBox = styled.div`
   width: auto;
@@ -33,8 +33,8 @@ const PWOABox = styled.div`
   margin-right: 10%;
   background-color: white;
   display: flex;
-  justify-content:center;
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   @media screen and (max-width: 612px) {
     margin-left: 0px;
     margin-right: 0px;
@@ -51,7 +51,7 @@ const PWForm = styled.form`
   margin-left: 10%;
   margin-right: 10%;
   margin-bottom: 30px;
-  text-align: center; 
+  text-align: center;
 
   @media screen and (max-width: 612px) {
     margin-left: 15%;
@@ -78,10 +78,10 @@ const ScrollBar = styled.div`
     cubic-bezier(0.75, 0.25, 0.25, 0.75);
   transition-delay: initial, initial;
   transition-property: transform, transform;
-  .original_header{
+  .original_header {
     color: white;
   }
-  .change_header{
+  .change_header {
     color: black;
   }
 `;
@@ -146,10 +146,10 @@ export default function PostWriteForm({ id }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const pageHeight = window.innerHeight;
   const updateScroll = () => {
-      setScrollPosition(window.scrollY || document.documentElement.scrollTop);
-  }
-  useEffect(()=>{
-      window.addEventListener('scroll', updateScroll);
+    setScrollPosition(window.scrollY || document.documentElement.scrollTop);
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", updateScroll);
   });
 
   //인풋 변경 이벤트 핸들러
@@ -228,7 +228,16 @@ export default function PostWriteForm({ id }) {
     for (let i = 1; i <= dayIndex; i++) {
       dayInputIndex.push(
         <Link to={i} spy={true} smooth={true}>
-            <span key={i} className={((scrollPosition < pageHeight) && (i == 1))? "original_header" : "change_header"}>{i + " DAY"}</span>
+          <span
+            key={i}
+            className={
+              scrollPosition < pageHeight && i == 1
+                ? "original_header"
+                : "change_header"
+            }
+          >
+            {i + " DAY"}
+          </span>
           <br />
         </Link>
       );
@@ -238,8 +247,13 @@ export default function PostWriteForm({ id }) {
 
   const DBox = (
     <ScrollBar>
-      <div className={scrollPosition < pageHeight ? "original_header" : "change_header"}>{scrollPosition}
-      {dayRender()}
+      <div
+        className={
+          scrollPosition < pageHeight ? "original_header" : "change_header"
+        }
+      >
+        {scrollPosition}
+        {dayRender()}
       </div>
       <Link to={"scrollup"} spy={true} smooth={false}>
         <IoIosArrowUp size="25" color="#000" />
@@ -280,16 +294,16 @@ export default function PostWriteForm({ id }) {
 
   return (
     // <POWBox>
-      <div id="scrollup">
-        {OABox}
+    <div id="scrollup">
+      {OABox}
+      <br />
+      <PWForm method="post" onSubmit={onSubmit}>
+        {DBox}
+        {days}
+        <PostInput type="submit" />
         <br />
-        <PWForm method="post" onSubmit={onSubmit}>
-          {DBox}
-          {days}
-          <PostInput type="submit" />
-          <br />
-        </PWForm>
-      </div>
+      </PWForm>
+    </div>
     // </POWBox>
   );
 }
