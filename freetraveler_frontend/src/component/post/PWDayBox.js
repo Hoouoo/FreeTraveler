@@ -84,6 +84,7 @@ export default function PWDayBox({ id, day, pgen }) {
   var [gen, setGen] = useState(new PWPlaceBoxGenerator(places, setPlaces));
   var [init, setInit] = useState(false);
 
+
   //초기 한번만 실행
   if (init == false) {
     pgen._genArray.push(gen);
@@ -97,6 +98,7 @@ export default function PWDayBox({ id, day, pgen }) {
 
   return (
     <div id={day}>
+      
       {/* <button onClick={() => gen.getData()}>함 보여바라!</button> */}
       <PWDayBoxTemplate>
         <DayTitleLine>

@@ -79,7 +79,7 @@ const ScrollBar = styled.div`
   transition-delay: initial, initial;
   transition-property: transform, transform;
   .original_header{
-    color: white;
+    color: black;
   }
   .change_header{
     color: black;
@@ -228,7 +228,7 @@ export default function PostWriteForm({ id }) {
     for (let i = 1; i <= dayIndex; i++) {
       dayInputIndex.push(
         <Link to={i} spy={true} smooth={true}>
-            <span key={i} className={((scrollPosition < pageHeight) && (i == 1))? "original_header" : "change_header"}>{i + " DAY"}</span>
+            <span key={i}>{i + " DAY"}</span>
           <br />
         </Link>
       );
@@ -238,9 +238,7 @@ export default function PostWriteForm({ id }) {
 
   const DBox = (
     <ScrollBar>
-      <div className={scrollPosition < pageHeight ? "original_header" : "change_header"}>{scrollPosition}
       {dayRender()}
-      </div>
       <Link to={"scrollup"} spy={true} smooth={false}>
         <IoIosArrowUp size="25" color="#000" />
       </Link>
