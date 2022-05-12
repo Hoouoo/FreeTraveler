@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { changeField } from "../../module/posting";
-import placelogo from "../../resource/img/placelogo2.png";
-import Button from "./buttons/DayButton";
+import { changeField } from "../../../module/posting";
+import placelogo from "../../../resource/img/placelogo2.png";
+import Button from "../buttons/DayButton";
 import { FormControl, TextField, NativeSelect } from "@mui/material";
 import DaumPostcode from "react-daum-postcode";
 import { IoSearchSharp } from "react-icons/io5";
