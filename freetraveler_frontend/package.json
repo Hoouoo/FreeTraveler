@@ -27,6 +27,7 @@
     "react-daum-postcode": "^3.0.1",
     "react-dom": "^18.0.0",
     "react-icons": "^4.3.1",
+    "react-kakao-maps": "^0.0.13",
     "react-paper": "^0.0.2",
     "react-redux": "^7.2.8",
     "react-router-dom": "^5.3.0",

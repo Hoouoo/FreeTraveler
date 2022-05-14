@@ -17,34 +17,35 @@ const PRDayBoxTemplate = styled.div`
   overflow-x: hidden;
   overflow-y: hidden; */
   /* margin: 50px; */
+  /* width: 100%; */
   margin-left: -40px;
-  margin-bottom: 20px;
-  min-height: 90vh;
-  background-color: rgb(255, 255, 255);
+  /* margin-bottom: 20px; */
+  /* min-height: 90vh; */
+  /* background-color: rgb(255, 255, 255); */
 
-  padding-top: 4rem;
-  padding-left: 1.2rem;
-  padding-right: 1.2rem;
-  padding-bottom: 1.2rem;
-  border-width: 0.1px;
-  border-style: solid;
-  border-color: rgb(230, 230, 230);
-  border-top-width: 0.1px;
+  /* padding-top: 4rem;
+  padding-left: -1rem;
+  padding-left: -1rem; */
+  /* padding-bottom: 1.2rem; */
+  /* border-width: 0.1px; */
+  /* border-style: solid; */
+  /* border-color: rgb(230, 230, 230); */
+  /* border-top-width: 0.1px;
   border-radius: 0.2rem;
   overflow-x: hidden;
   overflow-y: hidden;
   display: flex;
-  flex-direction: column;
-  @supports (-webkit-touch-callout: none) {
+  flex-direction: column; */
+  /* @supports (-webkit-touch-callout: none) {
     min-height: -webkit-fill-available;
-  }
+  } */
 
   @media screen and (max-width: 612px) {
-    margin-left: -90px;
-    margin-right: -50px;
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
-    padding-bottom: 0.8rem;
+    margin-left: -40px;
+    margin-right: -10px;
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+    padding-bottom: 0.1rem;
   }
 `;
 
@@ -53,7 +54,7 @@ const DayTitleLine = styled.div`
 `;
 
 const DayTitle = styled.div`
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
   float: left;
   font-size: 1.3rem;
   font-weight: 700;
@@ -80,21 +81,23 @@ const PlaceAddBtn = styled.div`
   color: rgb(1, 82, 204);
 `;
 
-export default function PRDayBox({ id, day, pgen }) {
+export default function PRDayBox({ id, day, pgen, data }) {
   var [places, setPlaces] = useState();
   var [gen, setGen] = useState(new PRPlaceBoxGenerator(places, setPlaces));
   var [init, setInit] = useState(false);
 
   //초기 한번만 실행
-  // if (init == false) {
-  //   pgen._genArray.push(gen);
-  //   setInit(true);
-  // }
+  if (init == false) {
+    //상위 제너레이터(daybox)에 현재 제너레이터(placebox)전달 및 추가
+    pgen._genArray.push(gen);
 
-  const placeAddAction = function () {
-    gen.addBox({ did: id });
+    //받은 데이터로 placebox 생성
+    for (var i = 0; i < data.length; i++) {
+      gen.addBox({ did: id, data: data[i] });
+    }
     setPlaces(gen.render());
-  };
+    setInit(true);
+  }
 
   return (
     <div id={day}>
@@ -102,15 +105,9 @@ export default function PRDayBox({ id, day, pgen }) {
       <PRDayBoxTemplate>
         <DayTitleLine>
           <DayTitle>{day} DAY</DayTitle>
-
-          <PlaceAddBtn>
-            <IoIosAddCircleOutline
-              size="25"
-              type="button"
-              onClick={() => placeAddAction()}
-            ></IoIosAddCircleOutline>
-          </PlaceAddBtn>
         </DayTitleLine>
+        <br />
+        <br />
         {places}
       </PRDayBoxTemplate>
     </div>

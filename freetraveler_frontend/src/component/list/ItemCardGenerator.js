@@ -10,7 +10,7 @@ class ItemCardGenerator {
   //단일 아이템 카드 삽입
   addItemCard(itemcard) {
     this._array[this._index] = (
-      <li id={"itemcard_" + itemcard.id}>
+      <li key={"itemcard_" + itemcard.id} id={"itemcard_" + itemcard.id}>
         <ItemCard
           img={itemcard.img}
           name={itemcard.name}

@@ -78,12 +78,6 @@ const ScrollBar = styled.div`
     cubic-bezier(0.75, 0.25, 0.25, 0.75);
   transition-delay: initial, initial;
   transition-property: transform, transform;
-  .original_header {
-    color: white;
-  }
-  .change_header {
-    color: black;
-  }
 `;
 
 const PostInput = styled.input`
@@ -129,35 +123,47 @@ const DayRemoveBtn = styled.div`
   text-align: center;
 `;
 
-export default function PostWriteForm({ id }) {
+export default function PostWriteForm({ id, mode }) {
+  var [init, setInit] = useState(false);
+
   var [gen, setGen] = useState(new PWDayBoxGenerator());
   var [days, setDays] = useState(gen.render());
   var [dayIndex, setDayIndex] = useState(0);
 
+  var [mode, setMode] = useState();
+  var [repImg, setRepImg] = useState("");
   var [postName, setPostName] = useState("");
   var [totalCost, setTotalCost] = useState("");
   var [totalDays, setTotalDays] = useState("");
   var [totalTrans, setTotalTrans] = useState("");
   var [comment, setComment] = useState("");
 
+  //최초 한번 실행
+  if (init != false) {
+    setMode(mode);
+    setInit(true);
+  }
+
   const dispatch = useDispatch();
 
-  //리모컨 scroll 이벤트
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const pageHeight = window.innerHeight;
-  const updateScroll = () => {
-    setScrollPosition(window.scrollY || document.documentElement.scrollTop);
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", updateScroll);
-  });
+  // //리모컨 scroll 이벤트
+  // const [scrollPosition, setScrollPosition] = useState(0);
+  // const pageHeight = window.innerHeight;
+  // const updateScroll = () => {
+  //   setScrollPosition(window.scrollY || document.documentElement.scrollTop);
+  // };
+  // useEffect(() => {
+  //   window.addEventListener("scroll", updateScroll);
+  // });
 
   //인풋 변경 이벤트 핸들러
   const onChange = (event) => {
-    const { value, name } = event.target;
+    const { value, name, files } = event.target;
     switch (name) {
+      case "repImg":
+        setRepImg(files[0]);
+        break;
       case "postName":
-        console.log(value);
         setPostName(value);
         break;
       case "totalCost":
@@ -205,6 +211,9 @@ export default function PostWriteForm({ id }) {
           placeholder="여행 방법"
           onChange={onChange}
         />
+
+        <PostObjectTitle> 대표 사진 </PostObjectTitle>
+        <PostInput name="repImg" type="file" onChange={onChange} />
         <PostObjectTitle> 경험자의 한마디 </PostObjectTitle>
         <PostInput
           name="comment"
@@ -228,16 +237,7 @@ export default function PostWriteForm({ id }) {
     for (let i = 1; i <= dayIndex; i++) {
       dayInputIndex.push(
         <Link to={i} spy={true} smooth={true}>
-          <span
-            key={i}
-            className={
-              scrollPosition < pageHeight && i == 1
-                ? "original_header"
-                : "change_header"
-            }
-          >
-            {i + " DAY"}
-          </span>
+          <span key={i}>{i + " DAY"}</span>
           <br />
         </Link>
       );
@@ -247,14 +247,7 @@ export default function PostWriteForm({ id }) {
 
   const DBox = (
     <ScrollBar>
-      <div
-        className={
-          scrollPosition < pageHeight ? "original_header" : "change_header"
-        }
-      >
-        {scrollPosition}
-        {dayRender()}
-      </div>
+      {dayRender()}
       <Link to={"scrollup"} spy={true} smooth={false}>
         <IoIosArrowUp size="25" color="#000" />
       </Link>
@@ -283,6 +276,7 @@ export default function PostWriteForm({ id }) {
   const onSubmit = (e) => {
     e.preventDefault();
     var formData = gen.getFormData();
+    formData.append("repImg", repImg);
     formData.append("postName", postName);
     formData.append("totalCost", totalCost);
     formData.append("totalDays", totalDays);

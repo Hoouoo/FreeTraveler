@@ -22,13 +22,10 @@ class PRPlaceBoxGenerator {
         key={this._index}
         did={box.did}
         pid={this._index}
+        data={box.data}
         gen={this}
       />
     );
-
-    this._array.forEach((e) => {
-      console.log(e);
-    });
 
     this.setPlaces(this.render());
   }
@@ -42,6 +39,7 @@ class PRPlaceBoxGenerator {
           key={this._index}
           did={box.did}
           pid={this._index}
+          data={box.data}
           gen={this}
         />
       );

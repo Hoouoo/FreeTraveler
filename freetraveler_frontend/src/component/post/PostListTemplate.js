@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PostButton from "./buttons/PostButton";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import palette from "../../lib/styles/palette";
+import { Link } from "react-router-dom";
 
 const PostListBox = styled.div`
   width: auto;
@@ -84,13 +85,15 @@ export default function PostListTemplate({ children }) {
         </div>
         {children}
         <div className="bottom_button_container">
-          <PostButton>
-            글쓰기
-            <div className="button_text"> gogo. </div>
-            <div className="button_icons">
-              <IoChevronForwardSharp size="20" color="#fff" />
-            </div>
-          </PostButton>
+          <Link to="/posting/write" style={{ textDecoration: "none" }}>
+            <PostButton>
+              글쓰기
+              <div className="button_text"> gogo. </div>
+              <div className="button_icons">
+                <IoChevronForwardSharp size="20" color="#fff" />
+              </div>
+            </PostButton>
+          </Link>
         </div>
         <div>
           <span>앞으로 </span>

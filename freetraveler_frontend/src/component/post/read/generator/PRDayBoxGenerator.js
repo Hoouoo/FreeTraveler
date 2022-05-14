@@ -17,7 +17,13 @@ class PRDayBoxGenerator {
   addBox(box) {
     this._index++;
     this._array.push(
-      <PRDayBox key={this._index} id={box.id} day={box.day} pgen={box.gen} />
+      <PRDayBox
+        key={this._index}
+        id={box.id}
+        day={box.day}
+        pgen={box.gen}
+        data={box.data}
+      />
     );
   }
 
@@ -26,7 +32,13 @@ class PRDayBoxGenerator {
     array.forEach((box) => {
       this._index++;
       this._array.push(
-        <PRDayBox key={this._index} id={box.id} day={box.day} pgen={box.gen} />
+        <PRDayBox
+          key={this._index}
+          id={box.id}
+          day={box.day}
+          pgen={box.gen}
+          data={box.data}
+        />
       );
     });
   }

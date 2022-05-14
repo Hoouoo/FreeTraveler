@@ -3,13 +3,13 @@ import Footer from "../component/common/Footer";
 import PostReadContainer from "../containers/post/PostReadContainer";
 import PostWriteContainer from "../containers/post/PostWriteContainer";
 
-function Home() {
+function HomePage() {
   return (
     <>
-      <PostWriteContainer id="id" mode="mode"/>
-      {/* <Footer /> */}
+      여기는 홈페이지다
+      <Footer />
     </>
   );
 }
 
-export default Home;
+export default HomePage;

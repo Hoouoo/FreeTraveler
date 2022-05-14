@@ -67,6 +67,7 @@ class PWDayBoxGenerator {
         formData.append(key + "content", data.data[i][j].content);
         formData.append(key + "trans", data.data[i][j].trans);
       }
+      formData.append(i + "_plength", data.data[i].length);
     }
     return formData;
   }

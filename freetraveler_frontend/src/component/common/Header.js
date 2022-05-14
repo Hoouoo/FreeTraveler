@@ -150,7 +150,9 @@ function Header({}) {
 
       {/* logo */}
       <div className="logo">
-        <img className="logo__center" src={ftlogo} />
+        <Link to="/">
+          <img className="logo__center" src={ftlogo} />
+        </Link>
       </div>
 
       {/* 네비게이션 토글 코드*/}

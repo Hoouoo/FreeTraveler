@@ -5,19 +5,21 @@ import { changeField } from "../../../module/posting";
 import placelogo from "../../../resource/img/placelogo2.png";
 import Button from "../buttons/DayButton";
 import { FormControl, TextField, NativeSelect } from "@mui/material";
+import palette from "../../../lib/styles/palette";
 
 const PRPlaceBoxTemplate = styled.div`
-  width: auto;
-  margin: 15px;
+  /* width: auto; */
+  /* margin: 15px; */
+  margin-top: 15px;
+  margin-bottom: 30px;
   background-color: white;
 
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px ${palette.gray[12]};
 
   padding: 1.1rem;
   border-width: 0px;
   border-style: solid;
-  border-bottom-left-radius: 0.4rem;
-  border-bottom-right-radius: 0.4rem;
+  border-radius: 0.4rem;
   overflow-x: hidden;
   overflow-y: hidden;
   display: flex;
@@ -56,18 +58,20 @@ const PRPlaceBoxTemplate = styled.div`
 `;
 
 const PRPlaceBoxTitle = styled.div`
-  text-align: left;
   margin-top: 1rem;
-  margin-left: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  font-size: 0.9rem;
-  width: 100%;
+  /* margin-left: 1rem; */
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgb(26, 26, 26);
+  text-align: left;
 `;
 
 const PostInput = styled.div`
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  margin: 10px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgb(26, 26, 26);
+  text-align: left;
 `;
 
 const PlaceRemoveBtn = styled.div`
@@ -77,7 +81,34 @@ const PlaceRemoveBtn = styled.div`
 
 const PRPlaceBoxText = styled.div``;
 
-const PRPlaceBoxImage = styled.div``;
+const PRPlaceBoxImage = styled.div`
+  .image-box {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .image-inbox {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+const CommentBox = styled.div`
+  margin-top: 1rem;
+  display: inline-flex;
+  outline: none;
+  border-width: 1.5px;
+  border-style: solid;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  /* padding: 0.9rem; */
+  width: 100%;
+  /* 색상 */
+  border-color: ${palette.mint[0]};
+`;
 
 export default function PRPlaceBox({ did, pid, data = {} }) {
   // 스테이트 형식
@@ -93,30 +124,40 @@ export default function PRPlaceBox({ did, pid, data = {} }) {
   return (
     <PRPlaceBoxTemplate>
       <img className="logo" src={placelogo} />
-      <PRPlaceBoxTitle>이름</PRPlaceBoxTitle>
-      {/* 이름 출력 */}
-      <PRPlaceBoxText>{data.name}</PRPlaceBoxText>
-
-      <PRPlaceBoxTitle>위치</PRPlaceBoxTitle>
-      {/* 위치 출력 */}
-      <PRPlaceBoxText>{data.loc}</PRPlaceBoxText>
-
-      <PRPlaceBoxTitle>비용</PRPlaceBoxTitle>
-      {/* 비용 출력 */}
-      <PRPlaceBoxText>{data.cost}</PRPlaceBoxText>
-
-      <PRPlaceBoxTitle>사진</PRPlaceBoxTitle>
       {/* 이미지 출력 */}
       <PRPlaceBoxImage>
-        <img src={data.img /* 이미지 주소 */}></img>
+        <div className="image-box">
+          <img className="image-inbox" src={data.img /* 이미지 주소 */}></img>
+        </div>
       </PRPlaceBoxImage>
 
-      <PRPlaceBoxTitle>내용</PRPlaceBoxTitle>
-      {/* 내용 출력 */}
-      <PRPlaceBoxText>{data.content}</PRPlaceBoxText>
+      {/* 이름 출력 */}
+      <PRPlaceBoxTitle>
+        <b>장소 | </b>
+        {data.placeName}
+      </PRPlaceBoxTitle>
+      {/* 위치 출력 */}
+      <PRPlaceBoxTitle>
+        <b>위치 | </b>
+        {data.loc}
+      </PRPlaceBoxTitle>
 
-      <PRPlaceBoxTitle>이동수단</PRPlaceBoxTitle>
-      <PRPlaceBoxText>{data.trans}</PRPlaceBoxText>
+      {/* 비용 출력 */}
+      <PRPlaceBoxTitle>
+        <b>비용 | </b>
+        {data.cost}
+      </PRPlaceBoxTitle>
+
+      {/* 이동 수단 출력 */}
+      <PRPlaceBoxTitle>
+        <b>이동수단 | </b>
+        {data.trans}
+      </PRPlaceBoxTitle>
+
+      {/* 내용 출력 */}
+      <CommentBox>
+        <PostInput>{data.content}</PostInput>
+      </CommentBox>
     </PRPlaceBoxTemplate>
   );
 }

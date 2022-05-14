@@ -6,6 +6,7 @@ const PostListPage = () => {
   const gen = new ItemCardGenerator();
   for (var i = 0; i <= 14; i++) {
     gen.addItemCard({
+      id: i,
       img: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
       name: "제목이랍니다." + i,
       how: "비행기, 자동차, 도보",

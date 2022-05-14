@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import palette from "../../lib/styles/palette";
 
 import {
   RiHomeSmile2Line,
@@ -32,7 +33,7 @@ const TabBarStyled = styled.div`
     align-items: center;
     position: fixed;
     bottom: 0;
-    border-top: 1px solid rgb(230, 230, 230);
+    border-top: 1px solid ${palette.gray[4]};
     padding-top: 5px;
     background-color: white;
   }
@@ -77,7 +78,7 @@ const TabBar = (props) => {
 
   const [activeTabs, setActiveTabs] = useState(props.name);
 
-  const tabbarPath = ["/", "/home", "/pick", "/post", "/account"];
+  const tabbarPath = ["/", "/home", "/pick", "/posting/list", "/account"];
 
   const { user } = useSelector(({ user }) => ({
     user: user.user,
@@ -93,12 +94,10 @@ const TabBar = (props) => {
         history.push("/pick");
         break;
       case "post":
-        history.push("/post");
+        history.push("/posting/list");
         break;
       case "account":
         history.push("/account");
-        break;
-      default:
         break;
     }
     //}
@@ -148,7 +147,7 @@ const TabBar = (props) => {
         </div>
         <div className="bn-tab">
           <div className="box">
-            {location.pathname == "/post" ? (
+            {location.pathname == "/posting/list" ? (
               <RiFileList2Fill
                 size="25"
                 color="#000"
