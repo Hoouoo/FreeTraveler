@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.auth.login.dto.LoginDTO;
 import team.capstonelongstone.freetraveler.utils.SHA256PasswordEncoder;
@@ -32,19 +33,26 @@ public class LoginService {
     /**
      * 로그인 로직
      */
-    public ResponseEntity login(LoginDTO loginDTO, HttpServletResponse response, HttpServletRequest request){
+    public ResponseEntity login(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpServletRequest request){
+        System.out.println(loginDTO.getUserId());
         Account account = loginRepository.findByUserId(loginDTO.getUserId());
-        SHA256PasswordEncoder passwordEncoder = new SHA256PasswordEncoder();
 
-        Map userId=new HashMap<String,LoginDTO>(); //JSON변환
-        userId.put("userId",account.getUserId());
+//         SHA256PasswordEncoder passwordEncoder = new SHA256PasswordEncoder();
+
+//         Map userId=new HashMap<String,LoginDTO>(); //JSON변환
+//         userId.put("userId",account.getUserId());
 
         if (Objects.isNull(account)){ //아이디 없을 때
             return new ResponseEntity("회원 아이디 없음",HttpStatus.BAD_REQUEST);
         }
 
         else{
-            if(passwordEncoder.encode(loginDTO.getUserPassword()).equals(account.getUserPassword())) { //로그인 성공
+
+            SHA256PasswordEncoder sha256PasswordEncoder=new SHA256PasswordEncoder();
+            if(sha256PasswordEncoder.encode(loginDTO.getUserPassword()).equals(account.getUserPassword())) { //로그인 성공
+
+//             if(passwordEncoder.encode(loginDTO.getUserPassword()).equals(account.getUserPassword())) { //로그인 성공
+
                 HttpSession session=request.getSession();
                 session.setAttribute("account",account);
                 return new ResponseEntity(userId,HttpStatus.OK); //로그인 성공시 userId 넘김
