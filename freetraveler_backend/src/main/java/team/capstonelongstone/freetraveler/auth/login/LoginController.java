@@ -3,9 +3,7 @@ package team.capstonelongstone.freetraveler.auth.login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import team.capstonelongstone.freetraveler.auth.login.dto.LoginDTO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +25,7 @@ public class LoginController {
 
     @PostMapping("/login")
     @ResponseBody
-    public ResponseEntity login(LoginDTO loginDTO, HttpServletResponse response, HttpServletRequest request){
+    public ResponseEntity login(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpServletRequest request){
         return loginService.login(loginDTO,response,request);
     }
 
