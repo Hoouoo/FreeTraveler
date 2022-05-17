@@ -12,6 +12,8 @@ import team.capstonelongstone.freetraveler.utils.SHA256PasswordEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -35,16 +37,25 @@ public class LoginService {
         System.out.println(loginDTO.getUserId());
         Account account = loginRepository.findByUserId(loginDTO.getUserId());
 
+//         SHA256PasswordEncoder passwordEncoder = new SHA256PasswordEncoder();
+
+//         Map userId=new HashMap<String,LoginDTO>(); //JSON변환
+//         userId.put("userId",account.getUserId());
+
         if (Objects.isNull(account)){ //아이디 없을 때
             return new ResponseEntity("회원 아이디 없음",HttpStatus.BAD_REQUEST);
         }
 
         else{
+
             SHA256PasswordEncoder sha256PasswordEncoder=new SHA256PasswordEncoder();
             if(sha256PasswordEncoder.encode(loginDTO.getUserPassword()).equals(account.getUserPassword())) { //로그인 성공
+
+//             if(passwordEncoder.encode(loginDTO.getUserPassword()).equals(account.getUserPassword())) { //로그인 성공
+
                 HttpSession session=request.getSession();
                 session.setAttribute("account",account);
-                return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity(userId,HttpStatus.OK); //로그인 성공시 userId 넘김
             }
             else{ //로그인 실패
                 return new ResponseEntity("로그인 실패",HttpStatus.BAD_REQUEST);
@@ -59,11 +70,14 @@ public class LoginService {
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
 
+        Map userId=new HashMap<String,LoginDTO>(); //JSON변환
+        userId.put("userId",account.getUserId());
+
         if(Objects.isNull(account)){
             return new ResponseEntity("세션이 없습니다.", HttpStatus.valueOf(401));
         }
         else{
-            return new ResponseEntity(account.getUserId(), HttpStatus.OK);
+            return new ResponseEntity(userId, HttpStatus.OK); //로그인 성공시 userId 넘김
         }
 
     }
