@@ -20,9 +20,6 @@ html {
   height: 100%;
 }
 
-.map {
-
-}
 
 .map_marker_wrapper {
   align-items: center;
@@ -36,10 +33,11 @@ html {
   padding: 2px;
   border-radius: 5px;
   font-weight: bolder;
+  border: solid black 3px;
 }
 
 .triangle {
-  left: 37%;
+  left: calc(50% - 9px);
   position:absolute;
   width: 0px;
   height: 0px;

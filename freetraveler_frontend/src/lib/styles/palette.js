@@ -29,6 +29,21 @@ const palette = {
     "#0b7285",
   ],
   mint: ["#00f1b4"],
+
+  line: [
+    "#FF3412",
+    "#FF6E0B",
+    "#FFB202",
+    "#FFE701",
+    "#ADFF01",
+    "#20FF01",
+    "#00FFDD",
+    "#00BDFF",
+    "#0073FF",
+    "#011BFF",
+    "#7B00FF",
+    "#FF01FF",
+  ],
 };
 
 export default palette;
