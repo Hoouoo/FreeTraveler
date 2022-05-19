@@ -134,7 +134,7 @@ export default function PostWriteForm({ id, mode }) {
   var [repImg, setRepImg] = useState("");
   var [postName, setPostName] = useState("");
   var [totalCost, setTotalCost] = useState("");
-  var [totalDays, setTotalDays] = useState("");
+  var [totalDays, setTotalDays] = useState(0);
   var [totalTrans, setTotalTrans] = useState("");
   var [comment, setComment] = useState("");
 
@@ -199,10 +199,12 @@ export default function PostWriteForm({ id, mode }) {
         />
         <PostObjectTitle> 여행 일수 </PostObjectTitle>
         <PostInput
+          id="totalDays"
           name="totalDays"
           type="text"
           placeholder="여행 일수"
           onChange={onChange}
+          readOnly
         />
         <PostObjectTitle> 여행 방법 </PostObjectTitle>
         <PostInput
@@ -232,6 +234,11 @@ export default function PostWriteForm({ id, mode }) {
     </PWOABox>
   );
 
+  useEffect(() => {
+    const totalDaysInput = document.getElementById("totalDays");
+    totalDaysInput.value = totalDays;
+  }, [totalDays]);
+
   const dayRender = () => {
     const dayInputIndex = [];
     for (let i = 1; i <= dayIndex; i++) {
@@ -258,6 +265,7 @@ export default function PostWriteForm({ id, mode }) {
     gen.addBox({ id: dayIndex, day: dayIndex + 1, gen });
     setDayIndex(++dayIndex);
     setDays(gen.render());
+    setTotalDays(totalDays + 1);
   };
 
   const dayRemoveAction = function () {
@@ -265,6 +273,7 @@ export default function PostWriteForm({ id, mode }) {
       gen.removeTop();
       setDayIndex(--dayIndex);
       setDays(gen.render());
+      setTotalDays(totalDays - 1);
     }
   };
 

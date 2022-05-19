@@ -18,9 +18,9 @@ export default function FrontRouter() {
     "/login",
     "/register",
     "/posting/list",
-    "/pick",
     "/posting/write",
     "/posting/modify",
+    "/posting/read",
   ];
 
   //로그인 시 접근 불가 영역

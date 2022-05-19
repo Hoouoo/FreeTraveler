@@ -24,6 +24,7 @@ class PRPlaceBoxGenerator {
         pid={this._index}
         data={box.data}
         gen={this}
+        line={box.line}
       />
     );
 
@@ -41,6 +42,7 @@ class PRPlaceBoxGenerator {
           pid={this._index}
           data={box.data}
           gen={this}
+          line={box.line}
         />
       );
     });

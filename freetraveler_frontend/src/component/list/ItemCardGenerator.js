@@ -12,6 +12,7 @@ class ItemCardGenerator {
     this._array[this._index] = (
       <li key={"itemcard_" + itemcard.id} id={"itemcard_" + itemcard.id}>
         <ItemCard
+          id={itemcard.id}
           img={itemcard.img}
           name={itemcard.name}
           how={itemcard.how}
@@ -30,6 +31,7 @@ class ItemCardGenerator {
       this._array[this._index] = (
         <li id={"itemcard_" + itemcard.id}>
           <ItemCard
+            id={itemcard.id}
             img={itemcard.img}
             name={itemcard.name}
             how={itemcard.how}

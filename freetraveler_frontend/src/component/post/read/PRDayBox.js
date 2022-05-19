@@ -81,7 +81,7 @@ const PlaceAddBtn = styled.div`
   color: rgb(1, 82, 204);
 `;
 
-export default function PRDayBox({ id, day, pgen, data }) {
+export default function PRDayBox({ id, day, pgen, data, lines }) {
   var [places, setPlaces] = useState();
   var [gen, setGen] = useState(new PRPlaceBoxGenerator(places, setPlaces));
   var [init, setInit] = useState(false);
@@ -90,10 +90,10 @@ export default function PRDayBox({ id, day, pgen, data }) {
   if (init == false) {
     //상위 제너레이터(daybox)에 현재 제너레이터(placebox)전달 및 추가
     pgen._genArray.push(gen);
-
     //받은 데이터로 placebox 생성
-    for (var i = 0; i < data.length; i++) {
-      gen.addBox({ did: id, data: data[i] });
+    gen.addBox({ did: id, data: data[0], line: null });
+    for (var i = 1; i < data.length; i++) {
+      gen.addBox({ did: id, data: data[i], line: lines[i - 1] });
     }
     setPlaces(gen.render());
     setInit(true);

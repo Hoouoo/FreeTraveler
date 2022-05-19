@@ -6,6 +6,7 @@ import placelogo from "../../../resource/img/placelogo2.png";
 import Button from "../buttons/DayButton";
 import { FormControl, TextField, NativeSelect } from "@mui/material";
 import palette from "../../../lib/styles/palette";
+import { IoOpenOutline } from "react-icons/io5";
 
 const PRPlaceBoxTemplate = styled.div`
   /* width: auto; */
@@ -110,7 +111,48 @@ const CommentBox = styled.div`
   border-color: ${palette.mint[0]};
 `;
 
-export default function PRPlaceBox({ did, pid, data = {} }) {
+const trimDistance = function (distance) {
+  let trim = Math.floor(distance);
+  let output = "";
+
+  if (trim >= 1000) {
+    trim = trim / 1000;
+    output = trim + "km";
+  } else {
+    output = trim + "m";
+  }
+
+  return output;
+};
+
+const getTimeToArrival = function (trans, distance) {
+  let output = 0;
+  if (trans == "walk") {
+    output = distance / 1.1; //도보 초속 1.1m
+  } else if (trans == "public") {
+    output = distance / 6; //대중교통 초속 6m
+  } else if (trans == "car") {
+    output = distance / 12; // 자동차 초속 12m
+  }
+  //소수점 떼줌
+  output = Math.floor(output);
+  if (output < 60) {
+    output = output.toFixed(2);
+    output = output + "초";
+  } else if (output >= 60 && output < 3600) {
+    output = output / 60;
+    output = output.toFixed(2);
+    output = output + "분";
+  } else {
+    output = output / 3600;
+    output = output.toFixed(2);
+    output = output + "시간";
+  }
+
+  return output;
+};
+
+export default function PRPlaceBox({ did, pid, data = {}, line }) {
   // 스테이트 형식
   // let data = {
   //   name: "",
@@ -152,6 +194,20 @@ export default function PRPlaceBox({ did, pid, data = {} }) {
       <PRPlaceBoxTitle>
         <b>이동수단 | </b>
         {data.trans}
+      </PRPlaceBoxTitle>
+
+      {/* 거리 출력 */}
+      <PRPlaceBoxTitle>
+        <b>거리 | </b>
+        {line == null ? "출발지" : trimDistance(line.getLength())}
+      </PRPlaceBoxTitle>
+
+      {/* 시간 출력 */}
+      <PRPlaceBoxTitle>
+        <b>소요시간 | </b>
+        {line == null
+          ? "출발지"
+          : getTimeToArrival(data.trans, line.getLength())}
       </PRPlaceBoxTitle>
 
       {/* 내용 출력 */}

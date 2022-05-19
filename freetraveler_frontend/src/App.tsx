@@ -13,6 +13,7 @@ import Pick from "./pages/MyPickPage";
 import PostListPage from "./pages/PostListPage.js";
 import Post from "./pages/PostListPage.js";
 import PostModifyPage from "./pages/PostModifyPage";
+import PostReadPage from "./pages/PostReadPage";
 import PostWritePage from "./pages/PostWritePage";
 import RegisterPage from "./pages/RegisterPage";
 import Search from "./pages/SearchPage";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/register" component={RegisterPage}/>
           <Route path="/posting/write" component={PostWritePage}/>
           <Route path="/posting/modify" component={PostModifyPage}/>
+          <Route path="/posting/read" component={PostReadPage} />
         </ContentTemplate>
       </Switch>
       <TabBar />

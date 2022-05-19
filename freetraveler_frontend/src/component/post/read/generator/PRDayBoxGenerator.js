@@ -23,6 +23,7 @@ class PRDayBoxGenerator {
         day={box.day}
         pgen={box.gen}
         data={box.data}
+        lines={box.lines}
       />
     );
   }
@@ -38,6 +39,7 @@ class PRDayBoxGenerator {
           day={box.day}
           pgen={box.gen}
           data={box.data}
+          lines={box.lines}
         />
       );
     });

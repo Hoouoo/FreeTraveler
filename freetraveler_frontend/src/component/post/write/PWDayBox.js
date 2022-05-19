@@ -87,6 +87,8 @@ export default function PWDayBox({ id, day, pgen }) {
   //초기 한번만 실행
   if (init == false) {
     pgen._genArray.push(gen);
+    gen.addBox({ did: id });
+    setPlaces(gen.render());
     setInit(true);
   }
 

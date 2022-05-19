@@ -8,6 +8,10 @@ import palette from "../../../lib/styles/palette";
 import { red } from "@mui/material/colors";
 import { dom } from "@fortawesome/fontawesome-svg-core";
 import hardSet from "redux-persist/es/stateReconciler/hardSet";
+import { useDispatch, useSelector } from "react-redux";
+import { getPost } from "../../../module/posting";
+import { useHistory } from "react-router-dom";
+import qs from "qs";
 
 const PRForm = styled.form`
   width: auto;
@@ -148,6 +152,12 @@ export default function PostReadForm({ id }) {
   var [markers, setMarkers] = useState([]);
   var [lines, setLines] = useState([]);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+  // const { data } = useSelector(({ post }) => {
+  //   data: post.postRead;
+  // });
+
   //카카오 맵
   var map;
 
@@ -173,7 +183,7 @@ export default function PostReadForm({ id }) {
           cost: "72만원",
           img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
           content: "와우와우와우! 티익스프레스 개꿀잼!",
-          trans: "도보",
+          trans: "walk",
         },
         {
           placeName: "서대문 형무소",
@@ -183,7 +193,7 @@ export default function PostReadForm({ id }) {
           cost: "72만원",
           img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
           content: "와우와우와우! 오늘도 개꿀잼!",
-          trans: "도보",
+          trans: "walk",
         },
       ],
       [
@@ -195,7 +205,7 @@ export default function PostReadForm({ id }) {
           cost: "72만원",
           img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
           content: "와우와우와우! 내일도 개꿀잼!",
-          trans: "도보",
+          trans: "walk",
         },
         {
           placeName: "숭례문",
@@ -205,7 +215,7 @@ export default function PostReadForm({ id }) {
           cost: "72만원",
           img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
           content: "와우와우와우! 그냥 개꿀잼!",
-          trans: "도보",
+          trans: "walk",
         },
         {
           placeName: "서해",
@@ -215,10 +225,21 @@ export default function PostReadForm({ id }) {
           cost: "72만원",
           img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
           content: "와우와우와우! 그냥 개꿀잼!",
-          trans: "도보",
+          trans: "car",
         },
       ],
     ],
+  };
+
+  const getData = function () {
+    const query = qs.parse(history.location.search, {
+      ignoreQueryPrefix: true, // 물음표를 제거하고 받아오기 위해서
+    });
+
+    const id = query.id;
+
+    var request = { params: { userId: id } };
+    dispatch(getPost(request));
   };
 
   const createMap = function () {
@@ -287,8 +308,6 @@ export default function PostReadForm({ id }) {
       lines.push([]);
       setLines(lines);
       for (var j = 0; j < data.days[i].length - 1; j++) {
-        var now = data.days[i][j];
-        var next = data.days[i][j + 1];
         //선 정보
         var fullLine = new kakao.maps.Polyline({
           map: map, // 선을 표시할 지도입니다
@@ -298,25 +317,44 @@ export default function PostReadForm({ id }) {
           strokeStyle: "solid", // 선의 스타일입니다
         });
 
+        var now = data.days[i][j];
+        var next = data.days[i][j + 1];
+
         var latlng1 = new kakao.maps.LatLng(now.loc_y, now.loc_x);
         var latlng2 = new kakao.maps.LatLng(next.loc_y, next.loc_x);
 
         fullLine.setPath([latlng1, latlng2]);
-
         fullLine.setMap(map);
 
         lines[i].push(fullLine);
         setLines(lines);
       }
-    }
-  };
 
-  const createDayBox = function () {
-    //daybox 생성합니다
-    for (var i = 0; i < data.days.length; i++) {
-      gen.addBox({ id: dayIndex, day: dayIndex + 1, gen, data: data.days[i] });
-      setDayIndex(++dayIndex);
-      setDays(gen.render());
+      // //전날 제일 마지막과 다음날 가장 마지막을 잇는다.
+      // if (i < data.days.length - 1) {
+      //   if (data.days[i + 1][0] != null) {
+      //     //선 정보
+      //     var fullLine = new kakao.maps.Polyline({
+      //       map: map, // 선을 표시할 지도입니다
+      //       strokeWeight: 5, // 선의 두께입니다
+      //       strokeColor: palette.line[i % palette.line.length], // 선의 색깔입니다
+      //       strokeOpacity: 0.8, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+      //       strokeStyle: "solid", // 선의 스타일입니다
+      //     });
+
+      //     var now = data.days[i][data.days[i].length - 1];
+      //     var next = data.days[i + 1][0];
+
+      //     var latlng1 = new kakao.maps.LatLng(now.loc_y, now.loc_x);
+      //     var latlng2 = new kakao.maps.LatLng(next.loc_y, next.loc_x);
+
+      //     // fullLine.setPath([latlng1, latlng2]);
+      //     // fullLine.setMap(map);
+
+      //     lines[i].push(fullLine);
+      //     setLines(lines);
+      //   }
+      // }
     }
   };
 
@@ -444,6 +482,22 @@ export default function PostReadForm({ id }) {
           });
         }
       });
+  };
+
+  const createDayBox = function () {
+    //daybox 생성합니다
+    for (var i = 0; i < data.days.length; i++) {
+      const tempLines = lines[i];
+      gen.addBox({
+        id: dayIndex,
+        day: dayIndex + 1,
+        gen,
+        data: data.days[i],
+        lines: tempLines,
+      });
+      setDayIndex(++dayIndex);
+      setDays(gen.render());
+    }
   };
 
   useEffect(() => {

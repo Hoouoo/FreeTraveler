@@ -4,6 +4,7 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 // id, imgUrl, title, totalDay, totalCost, realization, pickCnt
 import { BsHandThumbsUp } from "react-icons/bs";
 import { RiThumbUpLine } from "react-icons/ri";
+import { useHistory } from "react-router-dom";
 
 const ItemCardStyled = styled.div`
   background-color: white;
@@ -158,8 +159,12 @@ function ItemCard({
   cost = "여행비용",
   desc = "경험자의 한마디",
 }) {
+  const history = useHistory();
+  const onClick = function (id) {
+    history.push("/posting/read?id=" + id);
+  };
   return (
-    <ItemCardStyled>
+    <ItemCardStyled onClick={() => onClick(id)}>
       <div className="itemcard">
         {/* 대표 사진 :  /css - profile_box */}
         <div className="profile_box">
