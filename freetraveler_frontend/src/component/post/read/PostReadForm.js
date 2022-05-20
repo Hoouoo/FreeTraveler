@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPost, loadModBuffer } from "../../../module/posting";
 import { useHistory } from "react-router-dom";
 import qs from "qs";
+import { removePost } from "../../../module/posting";
 
 const PRForm = styled.form`
   width: auto;
@@ -141,6 +142,15 @@ const DayButton = styled.div`
 `;
 
 const ModifyButton = styled.div`
+  display: inline;
+  cursor: pointer;
+  background-color: red;
+  padding: 2px;
+  border-radius: 5px;
+  color: white;
+`;
+
+const DeleteButton = styled.div`
   display: inline;
   cursor: pointer;
   background-color: red;
@@ -522,6 +532,11 @@ export default function PostReadForm({ id }) {
     history.push("/posting/modify");
   };
 
+  const deleteBoard = function () {
+    dispatch(removePost({ id: data.id }));
+    history.push("/posting/list");
+  };
+
   return (
     <>
       <PRForm>
@@ -539,6 +554,8 @@ export default function PostReadForm({ id }) {
             <b>{data.author}</b> &nbsp;&nbsp;&nbsp;{data.time}
             &nbsp;&nbsp;&nbsp;
             <ModifyButton onClick={() => linkToModify()}>수정하기</ModifyButton>
+            &nbsp;&nbsp;&nbsp;
+            <DeleteButton onClick={() => deleteBoard()}>삭제하기</DeleteButton>
           </TotalText>
         </TitleObjectText>
         <TextLine />

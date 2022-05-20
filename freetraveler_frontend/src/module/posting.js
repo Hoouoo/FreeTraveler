@@ -5,12 +5,10 @@ import createRequestSaga, {
 } from "../lib/createRequestSaga";
 import * as postAPI from "../lib/api/post";
 import { take, takeLatest } from "redux-saga/effects";
+import { useHistory } from "react-router-dom";
 
 const CHANGE_FEILD = "post/CHANGE_FEILD";
 const INITIALIZE_FORM = "post/INITIALIZE_FORM";
-
-const ADD_FORM = "post/ADD_FORM";
-const REMOVE_FORM = "post/REMOVE_FORM";
 
 const LOAD_MODBUFFER = "post/LOAD_MODBUFFER";
 const CLEAR_MODBUFFER = "post/CLEAR_MODBUFFER";
@@ -23,6 +21,9 @@ const [GET_POSTLIST, GET_POSTLIST_SUCCESS, GET_POSTLIST_FAILURE] =
 
 const [GET_POST, GET_POST_SUCCESS, GET_POST_FAILURE] =
   createRequestActionTypes("post/GET_POST");
+
+const [REMOVE_POST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE] =
+  createRequestActionTypes("post/REMOVE_POST");
 
 export const changeField = createAction(
   CHANGE_FEILD,
@@ -44,12 +45,14 @@ const initialState = {
   posWritetError: null,
   postListError: null,
   postReadError: null,
+  postRemoveError: null,
 };
 
 //액션 생성
 export const post = createAction(POST, (data) => data);
 export const getPostList = createAction(GET_POSTLIST, (data) => data);
 export const getPost = createAction(GET_POST, (data) => data);
+export const removePost = createAction(REMOVE_POST, (data) => data);
 
 export const loadModBuffer = createAction(LOAD_MODBUFFER, (data) => data);
 export const clearModBuffer = createAction(CLEAR_MODBUFFER, (data) => data);
@@ -58,11 +61,13 @@ export const clearModBuffer = createAction(CLEAR_MODBUFFER, (data) => data);
 const postSaga = createRequestSaga(POST, postAPI.post);
 const getPostListSaga = createRequestSaga(GET_POSTLIST, postAPI.getPostList);
 const getPostSaga = createRequestSaga(GET_POST, postAPI.getPost);
+const removePostSaga = createRequestSaga(REMOVE_POST, postAPI.removePost);
 
 export function* postingSaga() {
   yield takeLatest(POST, postSaga);
   yield takeLatest(GET_POSTLIST, getPostListSaga);
   yield takeLatest(GET_POST, getPostSaga);
+  yield takeLatest(REMOVE_POST, removePostSaga);
 }
 
 const posting = handleActions(
@@ -76,11 +81,15 @@ const posting = handleActions(
       [form]: initialState[form],
       postError: null, //폼 전환 시 회원 인증  에러 초기화
     }),
-    [POST_SUCCESS]: (state, { payload: postWrite }) => ({
-      ...state,
-      posWritetError: null,
-      postWrite,
-    }),
+    [POST_SUCCESS]: (state, { payload: postWrite }) => {
+      const history = useHistory();
+      history.push("/posting/read?id=" + postWrite.id);
+      return {
+        ...state,
+        posWritetError: null,
+        postWrite,
+      };
+    },
     [POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       postWriteError: error,
@@ -111,6 +120,15 @@ const posting = handleActions(
       ...state,
       modBuffer: {},
     }),
+    [REMOVE_POST_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+    }),
+    [REMOVE_POST_FAILURE]: (state, { payload: error }) => {
+      return {
+        ...state,
+        postRemoveError: error,
+      };
+    },
   },
   initialState
 );

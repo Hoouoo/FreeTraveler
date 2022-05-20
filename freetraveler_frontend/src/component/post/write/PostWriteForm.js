@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import post, { changeField, clearModBuffer } from "../../../module/posting";
+import { post, changeField, clearModBuffer } from "../../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
 import PostTemplate from "../PostTemplate";
 import palette from "../../../lib/styles/palette";
