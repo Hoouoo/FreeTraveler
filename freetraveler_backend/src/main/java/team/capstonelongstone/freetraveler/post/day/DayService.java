@@ -44,13 +44,13 @@ public class DayService {
                 MultipartHttpServletRequest multipartRequest= (MultipartHttpServletRequest) request;
                 MultipartFile file=multipartRequest.getFile(varImg);
 
-                String placeTargetImg = imgService.daySaveImg(request, file,day,j);
+                List<String> list = imgService.daySaveImg(request, file, day, j);
                 List<Double> latLng = postService.getLatLng(request.getParameter(day + "_" + j + "_" + "loc"));
 
                 Place place=Place.builder().board(board).day(newDay).name(request.getParameter(day + "_" + j + "_" + "name"))
                         .address(request.getParameter(day + "_" + j + "_" + "loc")).cost(Integer.valueOf(request.getParameter(day + "_" + j + "_" + "cost")))
                         .review(request.getParameter(day + "_" + j + "_" + "content")).transportation(request.getParameter(day + "_" + j + "_" + "trans"))
-                        .lat(latLng.get(0)).lng(latLng.get(1)).placeImage(placeTargetImg).build();
+                        .lat(latLng.get(0)).lng(latLng.get(1)).placeImgPath(list.get(0)).placeImgName(list.get(1)).build();
                 placeRepository.save(place);
             }
 

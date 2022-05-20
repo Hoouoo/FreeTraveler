@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,25 +31,24 @@ public class BoardService {
         String postName = request.getParameter("postName");
         Integer totalDays = Integer.valueOf(request.getParameter("totalDays"));
         String comment = request.getParameter("comment");
+        String totalTrans=request.getParameter("totalTrans");
+
         Account author = account;
         int sumTotalCost = 0;
-        HashSet<String> setTrans = new HashSet<>();
 
         for (int day=0;day<totalDays;day++) {
             String varPlength = day + "_plength";
             Integer _plength = Integer.valueOf(request.getParameter(varPlength));
             for (int j = 0; j < _plength; j++) {
-                String targetTrans = request.getParameter(day + "_" + j + "_" + "trans");
-                setTrans.add(targetTrans);
                 Integer cost = Integer.valueOf(request.getParameter(day + "_" + j + "_" + "cost"));
                 sumTotalCost+=cost;
             }
         }
 
-        String boardTargetImg = imgService.boardSaveImg(request, file);
+        List<String> list = imgService.boardSaveImg(request, file);
 
         Board board = Board.builder().postName(postName).totalDays(totalDays).totalCost(sumTotalCost).comment(comment).pickCnt(0)
-                .author(author).refImg(boardTargetImg).build();
+                .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
         saveBoard(board);
         return board;
     }

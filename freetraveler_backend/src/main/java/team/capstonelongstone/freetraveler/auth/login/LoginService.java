@@ -36,7 +36,7 @@ public class LoginService {
     public ResponseEntity login(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpServletRequest request){
         Account account = loginRepository.findByUserId(loginDTO.getUserId());
         SHA256PasswordEncoder passwordEncoder = new SHA256PasswordEncoder();
-        
+
         Map userId=new HashMap<String,LoginDTO>(); //JSON변환
         userId.put("userId",account.getUserId());
 

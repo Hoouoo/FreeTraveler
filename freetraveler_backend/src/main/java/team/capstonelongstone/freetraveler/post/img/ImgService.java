@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ImgService {
@@ -25,14 +25,19 @@ public class ImgService {
      * 이미지 저장
      */
     public void uploadImg(MultipartFile file, String imgName, String suffix) throws IOException {
-        file.transferTo(new File("D:\\" + imgName + suffix));
+        String myDirectory = System.getProperty("user.dir");
+        file.transferTo(new File(myDirectory + imgName + suffix));
     }
 
     /**
      * 이미지 경로 설정
      */
-    public String getImgPath(String imgName, String suffix) {
-        return "D:\\" + imgName + suffix;
+    public List<String> getImgPath_Name(String imgName, String suffix) {
+        List<String> list=new ArrayList<>();
+        String myDirectory = System.getProperty("user.dir");
+        list.add(myDirectory);
+        list.add(imgName+suffix);
+        return list;
     }
 
     /**
@@ -52,13 +57,14 @@ public class ImgService {
             }
         }
 
-        return targetImgID+1;
+        return targetImgID;
     }
 
     /**
      * board 저장
+     * @return
      */
-    public String boardSaveImg(HttpServletRequest request,MultipartFile file) throws IOException {
+    public List<String> boardSaveImg(HttpServletRequest request, MultipartFile file) throws IOException {
 
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
@@ -71,13 +77,14 @@ public class ImgService {
 
         uploadImg(file, ImgUUID, suffix);
 
-        return getImgPath(ImgUUID, suffix);
+        return getImgPath_Name(ImgUUID,suffix);
     }
 
     /**
      * day, place 저장
+     * @return
      */
-    public String daySaveImg(HttpServletRequest request,MultipartFile file,int day,int j) throws IOException {
+    public List<String> daySaveImg(HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
 
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
@@ -88,8 +95,7 @@ public class ImgService {
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
         uploadImg(file, ImgUUID, suffix);
-
-        return getImgPath(ImgUUID, suffix);
+        return getImgPath_Name(ImgUUID,suffix);
     }
 
 

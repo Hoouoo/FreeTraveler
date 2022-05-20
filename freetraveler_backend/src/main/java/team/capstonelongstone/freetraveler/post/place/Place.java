@@ -31,23 +31,26 @@ public class Place {
 
     @Lob
     private String review;
+
     private String transportation;
     private Double lat;
     private Double lng;
-    @Lob
-    private String placeImage;
+
+    private String placeImgPath;
+    private String placeImgName;
 
     @Builder
-    public Place(Board board, Day day,String name, String address, Integer cost, String review, String transportation, Double lat, Double lng, String placeImage) {
+    public Place(Board board, Day day, String name, String address, Integer cost, String review, String transportation, Double lat, Double lng, String placeImgPath, String placeImgName) {
         this.board = board;
         this.day = day;
-        this.name=name;
+        this.name = name;
         this.address = address;
         this.cost = cost;
         this.review = review;
         this.transportation = transportation;
         this.lat = lat;
         this.lng = lng;
-        this.placeImage = placeImage;
+        this.placeImgPath = placeImgPath;
+        this.placeImgName = placeImgName;
     }
 }
