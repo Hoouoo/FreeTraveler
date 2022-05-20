@@ -4,7 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.capstonelongstone.freetraveler.post.board.Board;
+import team.capstonelongstone.freetraveler.post.board.BoardRepository;
+import team.capstonelongstone.freetraveler.post.day.Day;
+import team.capstonelongstone.freetraveler.post.day.DayRepository;
+import team.capstonelongstone.freetraveler.post.place.Place;
+import team.capstonelongstone.freetraveler.post.place.PlaceRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +25,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
+    @Autowired
+    BoardRepository boardRepository;
+
+    @Autowired
+    PlaceRepository placeRepository;
+
+    @Autowired
+    DayRepository dayRepository;
 
     public List<Double> getLatLng(String loc) throws IOException, JSONException {
         String location = loc; //도로명 주소
@@ -73,6 +89,52 @@ public class PostService {
         LntLng.add(tempObj.getDouble("y"));
         LntLng.add(tempObj.getDouble("x"));
         return LntLng;
+    }
+
+    public String getPost(String boardId) throws JSONException, IOException {
+        long id = Integer.valueOf(boardId).longValue();
+
+        Board board = boardRepository.getById(id);
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("id",board.getId());
+        jsonObject.put("author",board.getAuthor().getUserId());
+        jsonObject.put("time",board.getModifiedDate());
+        jsonObject.put("repimg",board.getRepImgName());
+        jsonObject.put("postName",board.getPostName());
+        jsonObject.put("totalCost",board.getTotalCost());
+        jsonObject.put("totalDays",board.getTotalDays());
+        jsonObject.put("totalTrans",board.getTotalTrans());
+        jsonObject.put("comment",board.getComment());
+        jsonObject.put("good",board.getPickCnt());
+
+        //day
+        List<Day> allByBoardId = dayRepository.findAllByBoard(board);
+        JSONArray dayArray= new JSONArray();
+
+        for (Day days : allByBoardId) {
+            JSONArray placeArray=new JSONArray();
+            List<Place> allByDayId = placeRepository.findAllByDay(days);
+
+            for (Place place : allByDayId) {
+                JSONObject data=new JSONObject();
+
+                data.put("placeName",place.getName());
+                data.put("loc",place.getAddress());
+                data.put("loc_x",place.getLng());
+                data.put("loc_y",place.getLat());
+                data.put("cost",place.getCost());
+                data.put("img",place.getPlaceImgName());
+                data.put("content",place.getReview());
+                data.put("trans",place.getTransportation());
+                placeArray.put(data);
+            }
+            dayArray.put(placeArray);
+            jsonObject.put("days",dayArray);
+        }
+
+        return jsonObject.toString();
     }
 
 }
