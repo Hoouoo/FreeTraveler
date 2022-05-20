@@ -70,9 +70,6 @@ public class ImgService {
         Account account = (Account) session.getAttribute("account");
 
         String ImgUUID = account.getUserId() +getImgId(); //대표 이미지 UUID
-        System.out.println("board");
-        System.out.println(ImgUUID);
-
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
         uploadImg(file, ImgUUID, suffix);
@@ -90,8 +87,6 @@ public class ImgService {
         Account account = (Account) session.getAttribute("account");
 
         String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" +getImgId();
-        System.out.println("day");
-        System.out.println(ImgUUID);
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
         uploadImg(file, ImgUUID, suffix);

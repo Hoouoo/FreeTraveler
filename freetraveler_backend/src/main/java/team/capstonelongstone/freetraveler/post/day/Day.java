@@ -3,6 +3,8 @@ package team.capstonelongstone.freetraveler.post.day;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import team.capstonelongstone.freetraveler.post.board.Board;
 
 import javax.persistence.*;
@@ -18,6 +20,7 @@ public class Day {
     private Long id;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 

@@ -3,6 +3,8 @@ package team.capstonelongstone.freetraveler.post.place;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import team.capstonelongstone.freetraveler.post.board.Board;
 import team.capstonelongstone.freetraveler.post.day.Day;
 
@@ -18,13 +20,15 @@ public class Place {
     @Column(name = "PLACE_ID")
     Long id;
 
-    @ManyToOne
-    @JoinColumn(name="BOARD_ID")
-    private Board board;
+//    @ManyToOne
+//    @JoinColumn(name="BOARD_ID")
+//    private Board board;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="DAY_ID")
     private Day day;
+
     private String name;
     private String address;
     private Integer cost;
@@ -40,8 +44,7 @@ public class Place {
     private String placeImgName;
 
     @Builder
-    public Place(Board board, Day day, String name, String address, Integer cost, String review, String transportation, Double lat, Double lng, String placeImgPath, String placeImgName) {
-        this.board = board;
+    public Place(Day day, String name, String address, Integer cost, String review, String transportation, Double lat, Double lng, String placeImgPath, String placeImgName) {
         this.day = day;
         this.name = name;
         this.address = address;
