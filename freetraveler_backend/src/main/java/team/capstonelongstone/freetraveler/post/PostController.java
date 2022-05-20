@@ -2,7 +2,6 @@ package team.capstonelongstone.freetraveler.post;
 
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,16 +32,19 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post") //게시물 등록
+    @ResponseBody
     public ResponseEntity generateBoard(HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws JSONException, IOException {
 
         String mode = request.getParameter("mode");
         if (mode.equals("write")) { //게시글 등록
-
             try {
                 Board board = boardService.generateBoard(request, file);
-
                 dayService.generateDay(request, board);
-                return new ResponseEntity(HttpStatus.valueOf(201));
+
+                HashMap<String,Integer> boardId=new HashMap<>();
+                boardId.put("id",board.getId().intValue());
+
+                return new ResponseEntity(boardId,HttpStatus.valueOf(201));
             } catch (Exception e) {
                 return new ResponseEntity(HttpStatus.valueOf(409));
             }
@@ -59,6 +61,17 @@ public class PostController {
         String boardId = id.get("id");
         String post = postService.getPost(boardId);
         return new ResponseEntity(post,HttpStatus.valueOf(200));
+    }
+
+    @DeleteMapping("/post")
+    public ResponseEntity deletePost(@RequestBody HashMap<String,String >id){
+        String boardId = id.get("id");
+        try {
+            postService.deletePost(boardId); //board 지우면 day, place 같이 지워짐
+            return new ResponseEntity(HttpStatus.valueOf(201));
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.valueOf(409));
+        }
     }
 
     @GetMapping(value = "/{boardImg}", produces = MediaType.IMAGE_JPEG_VALUE) //이미지 접근 링크

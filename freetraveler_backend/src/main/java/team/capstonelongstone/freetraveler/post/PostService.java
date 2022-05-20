@@ -21,6 +21,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -135,6 +136,13 @@ public class PostService {
         }
 
         return jsonObject.toString();
+    }
+
+    public void deletePost(String boardId){
+        Integer intBoardId = Integer.valueOf(boardId);
+        long longBoardId = intBoardId.longValue();
+        Board findByBoardId = boardRepository.findByBoardId(longBoardId);
+        boardRepository.delete(findByBoardId);
     }
 
 }
