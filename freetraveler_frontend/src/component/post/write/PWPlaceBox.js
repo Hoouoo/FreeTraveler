@@ -86,22 +86,60 @@ const PlaceRemoveBtn = styled.div`
   text-align: center;
 `;
 
+const PostPreviewImage = styled.div`
+  width: 500px;
+  height: auto;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 const PostSelect = styled.select``;
 
 const PostOption = styled.option``;
 
-export default function PWPlaceBox({ did, pid, gen }) {
-  //const stateName = did + "_" + pid + "_state";
+export default function PWPlaceBox({ did, pid, gen, data }) {
+  let [previewImg, setPreviewImg] = useState();
+
   let state = {
-    // [stateName]: {
     name: "",
     loc: "",
     cost: "",
     img: "",
     content: "",
     trans: "",
-    // },
   };
+
+  const showImage = (fileBlob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setPreviewImg(reader.result);
+        resolve();
+      };
+    });
+  };
+
+  useEffect(() => {
+    //엘리멘트 가져오기
+    if (data != null && data != undefined) {
+      const name = document.getElementById(did + "_" + pid + "_name");
+      const loc = document.getElementById(did + "_" + pid + "_loc");
+      const cost = document.getElementById(did + "_" + pid + "_cost");
+      const img = document.getElementById(did + "_" + pid + "_img");
+      const content = document.getElementById(did + "_" + pid + "_content");
+      const trans = document.getElementById(did + "_" + pid + "_trans");
+
+      name.value = data.placeName;
+      setAddressDetail(data.loc);
+      cost.value = data.cost;
+      content.value = data.content;
+      setPreviewImg(data.img);
+      trans.value = data.trans;
+    }
+  }, []);
 
   const placeRemoveAction = function () {
     gen.remove(pid);
@@ -136,7 +174,8 @@ export default function PWPlaceBox({ did, pid, gen }) {
     } else if (name == did + "_" + pid + "_cost") {
       state.cost = value;
     } else if (name == did + "_" + pid + "_img") {
-      state.img = files;
+      state.img = files[0];
+      showImage(files[0]);
     } else if (name == did + "_" + pid + "_content") {
       state.content = value;
     } else if (name == did + "_" + pid + "_trans") {
@@ -205,6 +244,7 @@ export default function PWPlaceBox({ did, pid, gen }) {
       <PostInput>
         <TextField
           fullWidth
+          id={did + "_" + pid + "_name"}
           name={did + "_" + pid + "_name"}
           type="text"
           placeholder="ex) 가게명, 명소명"
@@ -218,6 +258,7 @@ export default function PWPlaceBox({ did, pid, gen }) {
       <PostInput>
         <TextField
           fullWidth
+          id={did + "_" + pid + "_loc"}
           name={did + "_" + pid + "_loc"}
           type="text"
           placeholder="위치"
@@ -239,6 +280,7 @@ export default function PWPlaceBox({ did, pid, gen }) {
       <PostInput>
         <TextField
           fullWidth
+          id={did + "_" + pid + "_cost"}
           name={did + "_" + pid + "_cost"}
           type="text"
           placeholder="비용"
@@ -249,15 +291,20 @@ export default function PWPlaceBox({ did, pid, gen }) {
       </PostInput>
 
       <PostInputTitle>사진</PostInputTitle>
+      <PostPreviewImage>
+        <img src={previewImg} />
+      </PostPreviewImage>
       <PostInput>
         <TextField
           fullWidth
+          id={did + "_" + pid + "_img"}
           name={did + "_" + pid + "_img"}
           type="file"
           placeholder="사진"
           onChange={onChange}
           variant="outlined"
           onClick={() => onClosePost()}
+          accept="image/*"
         ></TextField>
       </PostInput>
 
@@ -265,6 +312,7 @@ export default function PWPlaceBox({ did, pid, gen }) {
       <PostInput>
         <TextField
           fullWidth
+          id={did + "_" + pid + "_content"}
           name={did + "_" + pid + "_content"}
           type="text"
           placeholder="내용"
@@ -278,6 +326,7 @@ export default function PWPlaceBox({ did, pid, gen }) {
       <PostInput>
         <FormControl fullWidth>
           <NativeSelect
+            id={did + "_" + pid + "_trans"}
             name={did + "_" + pid + "_trans"}
             onChange={onChange}
             onClick={() => onClosePost()}

@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import post, { changeField } from "../../../module/posting";
+import post, { changeField, clearModBuffer } from "../../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
 import PostTemplate from "../PostTemplate";
 import palette from "../../../lib/styles/palette";
@@ -113,6 +113,15 @@ const PostObjectTitle = styled.div`
   width: 100%;
 `;
 
+const PostPreviewImage = styled.div`
+  width: 500px;
+  height: auto;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 const DayAddBtn = styled.div`
   width: 100%;
   text-align: center;
@@ -124,29 +133,63 @@ const DayRemoveBtn = styled.div`
 `;
 
 export default function PostWriteForm({ id, mode }) {
-  var [init, setInit] = useState(false);
-
   var [gen, setGen] = useState(new PWDayBoxGenerator());
   var [days, setDays] = useState(gen.render());
   var [dayIndex, setDayIndex] = useState(0);
 
-  var [mode, setMode] = useState();
   var [repImg, setRepImg] = useState("");
+  var [repImgPreview, setRepImagePreview] = useState("");
   var [postName, setPostName] = useState("");
   var [totalCost, setTotalCost] = useState("");
   var [totalDays, setTotalDays] = useState(0);
   var [totalTrans, setTotalTrans] = useState("");
   var [comment, setComment] = useState("");
 
-  //최초 한번 실행
-  if (init != false) {
-    setMode(mode);
-    setInit(true);
-  }
+  var [data, setData] = useState(null);
 
   const dispatch = useDispatch();
+  const { modBuffer } = useSelector(({ post }) => ({
+    modBuffer: post.modBuffer,
+  }));
 
-  // //리모컨 scroll 이벤트
+  const dataSetting = function () {};
+  useEffect(() => {
+    if (mode == "modify") {
+      setData(modBuffer);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mode == "modify") {
+      if (data != undefined && data != null && JSON.stringify(data) != "{}") {
+        const postName = document.getElementById("postName");
+        const totalCost = document.getElementById("totalCost");
+        const totalTrans = document.getElementById("totalTrans");
+        const comment = document.getElementById("comment");
+
+        postName.value = data.postName;
+        totalCost.value = data.totalCost;
+        totalTrans.value = data.totalTrans;
+        comment.value = data.comment;
+        setRepImagePreview(data.repImg);
+
+        //day 박스 추가
+        for (let i = 0; i < data.days.length; i++) {
+          gen.addBox({
+            id: dayIndex,
+            day: dayIndex + 1,
+            gen,
+            data: data.days[i],
+          });
+          setDayIndex(++dayIndex);
+          setDays(gen.render());
+          setTotalDays(++totalDays);
+        }
+      }
+    }
+  }, [data]);
+
+  // //리모컨 scroll
   // const [scrollPosition, setScrollPosition] = useState(0);
   // const pageHeight = window.innerHeight;
   // const updateScroll = () => {
@@ -155,13 +198,25 @@ export default function PostWriteForm({ id, mode }) {
   // useEffect(() => {
   //   window.addEventListener("scroll", updateScroll);
   // });
+  const showImage = (fileBlob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setRepImagePreview(reader.result);
+        resolve();
+      };
+    });
+  };
 
   //인풋 변경 이벤트 핸들러
+
   const onChange = (event) => {
     const { value, name, files } = event.target;
     switch (name) {
       case "repImg":
         setRepImg(files[0]);
+        showImage(files[0]);
         break;
       case "postName":
         setPostName(value);
@@ -185,6 +240,7 @@ export default function PostWriteForm({ id, mode }) {
     <PWOABox>
       <PWForm>
         <TitleInput
+          id="postName"
           name="postName"
           type="text"
           placeholder="포스트 제목"
@@ -192,6 +248,7 @@ export default function PostWriteForm({ id, mode }) {
         />
         <PostObjectTitle> 여행 비용 </PostObjectTitle>
         <PostInput
+          id="totalCost"
           name="totalCost"
           type="text"
           placeholder="여행 비용"
@@ -208,6 +265,7 @@ export default function PostWriteForm({ id, mode }) {
         />
         <PostObjectTitle> 여행 방법 </PostObjectTitle>
         <PostInput
+          id="totalTrans"
           name="totalTrans"
           type="text"
           placeholder="여행 방법"
@@ -215,9 +273,18 @@ export default function PostWriteForm({ id, mode }) {
         />
 
         <PostObjectTitle> 대표 사진 </PostObjectTitle>
-        <PostInput name="repImg" type="file" onChange={onChange} />
+        <PostPreviewImage>
+          <img id="repImg" src={repImgPreview} />
+        </PostPreviewImage>
+        <PostInput
+          name="repImg"
+          type="file"
+          onChange={onChange}
+          accept="image/*"
+        />
         <PostObjectTitle> 경험자의 한마디 </PostObjectTitle>
         <PostInput
+          id="comment"
           name="comment"
           type="text"
           placeholder="경험자의 한마디"
@@ -269,7 +336,7 @@ export default function PostWriteForm({ id, mode }) {
   };
 
   const dayRemoveAction = function () {
-    if (dayIndex >= 0) {
+    if (dayIndex > 0) {
       gen.removeTop();
       setDayIndex(--dayIndex);
       setDays(gen.render());
@@ -291,6 +358,13 @@ export default function PostWriteForm({ id, mode }) {
     formData.append("totalDays", totalDays);
     formData.append("totalTrans", totalTrans);
     formData.append("comment", comment);
+
+    if (mode == "write") {
+      formData.append("mode", "write");
+    } else if (mode == "modify") {
+      formData.append("id", data.id);
+      formData.append("mode", "modify");
+    }
 
     dispatch(post(formData));
   };

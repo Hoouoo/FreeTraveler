@@ -79,18 +79,24 @@ const PlaceAddBtn = styled.div`
   color: rgb(1, 82, 204);
 `;
 
-export default function PWDayBox({ id, day, pgen }) {
+export default function PWDayBox({ id, day, pgen, data }) {
   var [places, setPlaces] = useState();
   var [gen, setGen] = useState(new PWPlaceBoxGenerator(places, setPlaces));
   var [init, setInit] = useState(false);
 
-  //초기 한번만 실행
-  if (init == false) {
-    pgen._genArray.push(gen);
-    gen.addBox({ did: id });
-    setPlaces(gen.render());
-    setInit(true);
-  }
+  useEffect(() => {
+    if (data != undefined && data != null && JSON.stringify(data) != "{}") {
+      for (let i = 0; i < data.length; i++) {
+        pgen._genArray.push(gen);
+        gen.addBox({ did: id, data: data[i] });
+        setPlaces(gen.render());
+      }
+    } else {
+      pgen._genArray.push(gen);
+      gen.addBox({ did: id });
+      setPlaces(gen.render());
+    }
+  }, []);
 
   const placeAddAction = function () {
     gen.addBox({ did: id });

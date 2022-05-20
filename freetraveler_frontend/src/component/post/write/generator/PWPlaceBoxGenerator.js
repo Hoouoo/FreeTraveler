@@ -22,11 +22,12 @@ class PWPlaceBoxGenerator {
         did={box.did}
         pid={this._index}
         gen={this}
+        data={box.data}
       />
     );
 
     this._array.forEach((e) => {
-      console.log(e);
+      //console.log(e);
     });
 
     this.setPlaces(this.render());
@@ -42,6 +43,7 @@ class PWPlaceBoxGenerator {
           did={box.did}
           pid={this._index}
           gen={this}
+          data={box.data}
         />
       );
     });

@@ -9,7 +9,7 @@ import { red } from "@mui/material/colors";
 import { dom } from "@fortawesome/fontawesome-svg-core";
 import hardSet from "redux-persist/es/stateReconciler/hardSet";
 import { useDispatch, useSelector } from "react-redux";
-import { getPost } from "../../../module/posting";
+import { getPost, loadModBuffer } from "../../../module/posting";
 import { useHistory } from "react-router-dom";
 import qs from "qs";
 
@@ -140,6 +140,15 @@ const DayButton = styled.div`
   cursor: pointer;
 `;
 
+const ModifyButton = styled.div`
+  display: inline;
+  cursor: pointer;
+  background-color: red;
+  padding: 2px;
+  border-radius: 5px;
+  color: white;
+`;
+
 const { kakao } = window;
 
 const PostInput = styled.input``;
@@ -163,9 +172,9 @@ export default function PostReadForm({ id }) {
 
   const data = {
     id: "1",
-    author: "작성자",
+    author: "이상훈",
     time: "2021-04-24",
-    repimg:
+    repImg:
       "https://file.mk.co.kr/meet/neds/2022/05/image_readtop_2022_413241_16521705595037804.jpg",
     postName: "서울 여행",
     totalCost: "100만원",
@@ -508,12 +517,17 @@ export default function PostReadForm({ id }) {
     createDayBox();
   }, []);
 
+  const linkToModify = function () {
+    dispatch(loadModBuffer(data));
+    history.push("/posting/modify");
+  };
+
   return (
     <>
       <PRForm>
         <ImgForm>
           <div className="image-box">
-            <img className="image-inbox" src={data.repimg} />
+            <img className="image-inbox" src={data.repImg} />
           </div>
         </ImgForm>
         <TitleText>{data.postName}</TitleText> <br />
@@ -523,6 +537,8 @@ export default function PostReadForm({ id }) {
               <VscAccount size="30" color="#000" />
             </TitleLogo>
             <b>{data.author}</b> &nbsp;&nbsp;&nbsp;{data.time}
+            &nbsp;&nbsp;&nbsp;
+            <ModifyButton onClick={() => linkToModify()}>수정하기</ModifyButton>
           </TotalText>
         </TitleObjectText>
         <TextLine />
@@ -552,6 +568,7 @@ export default function PostReadForm({ id }) {
         <DayButtonForm>{buttons}</DayButtonForm>
         <br />
         {/* 여기가 지도 넣을 곳 */}
+        {/* 데이 박스 */}
         {days}
       </PRForm>
     </>

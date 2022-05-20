@@ -12,6 +12,9 @@ const INITIALIZE_FORM = "post/INITIALIZE_FORM";
 const ADD_FORM = "post/ADD_FORM";
 const REMOVE_FORM = "post/REMOVE_FORM";
 
+const LOAD_MODBUFFER = "post/LOAD_MODBUFFER";
+const CLEAR_MODBUFFER = "post/CLEAR_MODBUFFER";
+
 const [POST, POST_SUCCESS, POST_FAILURE] =
   createRequestActionTypes("post/POST");
 
@@ -33,7 +36,8 @@ export const changeField = createAction(
 export const initializeForm = createAction(INITIALIZE_FORM, (form) => form); // register / login
 
 const initialState = {
-  meta: {},
+  modBuffer: {},
+
   postWrite: {},
   postRead: {},
   postList: {},
@@ -42,9 +46,13 @@ const initialState = {
   postReadError: null,
 };
 
+//액션 생성
 export const post = createAction(POST, (data) => data);
 export const getPostList = createAction(GET_POSTLIST, (data) => data);
 export const getPost = createAction(GET_POST, (data) => data);
+
+export const loadModBuffer = createAction(LOAD_MODBUFFER, (data) => data);
+export const clearModBuffer = createAction(CLEAR_MODBUFFER, (data) => data);
 
 //사가 생성
 const postSaga = createRequestSaga(POST, postAPI.post);
@@ -94,6 +102,14 @@ const posting = handleActions(
     [GET_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       postReadError: error,
+    }),
+    [LOAD_MODBUFFER]: (state, { payload: data }) => ({
+      ...state,
+      modBuffer: data,
+    }),
+    [CLEAR_MODBUFFER]: (state, { payload: data }) => ({
+      ...state,
+      modBuffer: {},
     }),
   },
   initialState

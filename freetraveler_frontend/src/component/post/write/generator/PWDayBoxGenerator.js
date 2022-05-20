@@ -10,20 +10,35 @@ class PWDayBoxGenerator {
   constructor() {
     this._array = new Array();
     this._genArray = new Array();
+    this._index = -1;
   }
 
   //단일 아이템 카드 삽입
   addBox(box) {
+    this._index++;
     this._array.push(
-      <PWDayBox key={box.id} id={box.id} day={box.day} pgen={box.gen} />
+      <PWDayBox
+        key={this._index}
+        id={box.id}
+        day={box.day}
+        pgen={box.gen}
+        data={box.data}
+      />
     );
   }
 
   //아이템 카드 배열 삽입
   addBoxArray(array) {
     array.forEach((box) => {
+      this._index++;
       this._array.push(
-        <PWDayBox key={box.id} id={box.id} day={box.day} pgen={box.gen} />
+        <PWDayBox
+          key={this._index}
+          id={box.id}
+          day={box.day}
+          pgen={box.gen}
+          data={box.data}
+        />
       );
     });
   }
