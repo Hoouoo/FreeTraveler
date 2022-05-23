@@ -182,8 +182,8 @@ export default function PostWriteForm({ id, mode }) {
             data: data.days[i],
           });
           setDayIndex(++dayIndex);
-          setDays(gen.render());
           setTotalDays(++totalDays);
+          setDays(gen.render());
         }
       }
     }
@@ -198,6 +198,7 @@ export default function PostWriteForm({ id, mode }) {
   // useEffect(() => {
   //   window.addEventListener("scroll", updateScroll);
   // });
+
   const showImage = (fileBlob) => {
     const reader = new FileReader();
     reader.readAsDataURL(fileBlob);

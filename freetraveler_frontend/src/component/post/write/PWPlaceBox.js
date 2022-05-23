@@ -101,15 +101,14 @@ const PostOption = styled.option``;
 
 export default function PWPlaceBox({ did, pid, gen, data }) {
   let [previewImg, setPreviewImg] = useState();
-
-  let state = {
+  let [state, setState] = useState({
     name: "",
     loc: "",
     cost: "",
     img: "",
     content: "",
     trans: "",
-  };
+  });
 
   const showImage = (fileBlob) => {
     const reader = new FileReader();
@@ -138,8 +137,21 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
       content.value = data.content;
       setPreviewImg(data.img);
       trans.value = data.trans;
+
+      setState({
+        name: data.placeName,
+        loc: data.loc,
+        cost: data.cost,
+        img: "",
+        content: data.content,
+        trans: data.trans,
+      });
     }
   }, []);
+
+  useEffect(() => {
+    stateSave();
+  }, [state]);
 
   const placeRemoveAction = function () {
     gen.remove(pid);
@@ -153,33 +165,25 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
   const onChange = (e) => {
     const { value, name, files } = e.target;
 
-    // if (name == did + "_" + pid + "_name") {
-    //   state[stateName].name = value;
-    // } else if (name == did + "_" + pid + "_loc") {
-    //   state[stateName].loc = value;
-    // } else if (name == did + "_" + pid + "_cost") {
-    //   state[stateName].cost = value;
-    // } else if (name == did + "_" + pid + "_img") {
-    //   state[stateName].img = files;
-    // } else if (name == did + "_" + pid + "_content") {
-    //   state[stateName].content = value;
-    // } else if (name == did + "_" + pid + "_trans") {
-    //   state[stateName].trans = value;
-    // }
-
     if (name == did + "_" + pid + "_name") {
       state.name = value;
+      setState(state);
     } else if (name == did + "_" + pid + "_loc") {
       state.loc = value;
+      setState(state);
     } else if (name == did + "_" + pid + "_cost") {
       state.cost = value;
+      setState(state);
     } else if (name == did + "_" + pid + "_img") {
-      state.img = files[0];
+      state.img = files != undefined ? files : "";
+      setState(state);
       showImage(files[0]);
     } else if (name == did + "_" + pid + "_content") {
       state.content = value;
+      setState(state);
     } else if (name == did + "_" + pid + "_trans") {
       state.trans = value;
+      setState(state);
     }
 
     stateSave();

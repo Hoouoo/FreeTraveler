@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PostButton from "./buttons/PostButton";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import palette from "../../lib/styles/palette";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import ItemCardGenerator from "../list/ItemCardGenerator";
+import { useSelector } from "react-redux";
 
 const PostListBox = styled.div`
   width: auto;
@@ -76,14 +78,37 @@ const PostListBox = styled.div`
   }
 `;
 
-export default function PostListTemplate({ children }) {
+export default function PostListTemplate({ id }) {
+  let [gen, setGen] = useState(new ItemCardGenerator());
+  let [render, setRender] = useState(gen.render());
+  const history = useHistory();
+  const location = useLocation();
+  const { data } = useSelector(({ post }) => ({
+    data: post.postRead,
+  }));
+
+  useEffect(() => {
+    for (var i = 0; i <= 14; i++) {
+      gen.addItemCard({
+        id: i,
+        img: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+        name: "제목이랍니다." + i,
+        how: "비행기, 자동차, 도보",
+        days: "5일",
+        cost: "100만원",
+        desc: "하와이는 와이키키를 추천합니다.",
+      });
+    }
+    setRender(gen.render());
+  }, [history, location]);
+
   return (
     <>
       <PostListBox>
         <div className="header_text_container">
           <div className="header_text_title">포스트</div>
         </div>
-        {children}
+        {render}
         <div className="bottom_button_container">
           <Link to="/posting/write" style={{ textDecoration: "none" }}>
             <PostButton>

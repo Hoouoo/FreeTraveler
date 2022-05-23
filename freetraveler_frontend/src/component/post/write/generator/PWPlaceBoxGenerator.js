@@ -83,7 +83,6 @@ class PWPlaceBoxGenerator {
 
   //폼데이터 추출
   getData() {
-    var formData = new FormData();
     var data = { data: [] };
     for (var i = 0; i < this._stateArray.length; i++) {
       const e = this._stateArray[i];

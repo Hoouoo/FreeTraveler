@@ -533,7 +533,7 @@ export default function PostReadForm({ id }) {
   };
 
   const deleteBoard = function () {
-    dispatch(removePost({ id: data.id }));
+    dispatch(removePost({ data: { id: data.id } }));
     history.push("/posting/list");
   };
 

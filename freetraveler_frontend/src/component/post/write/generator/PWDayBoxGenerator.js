@@ -78,7 +78,10 @@ class PWDayBoxGenerator {
         formData.append(key + "name", data.data[i][j].name);
         formData.append(key + "loc", data.data[i][j].loc);
         formData.append(key + "cost", data.data[i][j].cost);
-        formData.append(key + "img", data.data[i][j].img[0]);
+        formData.append(
+          key + "img",
+          data.data[i][j].img[0] != undefined ? data.data[i][j].img[0] : ""
+        );
         formData.append(key + "content", data.data[i][j].content);
         formData.append(key + "trans", data.data[i][j].trans);
       }

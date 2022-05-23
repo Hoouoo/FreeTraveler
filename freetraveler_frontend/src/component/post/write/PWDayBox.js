@@ -85,16 +85,12 @@ export default function PWDayBox({ id, day, pgen, data }) {
   var [init, setInit] = useState(false);
 
   useEffect(() => {
+    pgen._genArray.push(gen);
     if (data != undefined && data != null && JSON.stringify(data) != "{}") {
       for (let i = 0; i < data.length; i++) {
-        pgen._genArray.push(gen);
         gen.addBox({ did: id, data: data[i] });
         setPlaces(gen.render());
       }
-    } else {
-      pgen._genArray.push(gen);
-      gen.addBox({ did: id });
-      setPlaces(gen.render());
     }
   }, []);
 
