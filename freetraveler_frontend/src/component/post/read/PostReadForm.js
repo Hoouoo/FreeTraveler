@@ -534,7 +534,6 @@ export default function PostReadForm({ id }) {
 
   const deleteBoard = function () {
     dispatch(removePost({ data: { id: data.id } }));
-    history.push("/posting/list");
   };
 
   return (

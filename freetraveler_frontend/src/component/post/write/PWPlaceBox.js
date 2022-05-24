@@ -238,6 +238,8 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
 
     setAddress(data.zonecode);
     setAddressDetail(fullAddr);
+    state.loc = fullAddr;
+    setState(state);
     setIsOpenPost(false);
   };
 

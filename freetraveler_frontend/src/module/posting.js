@@ -82,18 +82,20 @@ const posting = handleActions(
       postError: null, //폼 전환 시 회원 인증  에러 초기화
     }),
     [POST_SUCCESS]: (state, { payload: postWrite }) => {
-      const history = useHistory();
-      history.push("/posting/read?id=" + postWrite.id);
+      alert("포스팅 성공");
       return {
         ...state,
         posWritetError: null,
         postWrite,
       };
     },
-    [POST_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      postWriteError: error,
-    }),
+    [POST_FAILURE]: (state, { payload: error }) => {
+      alert("포스팅 실패");
+      return {
+        ...state,
+        postWriteError: error,
+      };
+    },
     [GET_POSTLIST_SUCCESS]: (state, { payload: postList }) => ({
       ...state,
       postListError: null,
@@ -120,10 +122,16 @@ const posting = handleActions(
       ...state,
       modBuffer: {},
     }),
-    [REMOVE_POST_SUCCESS]: (state, { payload: data }) => ({
-      ...state,
-    }),
+    [REMOVE_POST_SUCCESS]: (state, { payload: data }) => {
+      alert("삭제 성공");
+
+      return {
+        ...state,
+      };
+    },
     [REMOVE_POST_FAILURE]: (state, { payload: error }) => {
+      useHistory().push("/");
+      alert("삭제 실패");
       return {
         ...state,
         postRemoveError: error,

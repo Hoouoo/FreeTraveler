@@ -84,7 +84,7 @@ export default function PostListTemplate({ id }) {
   const history = useHistory();
   const location = useLocation();
   const { data } = useSelector(({ post }) => ({
-    data: post.postRead,
+    data: post.postList,
   }));
 
   useEffect(() => {

@@ -1,2 +1,4 @@
 docker-compose.yml
 dbdata
+.DS_Store
+.png
