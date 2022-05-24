@@ -13,12 +13,15 @@ class ItemCardGenerator {
       <li key={"itemcard_" + itemcard.id} id={"itemcard_" + itemcard.id}>
         <ItemCard
           id={itemcard.id}
-          img={itemcard.img}
-          name={itemcard.name}
-          how={itemcard.how}
-          days={itemcard.days}
+          author={itemcard.author}
+          repImg={itemcard.repImg}
+          postName={itemcard.postName}
+          totalTrans={itemcard.totalTrans}
+          totalDays={itemcard.totalDays}
           cost={itemcard.cost}
-          desc={itemcard.desc}
+          comment={itemcard.comment}
+          good={itemcard.good}
+          isPick={itemcard.isPick}
         />
       </li>
     );

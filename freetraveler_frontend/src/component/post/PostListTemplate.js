@@ -5,7 +5,9 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 import palette from "../../lib/styles/palette";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import ItemCardGenerator from "../list/ItemCardGenerator";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getPostList } from "../../module/posting";
+import qs from "qs";
 
 const PostListBox = styled.div`
   width: auto;
@@ -78,29 +80,159 @@ const PostListBox = styled.div`
   }
 `;
 
+const NavButton = styled.div`
+  cursor: pointer;
+`;
+const PageNavigator = styled.div``;
+const Page = styled.div`
+  cursor: pointer;
+`;
+
 export default function PostListTemplate({ id }) {
   let [gen, setGen] = useState(new ItemCardGenerator());
   let [render, setRender] = useState(gen.render());
+  let [pageNav, setPageNav] = useState();
   const history = useHistory();
   const location = useLocation();
-  const { data } = useSelector(({ post }) => ({
-    data: post.postList,
-  }));
+  const dispatch = useDispatch();
+  // let data = useSelector(({ post }) => {
+  //   data: post.postList;
+  // });
 
+  const data = {
+    page: 0,
+    max: 4,
+    pageSize: 6,
+    totalPost: 22,
+    post: [
+      {
+        id: 0,
+        author: "shpusan001",
+        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+        postName: "포스트 제목",
+        totalCost: "10000",
+        totalDays: 3,
+        totalTrans: "대중교통",
+        comment: "경험자의 한마딥니다~~",
+        good: 3,
+        isPick: true,
+      },
+      {
+        id: 1,
+        author: "shpusan001",
+        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+        postName: "포스트 제목",
+        totalCost: "10000",
+        totalDays: 3,
+        totalTrans: "대중교통",
+        comment: "경험자의 한마딥니다~~",
+        good: 3,
+        isPick: true,
+      },
+      {
+        id: 2,
+        author: "shpusan001",
+        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+        postName: "포스트 제목",
+        totalCost: "10000",
+        totalDays: 3,
+        totalTrans: "대중교통",
+        comment: "경험자의 한마딥니다~~",
+        good: 3,
+        isPick: true,
+      },
+      {
+        id: 3,
+        author: "shpusan001",
+        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+        postName: "포스트 제목",
+        totalCost: "10000",
+        totalDays: 3,
+        totalTrans: "대중교통",
+        comment: "경험자의 한마딥니다~~",
+        good: 3,
+        isPick: true,
+      },
+      {
+        id: 4,
+        author: "shpusan001",
+        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+        postName: "포스트 제목",
+        totalCost: "10000",
+        totalDays: 3,
+        totalTrans: "대중교통",
+        comment: "경험자의 한마딥니다~~",
+        good: 3,
+        isPick: true,
+      },
+      {
+        id: 5,
+        author: "shpusan001",
+        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+        postName: "포스트 제목",
+        totalCost: "10000",
+        totalDays: 3,
+        totalTrans: "대중교통",
+        comment: "경험자의 한마딥니다~~",
+        good: 3,
+        isPick: true,
+      },
+    ],
+  };
+
+  //서버에 페이지 요청
   useEffect(() => {
-    for (var i = 0; i <= 14; i++) {
-      gen.addItemCard({
-        id: i,
-        img: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-        name: "제목이랍니다." + i,
-        how: "비행기, 자동차, 도보",
-        days: "5일",
-        cost: "100만원",
-        desc: "하와이는 와이키키를 추천합니다.",
-      });
+    //데이터 로드
+    const query = qs.parse(location.search, {
+      ignoreQueryPrefix: true,
+      // 문자열 맨 앞의 ?를 생력
+    });
+    const request = {
+      params: {
+        page: query.page,
+        pageSize: query.pageSize,
+        sort: query.sort,
+        recent: query.recent,
+        orderBy: query.orderBy,
+        search: query.search,
+        method: query.method,
+      },
+    };
+
+    dispatch(getPostList(request));
+  }, [history, location]);
+
+  //서버로부터 postList data를 받아 오면 렌더링
+  useEffect(() => {
+    //아이템 카드 생성
+    gen.clear();
+    for (let i = 0; i < data.post.length; i++) {
+      gen.addItemCard(data.post[i]);
     }
     setRender(gen.render());
-  }, [history, location]);
+
+    //페이지 네비게이터 바 생성
+    let pageBuf = new Array();
+    for (let i = 0; i < data.pageSize; i++) {
+      //버튼을 배열에 추가
+      const pageClick = function () {
+        history.push({
+          pathname: "/posting/list",
+          search: `page=${i}&pageSize=${6}&sort=recent&orderBy=desc&search=&method=&isMyPick=all`,
+        });
+      };
+      const index = pageBuf.push(
+        <Page
+          id={`page_${i + 1}`}
+          key={`page_${i + 1}`}
+          onClick={() => pageClick()}
+        >
+          {i + 1}
+        </Page>
+      );
+    }
+    setPageNav(<PageNavigator>{pageBuf}</PageNavigator>);
+  }, [data]);
 
   return (
     <>
@@ -121,9 +253,9 @@ export default function PostListTemplate({ id }) {
           </Link>
         </div>
         <div>
-          <span>앞으로 </span>
-          <span>뒤로 </span>
-          <span>1/10페이지</span>
+          <NavButton>앞으로 </NavButton>
+          {pageNav}
+          <NavButton>뒤로 </NavButton>
         </div>
       </PostListBox>
     </>

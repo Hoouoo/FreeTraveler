@@ -87,6 +87,9 @@ const PlaceRemoveBtn = styled.div`
 `;
 
 const PostPreviewImage = styled.div`
+  justify-content: center;
+  align-self: center;
+  align-content: center;
   width: 500px;
   height: auto;
   img {

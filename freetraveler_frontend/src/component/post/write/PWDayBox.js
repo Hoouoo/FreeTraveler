@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PWPlaceBoxGenerator from "./generator/PWPlaceBoxGenerator";
 import PostButton from "../buttons/PostButton";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import palette from "../../../lib/styles/palette";
 
 const PWDayBoxTemplate = styled.div`
   /* width: auto;
@@ -19,7 +20,7 @@ const PWDayBoxTemplate = styled.div`
   margin-left: -40px;
   margin-bottom: 20px;
   min-height: 90vh;
-  background-color: rgb(255, 255, 255);
+  background-color: white;
 
   padding-top: 4rem;
   padding-left: 1.2rem;
@@ -27,7 +28,7 @@ const PWDayBoxTemplate = styled.div`
   padding-bottom: 1.2rem;
   border-width: 0.1px;
   border-style: solid;
-  border-color: rgb(230, 230, 230);
+  border-color: ${palette.gray[3]};
   border-top-width: 0.1px;
   border-radius: 0.2rem;
   overflow-x: hidden;
@@ -57,7 +58,7 @@ const DayTitle = styled.div`
   font-size: 1.3rem;
   font-weight: 700;
   line-height: 1.9rem;
-  color: rgb(26, 26, 26);
+  /* color: rgb(26, 26, 26); */
 `;
 
 const PWForm = styled.form`
@@ -75,8 +76,11 @@ const PostInput = styled.input`
 const PlaceAddBtn = styled.div`
   padding-top: 4px;
   padding-right: 1rem;
-  float: right;
-  color: rgb(1, 82, 204);
+  text-align: center;
+  color: ${palette.gray[10]};
+  justify-content: center;
+  align-content: center;
+  cursor: pointer;
 `;
 
 export default function PWDayBox({ id, day, pgen, data }) {
@@ -105,16 +109,15 @@ export default function PWDayBox({ id, day, pgen, data }) {
       <PWDayBoxTemplate>
         <DayTitleLine>
           <DayTitle>{day} DAY</DayTitle>
-
-          <PlaceAddBtn>
-            <IoIosAddCircleOutline
-              size="25"
-              type="button"
-              onClick={() => placeAddAction()}
-            ></IoIosAddCircleOutline>
-          </PlaceAddBtn>
         </DayTitleLine>
         {places}
+        <PlaceAddBtn>
+          <IoIosAddCircleOutline
+            size="30"
+            type="button"
+            onClick={() => placeAddAction()}
+          ></IoIosAddCircleOutline>
+        </PlaceAddBtn>
       </PWDayBoxTemplate>
     </div>
   );

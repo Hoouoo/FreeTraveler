@@ -4,7 +4,7 @@ import palette from "../../../lib/styles/palette";
 
 const StyledButton = styled.button`
   /* 공통 스타일 */
-  width: 49%;
+  width: 99.5%;
   display: inline-flex;
   outline: none;
   border: none;
@@ -16,18 +16,19 @@ const StyledButton = styled.button`
   padding-right: 1rem;
   text-align: center;
   line-height: 30px;
+  margin-top: 20px;
 
   /* 크기 */
   height: 2.25rem;
   font-size: 1rem;
 
   /* 색상 */
-  background: ${palette.mint[1]};
+  background: ${palette.gray[12]};
   &:hover {
-    background: ${palette.mint[0]};
+    background: ${palette.gray[5]};
   }
   &:active {
-    background: ${palette.mint[0]};
+    background: ${palette.gray[5]};
   }
   /* 기타 */
   & + & {
@@ -53,8 +54,8 @@ const StyledButton = styled.button`
   }
 `;
 
-function DayButton({ children, ...rest }) {
+function PostSubButton({ children, ...rest }) {
   return <StyledButton {...rest}>{children}</StyledButton>;
 }
 
-export default DayButton;
+export default PostSubButton;

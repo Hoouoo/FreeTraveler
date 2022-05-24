@@ -102,6 +102,7 @@ const TextLine = styled.div`
 `;
 
 const TitleText = styled.div`
+  font-weight: 740;
   font-size: 2rem;
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
@@ -112,8 +113,8 @@ const TitleText = styled.div`
 
 const TotalTextInfo = styled.div`
   margin: 10px;
-  font-size: 1.2rem;
-  font-weight: 400;
+  font-size: 1rem;
+  font-weight: 500;
   color: rgb(26, 26, 26);
   text-align: left;
 `;
@@ -142,21 +143,37 @@ const DayButton = styled.div`
 `;
 
 const ModifyButton = styled.div`
+  /* float: right; */
   display: inline;
   cursor: pointer;
-  background-color: red;
-  padding: 2px;
+  padding: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
   border-radius: 5px;
-  color: white;
+
+  border: 1px solid ${palette.gray[13]};
+  color: black;
+  background-color: white;
 `;
 
 const DeleteButton = styled.div`
+  /* float: right; */
   display: inline;
   cursor: pointer;
-  background-color: red;
-  padding: 2px;
+  padding: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
   border-radius: 5px;
-  color: white;
+
+  border: 1px solid ${palette.gray[13]};
+  color: black;
+  background-color: white;
+  /* .button_title {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 24px;
+    color: ${palette.gray[13]};
+  } */
 `;
 
 const { kakao } = window;
@@ -550,10 +567,8 @@ export default function PostReadForm({ id }) {
             <TitleLogo>
               <VscAccount size="30" color="#000" />
             </TitleLogo>
-            <b>{data.author}</b> &nbsp;&nbsp;&nbsp;{data.time}
-            &nbsp;&nbsp;&nbsp;
+            <b>{data.author}</b> {data.time}
             <ModifyButton onClick={() => linkToModify()}>수정하기</ModifyButton>
-            &nbsp;&nbsp;&nbsp;
             <DeleteButton onClick={() => deleteBoard()}>삭제하기</DeleteButton>
           </TotalText>
         </TitleObjectText>

@@ -61,8 +61,11 @@ const PRPlaceBoxTemplate = styled.div`
 const PRPlaceBoxTitle = styled.div`
   margin-top: 1rem;
   /* margin-left: 1rem; */
-  font-size: 1.2rem;
+
   font-weight: 400;
+  /* line-height: 1.9rem; */
+
+  font-size: 1.2rem;
   color: rgb(26, 26, 26);
   text-align: left;
 `;

@@ -74,13 +74,6 @@ const PostInput = styled.input`
   margin: 5px;
 `;
 
-const PlaceAddBtn = styled.div`
-  padding-top: 4px;
-  padding-right: 1rem;
-  float: right;
-  color: rgb(1, 82, 204);
-`;
-
 export default function PRDayBox({ id, day, pgen, data, lines }) {
   var [places, setPlaces] = useState();
   var [gen, setGen] = useState(new PRPlaceBoxGenerator(places, setPlaces));

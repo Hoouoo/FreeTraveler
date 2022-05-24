@@ -8,6 +8,7 @@ import palette from "../../../lib/styles/palette";
 import { Link } from "react-scroll";
 import { IoIosArrowUp } from "react-icons/io";
 import DayButton from "../buttons/DayButton";
+import PostButton from "../buttons/PostSubButton";
 
 const POWBox = styled.div`
   width: auto;
@@ -65,6 +66,7 @@ const PWForm = styled.form`
 `;
 
 const ScrollBar = styled.div`
+  cursor: pointer;
   justify-content: center;
   align-items: flex-end;
   align-content: center;
@@ -114,6 +116,9 @@ const PostObjectTitle = styled.div`
 `;
 
 const PostPreviewImage = styled.div`
+  justify-content: center;
+  align-self: center;
+  align-content: center;
   width: 500px;
   height: auto;
   img {
@@ -122,12 +127,7 @@ const PostPreviewImage = styled.div`
   }
 `;
 
-const DayAddBtn = styled.div`
-  width: 100%;
-  text-align: center;
-`;
-
-const DayRemoveBtn = styled.div`
+const BtnBox = styled.div`
   width: 100%;
   text-align: center;
 `;
@@ -291,13 +291,6 @@ export default function PostWriteForm({ id, mode }) {
           placeholder="경험자의 한마디"
           onChange={onChange}
         />
-
-        <DayButton type="button" onClick={() => dayAddAction()}>
-          <DayAddBtn>하루 추가</DayAddBtn>
-        </DayButton>
-        <DayButton type="button" onClick={() => dayRemoveAction()}>
-          <DayRemoveBtn>하루 삭제</DayRemoveBtn>
-        </DayButton>
       </PWForm>
     </PWOABox>
   );
@@ -378,8 +371,17 @@ export default function PostWriteForm({ id, mode }) {
       <PWForm method="post" onSubmit={onSubmit}>
         {DBox}
         {days}
-        <PostInput type="submit" />
+        <DayButton type="button" onClick={() => dayAddAction()}>
+          <BtnBox>하루 추가</BtnBox>
+        </DayButton>
+        <DayButton type="button" onClick={() => dayRemoveAction()}>
+          <BtnBox>하루 삭제</BtnBox>
+        </DayButton>
+
         <br />
+        <PostButton type="submit">
+          <BtnBox>제출하기</BtnBox>
+        </PostButton>
       </PWForm>
     </div>
     // </POWBox>

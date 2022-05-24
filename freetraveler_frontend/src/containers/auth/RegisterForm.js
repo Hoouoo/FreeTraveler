@@ -49,7 +49,9 @@ const RegisterForm = ({ history }) => {
   // 회원가입 성공/실패 처리
   useEffect(() => {
     if (authError) {
-      setError("유효성 안맞음.");
+      const status = authError.status;
+      console.log(status);
+      setError("회원가입 실패");
       return;
     }
     if (auth) {
