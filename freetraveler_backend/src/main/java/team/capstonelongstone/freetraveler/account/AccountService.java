@@ -55,14 +55,14 @@ public class AccountService {
         if(isUsedId(accountRequestDto.getUserId())){
             if (isValidPassword(accountRequestDto.getUserPassword())) {
                 String targetPassword = passwordEncoder.encode(accountRequestDto.getUserPassword());
-                System.out.println(targetPassword);
+
                 if(targetPassword.equals("405")){
                     return new ResponseEntity("비밀번호 암호화 오류", HttpStatus.BAD_REQUEST);
                 }
                 Account account = Account.builder().userId(accountRequestDto.getUserId()).userName(accountRequestDto.getUserName())
                         .userPassword(targetPassword).roleType(RoleType.USER).build();
                 accountRepository.save(account);
-                return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity(accountRequestDto.getUserId(),HttpStatus.OK);
             }else{
                 return new ResponseEntity("비밀번호 유효성 오류", HttpStatus.BAD_REQUEST);
 
