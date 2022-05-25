@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import PostButton from "./buttons/PostButton";
 import { IoChevronForwardSharp } from "react-icons/io5";
@@ -202,14 +202,22 @@ export default function PostListTemplate({ id }) {
     dispatch(getPostList(request));
   }, [history, location]);
 
-  //서버로부터 postList data를 받아 오면 렌더링
-  useEffect(() => {
+  const generateItemCard = useCallback(() => {
     //아이템 카드 생성
     gen.clear();
     for (let i = 0; i < data.post.length; i++) {
       gen.addItemCard(data.post[i]);
     }
     setRender(gen.render());
+  });
+
+  const setPageNavCallback = useCallback((e) => {
+    setPageNav(e);
+  });
+
+  //서버로부터 postList data를 받아 오면 렌더링
+  useEffect(() => {
+    generateItemCard();
 
     //페이지 네비게이터 바 생성
     let pageBuf = new Array();
@@ -231,8 +239,8 @@ export default function PostListTemplate({ id }) {
         </Page>
       );
     }
-    setPageNav(<PageNavigator>{pageBuf}</PageNavigator>);
-  }, [data]);
+    setPageNavCallback(<PageNavigator>{pageBuf}</PageNavigator>);
+  }, [dispatch]);
 
   return (
     <>

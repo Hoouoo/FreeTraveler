@@ -47,7 +47,7 @@ const LoginForm = ({ history }) => {
       return;
     }
     if (auth) {
-      console.log("로그인 성공");
+      alert("로그인 성공");
       dispatch(check());
     }
   }, [auth, authError, dispatch]);

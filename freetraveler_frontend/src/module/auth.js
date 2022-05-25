@@ -77,14 +77,12 @@ const auth = handleActions(
     }),
     //회원가입 성공
     [REGISTER_SUCCESS]: (state, { payload: auth }) => {
-      alert("회원가입 성공");
       return {
         ...state,
         auth,
       };
     },
     [REGISTER_FAILURE]: (state, { payload: error }) => {
-      alert("회원가입 실패");
       return {
         ...state,
         authError: error,

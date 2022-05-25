@@ -49,14 +49,11 @@ const RegisterForm = ({ history }) => {
   // 회원가입 성공/실패 처리
   useEffect(() => {
     if (authError) {
-      const status = authError.status;
-      console.log(status);
-      setError("회원가입 실패");
+      const errorMsg = authError.response.data;
+      setError(errorMsg);
       return;
     }
     if (auth) {
-      console.log("회원가입 성공");
-      console.log(auth);
       alert("회원가입 성공!");
       dispatch(check());
     }

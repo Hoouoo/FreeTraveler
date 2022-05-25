@@ -19,8 +19,8 @@ const POWBox = styled.div`
   margin-right: 10%;
   background-color: white;
   @media screen and (max-width: 612px) {
-    margin-left: 0px;
-    margin-right: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
     padding: 0px;
   }
 `;
@@ -37,8 +37,8 @@ const PWOABox = styled.div`
   justify-content: center;
   align-items: center;
   @media screen and (max-width: 612px) {
-    margin-left: 0px;
-    margin-right: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
     padding: 0px;
   }
 `;
@@ -94,6 +94,10 @@ const PostInput = styled.input`
   margin-bottom: 1rem;
   border-bottom: 1px solid ${palette.mint[0]};
   /* border: 1px solid rgba(var(--c8c, 168, 168, 168), 1); */
+  @media screen and (max-width: 612px) {
+    text-align: left;
+    width: 60%;
+  }
 `;
 
 const TitleInput = styled.input`
@@ -132,6 +136,12 @@ const BtnBox = styled.div`
   text-align: center;
 `;
 
+const ErrorMesageBox = styled.div`
+  color: red;
+  margin-bottom: 20px;
+  font-size: 10pt;
+`;
+
 export default function PostWriteForm({ id, mode }) {
   var [gen, setGen] = useState(new PWDayBoxGenerator());
   var [days, setDays] = useState(gen.render());
@@ -151,6 +161,12 @@ export default function PostWriteForm({ id, mode }) {
   const { modBuffer } = useSelector(({ post }) => ({
     modBuffer: post.modBuffer,
   }));
+
+  let [postNameIntegrity, setPostNameIntegrity] = useState();
+  let [totalCostIntegrity, setTotalCostIntegrity] = useState();
+  let [totalTransIntegrity, setTotalTransIntegrity] = useState();
+  let [commentIntegrity, setCommentIntegrity] = useState();
+  let [repImgIntegrity, setImgIntegrity] = useState();
 
   const dataSetting = function () {};
   useEffect(() => {
@@ -188,6 +204,50 @@ export default function PostWriteForm({ id, mode }) {
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    {
+      if (postName.length == 0) {
+        setPostNameIntegrity("포스트 제목을 입력해주세요.");
+      } else {
+        setPostNameIntegrity(null);
+      }
+    }
+    {
+      if (totalCost.length == 0) {
+        setTotalCostIntegrity("총 금액을 입력해주세요.");
+      } else {
+        setTotalCostIntegrity(null);
+      }
+    }
+    {
+      if (totalTrans.length == 0) {
+        setTotalTransIntegrity("교통 수단을 입력해주세요.");
+      } else {
+        setTotalTransIntegrity(null);
+      }
+    }
+    {
+      if (comment.length == 0) {
+        setCommentIntegrity("내용을 입력해주세요.");
+      } else {
+        setCommentIntegrity(null);
+      }
+    }
+    {
+      let dataImg = null;
+      if (mode == "modify") {
+        if (data != undefined && data != null && JSON.stringify(data) != "{}") {
+          dataImg = data.repImg;
+        }
+      }
+      if (repImg == "" && dataImg == null) {
+        setImgIntegrity("사진을 첨부해주세요.");
+      } else {
+        setImgIntegrity(null);
+      }
+    }
+  }, [postName, totalCost, totalTrans, comment, repImg]);
 
   // //리모컨 scroll
   // const [scrollPosition, setScrollPosition] = useState(0);
@@ -247,6 +307,10 @@ export default function PostWriteForm({ id, mode }) {
           placeholder="포스트 제목"
           onChange={onChange}
         />
+        {/* 무결성 에러 표시 */}
+        {postNameIntegrity != null && (
+          <ErrorMesageBox>{postNameIntegrity}</ErrorMesageBox>
+        )}
         <PostObjectTitle> 여행 비용 </PostObjectTitle>
         <PostInput
           id="totalCost"
@@ -255,6 +319,10 @@ export default function PostWriteForm({ id, mode }) {
           placeholder="여행 비용"
           onChange={onChange}
         />
+        {/* 무결성 에러 표시 */}
+        {totalCostIntegrity != null && (
+          <ErrorMesageBox>{totalCostIntegrity}</ErrorMesageBox>
+        )}
         <PostObjectTitle> 여행 일수 </PostObjectTitle>
         <PostInput
           id="totalDays"
@@ -272,6 +340,10 @@ export default function PostWriteForm({ id, mode }) {
           placeholder="여행 방법"
           onChange={onChange}
         />
+        {/* 무결성 에러 표시 */}
+        {totalTransIntegrity != null && (
+          <ErrorMesageBox>{totalTransIntegrity}</ErrorMesageBox>
+        )}
 
         <PostObjectTitle> 대표 사진 </PostObjectTitle>
         <PostPreviewImage>
@@ -283,6 +355,11 @@ export default function PostWriteForm({ id, mode }) {
           onChange={onChange}
           accept="image/*"
         />
+        {/* 무결성 에러 표시 */}
+        {repImgIntegrity != null && (
+          <ErrorMesageBox>{repImgIntegrity}</ErrorMesageBox>
+        )}
+
         <PostObjectTitle> 경험자의 한마디 </PostObjectTitle>
         <PostInput
           id="comment"
@@ -291,6 +368,10 @@ export default function PostWriteForm({ id, mode }) {
           placeholder="경험자의 한마디"
           onChange={onChange}
         />
+        {/* 무결성 에러 표시 */}
+        {commentIntegrity != null && (
+          <ErrorMesageBox>{commentIntegrity}</ErrorMesageBox>
+        )}
       </PWForm>
     </PWOABox>
   );
@@ -343,24 +424,36 @@ export default function PostWriteForm({ id, mode }) {
   };
 
   // 폼 등록 이벤트 핸들러
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    var formData = gen.getFormData();
-    formData.append("repImg", repImg);
-    formData.append("postName", postName);
-    formData.append("totalCost", totalCost);
-    formData.append("totalDays", totalDays);
-    formData.append("totalTrans", totalTrans);
-    formData.append("comment", comment);
+    let pass = true;
+    pass = pass && gen.isIntegrity();
+    pass = pass && postNameIntegrity == null;
+    pass = pass && totalCostIntegrity == null;
+    pass = pass && totalTransIntegrity == null;
+    pass = pass && commentIntegrity == null;
+    pass = pass && repImgIntegrity == null;
 
-    if (mode == "write") {
-      formData.append("mode", "write");
-    } else if (mode == "modify") {
-      formData.append("id", data.id);
-      formData.append("mode", "modify");
+    if (pass) {
+      var formData = gen.getFormData();
+      formData.append("repImg", repImg);
+      formData.append("postName", postName);
+      formData.append("totalCost", totalCost);
+      formData.append("totalDays", totalDays);
+      formData.append("totalTrans", totalTrans);
+      formData.append("comment", comment);
+
+      if (mode == "write") {
+        formData.append("mode", "write");
+      } else if (mode == "modify") {
+        formData.append("id", data.id);
+        formData.append("mode", "modify");
+      }
+
+      dispatch(post(formData));
+    } else {
+      alert("양식을 다시 확인해주세요.");
     }
-
-    dispatch(post(formData));
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { changeField } from "../../../module/posting";
+import { changeField, savePostIntegrity } from "../../../module/posting";
 import placelogo from "../../../resource/img/placelogo2.png";
 import Button from "../buttons/DayButton";
 import { FormControl, TextField, NativeSelect } from "@mui/material";
@@ -102,6 +102,12 @@ const PostSelect = styled.select``;
 
 const PostOption = styled.option``;
 
+const ErrorMesageBox = styled.div`
+  color: red;
+  margin-bottom: 20px;
+  font-size: 10pt;
+`;
+
 export default function PWPlaceBox({ did, pid, gen, data }) {
   let [previewImg, setPreviewImg] = useState();
   let [state, setState] = useState({
@@ -111,6 +117,15 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
     img: "",
     content: "",
     trans: "",
+    integrity: false,
+  });
+  let [integrityUnit, setIntegrityUnit] = useState({
+    name: false,
+    loc: false,
+    cost: false,
+    img: false,
+    content: false,
+    trans: false,
   });
 
   const showImage = (fileBlob) => {
@@ -125,7 +140,6 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
   };
 
   useEffect(() => {
-    //엘리멘트 가져오기
     if (data != null && data != undefined) {
       const name = document.getElementById(did + "_" + pid + "_name");
       const loc = document.getElementById(did + "_" + pid + "_loc");
@@ -145,14 +159,126 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
         name: data.placeName,
         loc: data.loc,
         cost: data.cost,
-        img: "",
+        img: true,
         content: data.content,
         trans: data.trans,
       });
     }
   }, []);
 
+  let [nameIntegrity, setNameIntegrity] = useState(null);
+  let [locIntegrity, setLocIntegrity] = useState(null);
+  let [costIntegrity, setCostIntegerity] = useState(null);
+  let [imgIntegrity, setImgIntegrity] = useState(null);
+  let [contentIntegrity, setContentIntegrity] = useState(null);
+  let [transIntegrity, setTransIntegrity] = useState(null);
+
   useEffect(() => {
+    {
+      if (state.name.length > 0) {
+        const temp = integrityUnit;
+        temp.name = true;
+        setIntegrityUnit(temp);
+        setNameIntegrity(null);
+      } else {
+        const temp = integrityUnit;
+        temp.name = false;
+        setIntegrityUnit(temp);
+        setNameIntegrity("이름을 입력 해주세요.");
+      }
+    }
+    {
+      if (state.loc.length > 1) {
+        const temp = integrityUnit;
+        temp.loc = true;
+        setIntegrityUnit(temp);
+        setLocIntegrity(null);
+      } else {
+        const temp = integrityUnit;
+        temp.loc = false;
+        setIntegrityUnit(temp);
+        setLocIntegrity("주소를 입력 해주세요");
+      }
+    }
+    {
+      let pass = false;
+      const regex = /^[0-9]{0,}$/;
+      pass = state.cost.length > 0;
+      pass = pass && regex.test(state.cost);
+      if (pass) {
+        const temp = integrityUnit;
+        temp.cost = true;
+        setIntegrityUnit(temp);
+        setCostIntegerity(null);
+      } else {
+        const temp = integrityUnit;
+        temp.cost = false;
+        setIntegrityUnit(temp);
+        setIntegrityUnit({ ...integrityUnit, cost: false });
+        setCostIntegerity("가격을 숫자로 입력해주세요.");
+      }
+    }
+    {
+      let pass = false;
+      pass = state.img == true || state.img != "";
+      if (pass) {
+        const temp = integrityUnit;
+        temp.img = true;
+        setIntegrityUnit(temp);
+        setImgIntegrity(null);
+      } else {
+        const temp = integrityUnit;
+        temp.img = false;
+        setIntegrityUnit(temp);
+        setIntegrityUnit({ ...integrityUnit, img: false });
+        setImgIntegrity("이미지를 첨부해주세요.");
+      }
+    }
+    {
+      let pass = false;
+      pass = state.content.length > 0;
+      if (pass) {
+        const temp = integrityUnit;
+        temp.content = true;
+        setIntegrityUnit(temp);
+        setContentIntegrity(null);
+      } else {
+        const temp = integrityUnit;
+        temp.content = false;
+        setIntegrityUnit({ ...integrityUnit, content: false });
+        setContentIntegrity("내용을 입력해주세요.");
+      }
+    }
+    {
+      let pass = false;
+      pass = state.trans != "none" && state.trans != "";
+      if (pass) {
+        const temp = integrityUnit;
+        temp.trans = true;
+        setIntegrityUnit(temp);
+        setTransIntegrity(null);
+      } else {
+        const temp = integrityUnit;
+        temp.trans = false;
+        setIntegrityUnit(temp);
+        setTransIntegrity("교통수단을 선택해주세요.");
+      }
+    }
+    stateSave();
+  }, [state]);
+
+  useEffect(() => {
+    console.log(integrityUnit);
+    const pass =
+      integrityUnit.name != false &&
+      integrityUnit.loc != false &&
+      integrityUnit.cost != false &&
+      integrityUnit.img != false &&
+      integrityUnit.content != false &&
+      integrityUnit.trans != false;
+    const temp = state;
+    temp.integrity = pass;
+    setState(temp);
     stateSave();
   }, [state]);
 
@@ -169,27 +295,19 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
     const { value, name, files } = e.target;
 
     if (name == did + "_" + pid + "_name") {
-      state.name = value;
-      setState(state);
+      setState({ ...state, name: value });
     } else if (name == did + "_" + pid + "_loc") {
-      state.loc = value;
-      setState(state);
+      setState({ ...state, loc: value });
     } else if (name == did + "_" + pid + "_cost") {
-      state.cost = value;
-      setState(state);
+      setState({ ...state, cost: value });
     } else if (name == did + "_" + pid + "_img") {
-      state.img = files != undefined ? files : "";
-      setState(state);
+      setState({ ...state, img: files != undefined ? files : "" });
       showImage(files[0]);
     } else if (name == did + "_" + pid + "_content") {
-      state.content = value;
-      setState(state);
+      setState({ ...state, content: value });
     } else if (name == did + "_" + pid + "_trans") {
-      state.trans = value;
-      setState(state);
+      setState({ ...state, trans: value });
     }
-
-    stateSave();
 
     // if (type != "file") {
     //   dispatch(
@@ -241,8 +359,7 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
 
     setAddress(data.zonecode);
     setAddressDetail(fullAddr);
-    state.loc = fullAddr;
-    setState(state);
+    setState({ ...state, loc: fullAddr });
     setIsOpenPost(false);
   };
 
@@ -262,6 +379,10 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
           onClick={() => onClosePost()}
         />
       </PostInput>
+      {/* 무결성 에러 표시 */}
+      {nameIntegrity != null && (
+        <ErrorMesageBox>{nameIntegrity}</ErrorMesageBox>
+      )}
 
       <PostInputTitle>위치</PostInputTitle>
       <PostInput>
@@ -284,6 +405,8 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
           </PostCodeStyle>
         ) : null}
       </PostInput>
+      {/* 무결성 에러 표시 */}
+      {locIntegrity != null && <ErrorMesageBox>{locIntegrity}</ErrorMesageBox>}
 
       <PostInputTitle>비용</PostInputTitle>
       <PostInput>
@@ -298,6 +421,10 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
           onClick={() => onClosePost()}
         />
       </PostInput>
+      {/* 무결성 에러 표시 */}
+      {costIntegrity != null && (
+        <ErrorMesageBox>{costIntegrity}</ErrorMesageBox>
+      )}
 
       <PostInputTitle>사진</PostInputTitle>
       <PostPreviewImage>
@@ -316,6 +443,8 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
           accept="image/*"
         ></TextField>
       </PostInput>
+      {/* 무결성 에러 표시 */}
+      {imgIntegrity != null && <ErrorMesageBox>{imgIntegrity}</ErrorMesageBox>}
 
       <PostInputTitle>내용</PostInputTitle>
       <PostInput>
@@ -330,6 +459,10 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
           onClick={() => onClosePost()}
         ></TextField>
       </PostInput>
+      {/* 무결성 에러 표시 */}
+      {contentIntegrity != null && (
+        <ErrorMesageBox>{contentIntegrity}</ErrorMesageBox>
+      )}
 
       <PostInputTitle>이동수단</PostInputTitle>
       <PostInput>
@@ -348,6 +481,11 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
           </NativeSelect>
         </FormControl>
       </PostInput>
+      {/* 무결성 에러 표시 */}
+      {transIntegrity != null && (
+        <ErrorMesageBox>{transIntegrity}</ErrorMesageBox>
+      )}
+
       <div className="button">
         <Button type="button" onClick={() => placeRemoveAction()}>
           <PlaceRemoveBtn>삭제</PlaceRemoveBtn>

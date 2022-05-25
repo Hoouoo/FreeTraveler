@@ -90,6 +90,27 @@ class PWDayBoxGenerator {
     return formData;
   }
 
+  isIntegrity() {
+    console.log("isIntegrity 작동");
+    let answer = true;
+    var data = { data: [] };
+    for (var i = 0; i < this._genArray.length; i++) {
+      const temp = this._genArray[i];
+      const adding = temp.getData();
+      data = { data: [...data.data, adding.data] };
+    }
+
+    for (var i = 0; i < data.data.length; i++) {
+      for (var j = 0; j < data.data[i].length; j++) {
+        console.log(i + " " + j + " intergrity: " + data.data[i][j].integrity);
+        answer = answer && data.data[i][j].integrity == true;
+      }
+    }
+
+    console.log("isIntegrity 작동종료, answer: " + answer);
+    return answer;
+  }
+
   //렌더링
   render() {
     return <NoDotUl className="pw_day_box_list">{this._array}</NoDotUl>;

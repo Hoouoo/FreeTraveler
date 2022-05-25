@@ -13,6 +13,7 @@ import { getPost, loadModBuffer } from "../../../module/posting";
 import { useHistory } from "react-router-dom";
 import qs from "qs";
 import { removePost } from "../../../module/posting";
+import { IoMdMore } from "react-icons/io";
 
 const PRForm = styled.form`
   width: auto;
@@ -143,37 +144,194 @@ const DayButton = styled.div`
 `;
 
 const ModifyButton = styled.div`
-  /* float: right; */
+  float: right;
   display: inline;
   cursor: pointer;
-  padding: 3px;
+  /* padding: 10px; */
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
 
-  border: 1px solid ${palette.gray[13]};
+  /* border: 1px solid ${palette.gray[13]}; */
+  &:hover {
+    background: ${palette.gray[6]};
+    color: white;
+  }
+  &:active {
+    background: ${palette.gray[6]};
+    color: white;
+  }
+
   color: black;
   background-color: white;
+
+  font-size: 12px;
+  font-weight: 700;
 `;
 
 const DeleteButton = styled.div`
-  /* float: right; */
+  float: right;
   display: inline;
   cursor: pointer;
-  padding: 3px;
+  /* padding: 3px; */
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
+  margin-left: 3px;
+  margin-right: 10px;
 
-  border: 1px solid ${palette.gray[13]};
+  /* border: 1px solid ${palette.gray[13]}; */
   color: black;
   background-color: white;
-  /* .button_title {
-    font-weight: 700;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  &:hover {
+    background: ${palette.gray[6]};
+    color: white;
+  }
+  &:active {
+    background: ${palette.gray[6]};
+    color: white;
+  }
+`;
+
+const MenuBar = styled.div`
+  float: right;
+  margin-right: 10px;
+
+  .menubar-box {
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid ${palette.gray[14]};
+    box-shadow: 1px 2px 2px 0px ${palette.gray[12]};
+  }
+  .menubar-border-bottom {
+    border-bottom: 0.3px solid ${palette.gray[14]};
+  }
+  .menubar {
+    border: none;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
     font-size: 14px;
-    line-height: 24px;
-    color: ${palette.gray[13]};
-  } */
+    font-weight: bold;
+  }
+
+  .menubar ul {
+    /* background: white; */
+    height: 50px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menubar li {
+    list-style: none;
+    float: right;
+    padding: 0px;
+  }
+
+  .menubar li a {
+    background: white;
+    color: black;
+    display: block;
+    font-weight: normal;
+    line-height: 50px;
+    margin: 0px;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  /* .menubar li a:hover, */
+  /* .menubar ul li:hover a { */
+  /* border: 0.3px solid black; */
+  /* background: ${palette.gray[6]};
+    color: ${palette.gray[0]}; */
+  /* text-decoration: none; */
+  /* } */
+
+  .menubar li ul {
+    /* background: ${palette.gray[6]}; */
+    /* border-radius: 10px; */
+    /* border: 0.3px solid black; */
+    display: none; /* 평상시에는 드랍메뉴가 안보이게 하기 */
+    height: auto;
+    padding: 0px;
+    margin-left: -90px;
+    border: 0px;
+    position: absolute;
+    width: 130px;
+    z-index: 200;
+    /*top:1em;
+/*left:0;*/
+  }
+  .menubar-dark-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: ${palette.gray[10]};
+    /* text-align: left;
+    margin-left: 5px; */
+  }
+  .menubar-red-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: red;
+  }
+
+  @media screen and (max-width: 612px) {
+    .menubar li ul {
+      margin-left: -100px;
+    }
+  }
+  .menubar li:active ul {
+    display: block; /* 마우스 커서 올리면 드랍메뉴 보이게 하기 */
+  }
+
+  .menubar li:focus ul {
+    display: block; /* 마우스 커서 올리면 드랍메뉴 보이게 하기 */
+  }
+
+  .menubar li li {
+    /* background: ${palette.gray[6]}; */
+    display: block;
+    float: none;
+    margin: 0px;
+    padding: 0px;
+    width: 130px;
+  }
+
+  .menubar li:hover li a {
+    background: none;
+  }
+
+  .menubar li ul a {
+    /* border-radius: 10px; */
+    width: 100%;
+    display: block;
+    height: 50px;
+    font-size: 12px;
+    font-style: normal;
+    /* margin: 0px; */
+    margin-right: 100px;
+    /* text-align: right; */
+  }
+
+  /* 클릭 시  */
+  .menubar li ul a:active,
+  .menubar li ul li:active a {
+    cursor: pointer;
+    width: 100%;
+    /* background: ${palette.gray[13]}; */
+    border: 0px;
+    /* color: ${palette.gray[0]}; */
+    text-decoration: none;
+  }
+
+  .menubar p {
+    clear: left;
+  }
 `;
 
 const { kakao } = window;
@@ -274,7 +432,7 @@ export default function PostReadForm({ id }) {
 
     const id = query.id;
 
-    var request = { params: { userId: id } };
+    var request = { params: { id: id } };
     dispatch(getPost(request));
   };
 
@@ -537,6 +695,7 @@ export default function PostReadForm({ id }) {
   };
 
   useEffect(() => {
+    getData();
     createMap();
     createCustomOverlay();
     createLine();
@@ -568,8 +727,31 @@ export default function PostReadForm({ id }) {
               <VscAccount size="30" color="#000" />
             </TitleLogo>
             <b>{data.author}</b> {data.time}
-            <ModifyButton onClick={() => linkToModify()}>수정하기</ModifyButton>
-            <DeleteButton onClick={() => deleteBoard()}>삭제하기</DeleteButton>
+            <MenuBar>
+              <div className="menubar">
+                <li>
+                  <IoMdMore size="30" color="#adb5bd" />
+                  <ul>
+                    <div className="menubar-box">
+                      <li className="menubar-border-bottom">
+                        <a onClick={() => linkToModify()}>
+                          {/* <ModifyButton onClick={() => linkToModify()}> */}
+                          <div className="menubar-dark-text">수정하기</div>
+                          {/* </ModifyButton> */}
+                        </a>
+                      </li>
+                      <li>
+                        <a onClick={() => deleteBoard()}>
+                          {/* <DeleteButton onClick={() => deleteBoard()}> */}
+                          <div className="menubar-red-text">삭제하기</div>
+                          {/* </DeleteButton> */}
+                        </a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </div>
+            </MenuBar>
           </TotalText>
         </TitleObjectText>
         <TextLine />

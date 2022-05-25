@@ -46,8 +46,13 @@ const StyledButton = styled.button`
     transition-property: transform, transform;
   }
 
-  @media screen and (max-width: 612px) {
-    width: 40%;
+  @media screen and (max-width: 1007px) {
+    width: 48%;
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+  @media screen and (max-width: 638px) {
+    width: 48%;
     height: 2rem;
     font-size: 0.8rem;
   }

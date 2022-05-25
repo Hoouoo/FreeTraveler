@@ -13,6 +13,9 @@ const INITIALIZE_FORM = "post/INITIALIZE_FORM";
 const LOAD_MODBUFFER = "post/LOAD_MODBUFFER";
 const CLEAR_MODBUFFER = "post/CLEAR_MODBUFFER";
 
+const SAVE_POST_INTEGRITY = "post/SAVE_POST_INTEGRITY";
+const CLEAR_POST_INTEGRITY = "post/SAVE_POST_INTERGRITY";
+
 const [POST, POST_SUCCESS, POST_FAILURE] =
   createRequestActionTypes("post/POST");
 
@@ -46,6 +49,8 @@ const initialState = {
   postListError: null,
   postReadError: null,
   postRemoveError: null,
+
+  postIntegrity: [[]],
 };
 
 //액션 생성
@@ -56,6 +61,15 @@ export const removePost = createAction(REMOVE_POST, (data) => data);
 
 export const loadModBuffer = createAction(LOAD_MODBUFFER, (data) => data);
 export const clearModBuffer = createAction(CLEAR_MODBUFFER, (data) => data);
+
+export const savePostIntegrity = createAction(
+  SAVE_POST_INTEGRITY,
+  (data) => data
+);
+export const clearPostIntegrity = createAction(
+  CLEAR_POST_INTEGRITY,
+  (data) => data
+);
 
 //사가 생성
 const postSaga = createRequestSaga(POST, postAPI.post);
@@ -124,17 +138,27 @@ const posting = handleActions(
     }),
     [REMOVE_POST_SUCCESS]: (state, { payload: data }) => {
       alert("삭제 성공");
-
       return {
         ...state,
       };
     },
     [REMOVE_POST_FAILURE]: (state, { payload: error }) => {
-      useHistory().push("/");
       alert("삭제 실패");
       return {
         ...state,
         postRemoveError: error,
+      };
+    },
+    [SAVE_POST_INTEGRITY]: (state, { payload: data }) => {
+      return {
+        ...state,
+        postIntegrity: data,
+      };
+    },
+    [CLEAR_POST_INTEGRITY]: (state, { payload: data }) => {
+      return {
+        ...state,
+        postIntegrity: [],
       };
     },
   },

@@ -1,7 +1,7 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { changeField } from "../../../module/posting";
+import { changeField, savePostIntegerity } from "../../../module/posting";
 import placelogo from "../../../resource/img/placelogo2.png";
 import Button from "../buttons/DayButton";
 import { FormControl, TextField, NativeSelect } from "@mui/material";

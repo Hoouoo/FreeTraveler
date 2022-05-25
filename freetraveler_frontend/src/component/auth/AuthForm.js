@@ -197,7 +197,7 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
       }
       case "name": {
         let pass = false;
-        const regex = /^[가-힣]{2,4}|[a-zA-Z]{2,16}\s[a-zA-Z]{2,16}$/;
+        const regex = /^([가-힣]{2,4}|[a-zA-Z]{2,16})$/;
         pass = regex.test(value);
         if (!pass) {
           setNameIntegrity(
