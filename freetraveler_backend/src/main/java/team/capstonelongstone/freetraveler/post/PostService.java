@@ -36,8 +36,11 @@ public class PostService {
     @Autowired
     DayRepository dayRepository;
 
+    /**
+     * 도로명 주소로 위도 경도 뽑는 API
+     */
     public List<Double> getLatLng(String loc) throws IOException, JSONException {
-        String location = loc; //도로명 주소
+        String location = loc;
 
         String addr = "https://dapi.kakao.com/v2/local/search/address.json";
 
@@ -92,6 +95,9 @@ public class PostService {
         return LntLng;
     }
 
+    /**
+     * 게시물 JSON으로 가져오기
+     */
     public String getPost(String boardId) throws JSONException, IOException {
         long id = Integer.valueOf(boardId).longValue();
 
@@ -138,6 +144,9 @@ public class PostService {
         return jsonObject.toString();
     }
 
+    /**
+     * 게시물 삭제
+     */
     public void deletePost(String boardId){
         Integer intBoardId = Integer.valueOf(boardId);
         long longBoardId = intBoardId.longValue();

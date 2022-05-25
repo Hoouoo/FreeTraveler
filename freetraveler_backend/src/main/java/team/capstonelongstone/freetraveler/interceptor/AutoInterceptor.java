@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * @author 정순범
+ * 세션 확인 기능
+ */
 @Component
 public class AutoInterceptor implements HandlerInterceptor {
 

@@ -11,7 +11,9 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import team.capstonelongstone.freetraveler.post.board.Board;
+import team.capstonelongstone.freetraveler.post.board.BoardRepository;
 import team.capstonelongstone.freetraveler.post.board.BoardService;
+import team.capstonelongstone.freetraveler.post.board.dto.PostListDTO;
 import team.capstonelongstone.freetraveler.post.day.DayService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 
+/**
+ * @author 정순범
+ * 게시물 관련 서비스
+ */
 @Controller
 @RequiredArgsConstructor
 public class PostController {
@@ -31,7 +37,12 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/post") //게시물 등록
+    private final BoardRepository boardRepository;
+
+    /**
+     * 게시물 등록
+     */
+    @PostMapping("/post") 
     @ResponseBody
     public ResponseEntity generateBoard(HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws JSONException, IOException {
 
@@ -55,14 +66,20 @@ public class PostController {
         }
     }
 
-    @GetMapping("/post") //게시물조회
+    /**
+     * 게시물 조회
+     */
+    @GetMapping("/post")
     @ResponseBody
-    public ResponseEntity getPost(@RequestBody HashMap<String,String> id) throws JSONException, IOException {
-        String boardId = id.get("id");
+    public ResponseEntity getPost(@RequestParam("id")String boardId) throws JSONException, IOException {
+        System.out.println(boardId);
         String post = postService.getPost(boardId);
         return new ResponseEntity(post,HttpStatus.valueOf(200));
     }
 
+    /**
+     * 게시물 삭제
+     */
     @DeleteMapping("/post")
     public ResponseEntity deletePost(@RequestBody HashMap<String,String >id){
         String boardId = id.get("id");
@@ -74,6 +91,9 @@ public class PostController {
         }
     }
 
+    /**
+     * 이미지 가져오기
+     */
     @GetMapping(value = "/{boardImg}", produces = MediaType.IMAGE_JPEG_VALUE) //이미지 접근 링크
     public ResponseEntity<byte[]> files(@RequestParam String boardImg) throws Exception {
         String fileDir = boardImg;
@@ -86,5 +106,13 @@ public class PostController {
     }
 
 
+    /**
+     * 게시물 조회 리스트 출력
+     */
+    @GetMapping("/post/list")
+    @ResponseBody
+    public String getPostList(PostListDTO postListDTO,HttpServletRequest request) throws JSONException {
+        return boardService.getPostList(postListDTO,request);
+    }
 
 }
