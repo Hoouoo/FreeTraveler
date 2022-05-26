@@ -81,9 +81,9 @@ public class BoardService {
         }
 
         String pick="";
-        if(postListDTO.getIsMyPic().equals("") ||postListDTO.getIsMyPic().equals("all" )){
+        if(postListDTO.getIsMyPick().equals("") ||postListDTO.getIsMyPick().equals("all" )){
             pick="all";
-        } else if (postListDTO.getIsMyPic().equals("pick")){
+        } else if (postListDTO.getIsMyPick().equals("pick")){
             pick="true";
         }else{
             pick="false";
@@ -101,7 +101,7 @@ public class BoardService {
                 sort = Sort.by(Sort.Direction.ASC, "createdDate");
             }
             else{
-
+                sort = Sort.by(Sort.Direction.ASC, "pickCnt");
             }
         }
         else{
