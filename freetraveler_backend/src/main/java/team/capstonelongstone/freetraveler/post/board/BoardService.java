@@ -101,7 +101,7 @@ public class BoardService {
                 sort = Sort.by(Sort.Direction.ASC, "createdDate");
             }
             else{
-
+                sort = Sort.by(Sort.Direction.ASC, "pickCnt");
             }
         }
         else{
