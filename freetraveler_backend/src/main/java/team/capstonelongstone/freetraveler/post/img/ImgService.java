@@ -30,7 +30,7 @@ public class ImgService {
      */
     public void uploadImg(MultipartFile file, String imgName, String suffix) throws IOException {
         String myDirectory = System.getProperty("user.dir");
-        file.transferTo(new File(myDirectory + imgName + suffix));
+        file.transferTo(new File(myDirectory ,imgName + suffix));
     }
 
     /**
