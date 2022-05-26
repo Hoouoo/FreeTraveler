@@ -30,17 +30,14 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class PostController {
 
-
     private final BoardService boardService;
 
     private final DayService dayService;
 
     private final PostService postService;
 
-    private final BoardRepository boardRepository;
-
     /**
-     * 게시물 등록
+     * 게시물 등록 및 수정
      */
     @PostMapping("/post") 
     @ResponseBody
@@ -95,7 +92,8 @@ public class PostController {
      * 이미지 가져오기
      */
     @GetMapping(value = "/{boardImg}", produces = MediaType.IMAGE_JPEG_VALUE) //이미지 접근 링크
-    public ResponseEntity<byte[]> files(@RequestParam String boardImg) throws Exception {
+    public ResponseEntity<byte[]> files(@PathVariable String boardImg) throws Exception {
+
         String fileDir = boardImg;
         File file=new File(fileDir);
         HttpHeaders header = new HttpHeaders();
@@ -104,7 +102,6 @@ public class PostController {
 
         return new ResponseEntity(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
     }
-
 
     /**
      * 게시물 조회 리스트 출력
