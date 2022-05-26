@@ -81,15 +81,15 @@ public class BoardService {
         }
 
         String pick="";
-        if(Objects.isNull(postListDTO.getIsMyPic())){
+        if(postListDTO.getIsMyPic().equals("") ||postListDTO.getIsMyPic().equals("all" )){
             pick="all";
-        }else if (postListDTO.getIsMyPic().equals("pick")){
+        } else if (postListDTO.getIsMyPic().equals("pick")){
             pick="true";
         }else{
             pick="false";
         }
 
-        if(Objects.isNull(postListDTO.getMethod())){
+        if(postListDTO.getMethod().equals("")){
             postListDTO.setMethod("title");
         }else if(postListDTO.getMethod().equals("author")){
             postListDTO.setMethod("b.author.userName");
@@ -118,11 +118,12 @@ public class BoardService {
 
         Pageable pageable= PageRequest.of(postListDTO.getPage(), postListDTO.getPageSize(),sort);
 
+        Page<Board> all=null;
         if(pick.equals("all")){//pick all 일때
-            Page<Board> all = boardRepository.findAllPickAll(pageable,postListDTO.getMethod(),postListDTO.getSearch());
+            all = boardRepository.findAllPickAll(pageable,postListDTO.getMethod(),postListDTO.getSearch());
+        }else {
+            all = boardRepository.findAllPick(pageable, account.getId(), postListDTO.getMethod(), postListDTO.getSearch(), pick);
         }
-        Page<Board> all = boardRepository.findAllPick(pageable, account.getId(), postListDTO.getMethod(),postListDTO.getSearch(),pick);
-
 
         List<Board> allBoard = boardRepository.findAll();
         int boardSize = allBoard.size();
