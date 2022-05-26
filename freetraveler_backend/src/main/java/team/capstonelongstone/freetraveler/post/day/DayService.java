@@ -17,6 +17,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author 정순범, 박성호
+ * Day, Place 저장
+ */
 @Service
 @RequiredArgsConstructor
 public class DayService {

@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author 정순범, 박성호
+ * 이미저 저장 기능
+ */
 @Service
 public class ImgService {
 
@@ -62,14 +66,13 @@ public class ImgService {
 
     /**
      * board 저장
-     * @return
      */
     public List<String> boardSaveImg(HttpServletRequest request, MultipartFile file) throws IOException {
 
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
 
-        String ImgUUID = account.getUserId() +getImgId(); //대표 이미지 UUID
+        String ImgUUID = account.getUserId() + "_"+getImgId(); //대표 이미지 UUID
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
         uploadImg(file, ImgUUID, suffix);
@@ -79,7 +82,6 @@ public class ImgService {
 
     /**
      * day, place 저장
-     * @return
      */
     public List<String> daySaveImg(HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
 
