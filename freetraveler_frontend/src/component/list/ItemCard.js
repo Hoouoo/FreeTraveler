@@ -233,7 +233,7 @@ function ItemCard({
         </div>
 
         <ItemCardContentStyled>
-          <div class="content_title_list">
+          <div className="content_title_list">
             <div className="content_name">
               {postName /*이름*/}
               <div className="content_pick">

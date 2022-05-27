@@ -270,7 +270,6 @@ export default function PostListTemplate({ id }) {
         {render}
         <div className="bottom_button_container">
           <Link to="/posting/write" style={{ textDecoration: "none" }}>
-            ㅎ
             <PostButton>
               글쓰기
               <div className="button_text"> gogo. </div>

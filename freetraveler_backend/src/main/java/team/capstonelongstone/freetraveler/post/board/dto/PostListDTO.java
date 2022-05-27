@@ -14,7 +14,7 @@ public class PostListDTO {
     String orderBy;
     String search;
     String method;
-    String isMyPic;
+    String isMyPick;
 
     @Builder
     public PostListDTO(Integer page, Integer pageSize, String sort, String orderBy, String search, String method, String isMyPic) {
@@ -24,7 +24,7 @@ public class PostListDTO {
         this.orderBy = orderBy;
         this.search = search;
         this.method = method;
-        this.isMyPic = isMyPic;
+        this.isMyPick = isMyPic;
     }
 
 }

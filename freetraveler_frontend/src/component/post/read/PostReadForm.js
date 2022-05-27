@@ -748,6 +748,8 @@ export default function PostReadForm({ id }) {
         createDayButton();
         createDayBox();
       }
+      data.time = data.time.split("T")[0];
+      console.log(data.time);
     }
   }, [data]);
 

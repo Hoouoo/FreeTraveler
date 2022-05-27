@@ -1,7 +1,9 @@
 import { call, put } from "redux-saga/effects";
 import { startLoading, finishLoading } from "../module/loading";
+import { check } from "../module/user";
 import client from "./api/client";
 import { setCookie } from "./cookie";
+import userAPI from "../module/user";
 
 export const createRequestActionTypes = (type) => {
   const SUCCESS = `${type}_SUCCESS`;

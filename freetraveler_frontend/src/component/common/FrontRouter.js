@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { check, logout } from "../../module/user";
 
 export default function FrontRouter() {
   const dispatch = useDispatch();
@@ -27,8 +28,13 @@ export default function FrontRouter() {
   const includePath = ["/login", "/register"];
 
   useEffect(() => {
+    dispatch(check());
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (user === null) {
       if (!excludePath.includes(history.location.pathname)) {
+        alert("로그인이 필요합니다.");
         history.push("/login");
       }
     } else {
