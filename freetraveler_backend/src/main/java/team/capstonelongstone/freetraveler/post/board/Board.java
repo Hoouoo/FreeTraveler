@@ -21,7 +21,7 @@ public class Board extends BaseTime {
     private String totalTrans;
     private Integer totalCost;
     private String comment;
-    private Integer pickCnt;
+    private Integer goodCnt;
 
     @ManyToOne
     @JoinColumn(name = "ACCOUNT_ID")
@@ -31,15 +31,19 @@ public class Board extends BaseTime {
     private String repImgName;
 
     @Builder
-    public Board(String postName, Integer totalDays, String totalTrans, Integer totalCost, String comment, Integer pickCnt, Account author, String repImgPath, String repImgName) {
+    public Board(String postName, Integer totalDays, String totalTrans, Integer totalCost, String comment, Integer goodCnt, Account author, String repImgPath, String repImgName) {
         this.postName = postName;
         this.totalDays = totalDays;
         this.totalTrans = totalTrans;
         this.totalCost = totalCost;
         this.comment = comment;
-        this.pickCnt = pickCnt;
+        this.goodCnt = goodCnt;
         this.author = author;
         this.repImgPath = repImgPath;
         this.repImgName = repImgName;
+    }
+
+    public void changeGoodCnt(Integer goodCnt) {
+        this.goodCnt = goodCnt;
     }
 }
