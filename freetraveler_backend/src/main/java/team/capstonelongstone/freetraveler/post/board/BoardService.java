@@ -58,7 +58,7 @@ public class BoardService {
 
         List<String> list = imgService.boardSaveImg(request, file);
 
-        Board board = Board.builder().postName(postName).totalDays(totalDays).totalCost(sumTotalCost).comment(comment).pickCnt(0)
+        Board board = Board.builder().postName(postName).totalDays(totalDays).totalCost(sumTotalCost).comment(comment).goodCnt(0)
                 .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
         saveBoard(board);
         return board;
@@ -148,7 +148,7 @@ public class BoardService {
             post.put("totalDays",board.getTotalDays());
             post.put("totalTrans",board.getTotalTrans());
             post.put("comment",board.getComment());
-            post.put("good",board.getPickCnt());
+            post.put("good",board.getGoodCnt());
             post.put("isPick","false");
             array.put(post);
             page.put("post",array);
