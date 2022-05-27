@@ -6,8 +6,9 @@ import palette from "../../lib/styles/palette";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import ItemCardGenerator from "../list/ItemCardGenerator";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostList } from "../../module/posting";
+import { getPostClear, getPostList } from "../../module/posting";
 import qs from "qs";
+import { BASE_URL } from "../../lib/api/client";
 
 const PostListBox = styled.div`
   width: auto;
@@ -95,11 +96,12 @@ export default function PostListTemplate({ id }) {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
-  // let data = useSelector(({ post }) => {
-  //   data: post.postList;
-  // });
 
-  const data = {
+  let { data } = useSelector(({ post }) => ({
+    data: post.postList,
+  }));
+
+  const data2 = {
     page: 0,
     max: 4,
     pageSize: 6,
@@ -180,6 +182,11 @@ export default function PostListTemplate({ id }) {
     ],
   };
 
+  useEffect(() => {
+    //조회 폼 제거
+    dispatch(getPostClear());
+  }, []);
+
   //서버에 페이지 요청
   useEffect(() => {
     //데이터 로드
@@ -187,28 +194,40 @@ export default function PostListTemplate({ id }) {
       ignoreQueryPrefix: true,
       // 문자열 맨 앞의 ?를 생력
     });
+
+    console.log(query);
+
     const request = {
       params: {
         page: query.page,
         pageSize: query.pageSize,
         sort: query.sort,
-        recent: query.recent,
         orderBy: query.orderBy,
         search: query.search,
         method: query.method,
+        isMyPick: query.isMyPick,
       },
     };
+
+    console.log(request);
 
     dispatch(getPostList(request));
   }, [history, location]);
 
   const generateItemCard = useCallback(() => {
-    //아이템 카드 생성
-    gen.clear();
-    for (let i = 0; i < data.post.length; i++) {
-      gen.addItemCard(data.post[i]);
+    console.log(data);
+    if (data != undefined && data != null && JSON.stringify(data) != "{}") {
+      //아이템 카드 생성
+      gen.clear();
+      if (data.post != null) {
+        for (let i = 0; i < data.post.length; i++) {
+          data.post[i].repImg = BASE_URL + "/" + data.post[i].repimg;
+          console.log(data.post[i].repImg);
+          gen.addItemCard(data.post[i]);
+        }
+        setRender(gen.render());
+      }
     }
-    setRender(gen.render());
   });
 
   const setPageNavCallback = useCallback((e) => {
@@ -221,7 +240,7 @@ export default function PostListTemplate({ id }) {
 
     //페이지 네비게이터 바 생성
     let pageBuf = new Array();
-    for (let i = 0; i < data.pageSize; i++) {
+    for (let i = 0; i < data.max + 1; i++) {
       //버튼을 배열에 추가
       const pageClick = function () {
         history.push({
@@ -240,7 +259,7 @@ export default function PostListTemplate({ id }) {
       );
     }
     setPageNavCallback(<PageNavigator>{pageBuf}</PageNavigator>);
-  }, [dispatch]);
+  }, [data]);
 
   return (
     <>
@@ -251,6 +270,7 @@ export default function PostListTemplate({ id }) {
         {render}
         <div className="bottom_button_container">
           <Link to="/posting/write" style={{ textDecoration: "none" }}>
+            ㅎ
             <PostButton>
               글쓰기
               <div className="button_text"> gogo. </div>

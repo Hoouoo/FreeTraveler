@@ -78,6 +78,8 @@ class PRPlaceBoxGenerator {
   clear() {
     this._array = null;
     this._array = new Array();
+    this._stateArray = null;
+    this._stateArray = new Array();
   }
 
   //폼데이터 추출

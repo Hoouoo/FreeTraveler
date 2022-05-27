@@ -96,7 +96,7 @@ const TabBar = (props) => {
       case "post":
         history.push({
           pathname: "/posting/list",
-          search: `page=${0}&pageSize=&sort=recent&orderBy=desc&search=&method=&isMyPick=all`,
+          search: `page=${0}&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all`,
         });
         break;
       case "account":

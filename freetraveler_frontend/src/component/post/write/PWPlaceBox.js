@@ -109,6 +109,12 @@ const ErrorMesageBox = styled.div`
 `;
 
 export default function PWPlaceBox({ did, pid, gen, data }) {
+  let [nameIntegrity, setNameIntegrity] = useState(null);
+  let [locIntegrity, setLocIntegrity] = useState(null);
+  let [costIntegrity, setCostIntegerity] = useState(null);
+  let [imgIntegrity, setImgIntegrity] = useState(null);
+  let [contentIntegrity, setContentIntegrity] = useState(null);
+  let [transIntegrity, setTransIntegrity] = useState(null);
   let [previewImg, setPreviewImg] = useState();
   let [state, setState] = useState({
     name: "",
@@ -155,25 +161,23 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
       setPreviewImg(data.img);
       trans.value = data.trans;
 
-      setState({
+      const temp = {
         name: data.placeName,
         loc: data.loc,
         cost: data.cost,
         img: true,
         content: data.content,
         trans: data.trans,
-      });
+        integrity: false,
+      };
+
+      state = temp;
+      setState(state);
     }
   }, []);
 
-  let [nameIntegrity, setNameIntegrity] = useState(null);
-  let [locIntegrity, setLocIntegrity] = useState(null);
-  let [costIntegrity, setCostIntegerity] = useState(null);
-  let [imgIntegrity, setImgIntegrity] = useState(null);
-  let [contentIntegrity, setContentIntegrity] = useState(null);
-  let [transIntegrity, setTransIntegrity] = useState(null);
-
   useEffect(() => {
+    console.log(state);
     {
       if (state.name.length > 0) {
         const temp = integrityUnit;
@@ -203,7 +207,7 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
     {
       let pass = false;
       const regex = /^[0-9]{0,}$/;
-      pass = state.cost.length > 0;
+      pass = String(state.cost).length > 0;
       pass = pass && regex.test(state.cost);
       if (pass) {
         const temp = integrityUnit;

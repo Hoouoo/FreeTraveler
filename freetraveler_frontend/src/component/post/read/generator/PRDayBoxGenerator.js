@@ -62,7 +62,10 @@ class PRDayBoxGenerator {
   //아이템 리스트 초기화
   clear() {
     this._array = null;
-    this._array = new Array();
+    this._array = [];
+    for (let i = 0; i < this._genArray.length; i++) {
+      this._genArray[i].clear();
+    }
   }
 
   //렌더링

@@ -25,6 +25,8 @@ const [GET_POSTLIST, GET_POSTLIST_SUCCESS, GET_POSTLIST_FAILURE] =
 const [GET_POST, GET_POST_SUCCESS, GET_POST_FAILURE] =
   createRequestActionTypes("post/GET_POST");
 
+const GET_POST_CLEAR = "post/GET_POST_CLEAR";
+
 const [REMOVE_POST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE] =
   createRequestActionTypes("post/REMOVE_POST");
 
@@ -70,6 +72,8 @@ export const clearPostIntegrity = createAction(
   CLEAR_POST_INTEGRITY,
   (data) => data
 );
+
+export const getPostClear = createAction(GET_POST_CLEAR, (data) => data);
 
 //사가 생성
 const postSaga = createRequestSaga(POST, postAPI.post);
@@ -119,14 +123,18 @@ const posting = handleActions(
       ...state,
       postListError: error,
     }),
-    [GET_POST_SUCCESS]: (state, { payload: PostRead }) => ({
+    [GET_POST_SUCCESS]: (state, { payload: postRead }) => ({
       ...state,
       postReadError: null,
-      PostRead,
+      postRead,
     }),
     [GET_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       postReadError: error,
+    }),
+    [GET_POST_CLEAR]: (state, { payload: data }) => ({
+      ...state,
+      postRead: {},
     }),
     [LOAD_MODBUFFER]: (state, { payload: data }) => ({
       ...state,

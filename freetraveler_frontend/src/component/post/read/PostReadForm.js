@@ -9,11 +9,12 @@ import { red } from "@mui/material/colors";
 import { dom } from "@fortawesome/fontawesome-svg-core";
 import hardSet from "redux-persist/es/stateReconciler/hardSet";
 import { useDispatch, useSelector } from "react-redux";
-import { getPost, loadModBuffer } from "../../../module/posting";
+import { getPost, getPostClear, loadModBuffer } from "../../../module/posting";
 import { useHistory } from "react-router-dom";
 import qs from "qs";
 import { removePost } from "../../../module/posting";
 import { IoMdMore } from "react-icons/io";
+import { BASE_URL } from "../../../lib/api/client";
 
 const PRForm = styled.form`
   width: auto;
@@ -203,6 +204,7 @@ const MenuBar = styled.div`
 
   .menubar-box {
     background-color: white;
+    /* background: none; */
     border-radius: 4px;
     border: 1px solid ${palette.gray[14]};
     box-shadow: 1px 2px 2px 0px ${palette.gray[12]};
@@ -220,43 +222,39 @@ const MenuBar = styled.div`
   }
 
   .menubar ul {
-    /* background: white; */
-    height: 50px;
+    /* height: 100px; */
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
   .menubar li {
+    /* margin-top: 20px; */
+    /* margin-right: -100px; */
     list-style: none;
     float: right;
     padding: 0px;
   }
 
+  .menubar-icon-ml {
+    margin-left: 110px;
+  }
+
   .menubar li a {
-    background: white;
+    background-color: white;
     color: black;
     display: block;
     font-weight: normal;
-    line-height: 50px;
-    margin: 0px;
+    line-height: 30px;
+    /* padding: 10px; */
+    margin: 5px;
     text-align: center;
     text-decoration: none;
   }
 
-  /* .menubar li a:hover, */
-  /* .menubar ul li:hover a { */
-  /* border: 0.3px solid black; */
-  /* background: ${palette.gray[6]};
-    color: ${palette.gray[0]}; */
-  /* text-decoration: none; */
-  /* } */
-
-  .menubar li ul {
-    /* background: ${palette.gray[6]}; */
-    /* border-radius: 10px; */
-    /* border: 0.3px solid black; */
-    display: none; /* 평상시에는 드랍메뉴가 안보이게 하기 */
+  /* 평상시에는 드랍메뉴가 안보이게 하기 */
+  /* .menubar li ul {
+    display: none;
     height: auto;
     padding: 0px;
     margin-left: -90px;
@@ -264,73 +262,92 @@ const MenuBar = styled.div`
     position: absolute;
     width: 130px;
     z-index: 200;
-    /*top:1em;
-/*left:0;*/
+  } */
+
+  .menubar-hide {
+    display: none;
+    height: auto;
+    padding: 0px;
+    /* margin-left: -180px; */
+    border: 0px;
+    position: absolute;
+    /* width: 130px; */
+    z-index: 200;
   }
   .menubar-dark-text {
+    /* width: 10px; */
     font-size: 14px;
     font-weight: 300;
     color: ${palette.gray[10]};
+    /* object-fit: cover; */
+    /* border-radius: 4px; */
     /* text-align: left;
     margin-left: 5px; */
   }
   .menubar-red-text {
+    /* width: 10px; */
     font-size: 14px;
     font-weight: 300;
     color: red;
+    /* border-radius: 4px; */
+    object-fit: cover;
   }
 
-  @media screen and (max-width: 612px) {
-    .menubar li ul {
-      margin-left: -100px;
-    }
-  }
-  .menubar li:active ul {
-    display: block; /* 마우스 커서 올리면 드랍메뉴 보이게 하기 */
-  }
-
-  .menubar li:focus ul {
-    display: block; /* 마우스 커서 올리면 드랍메뉴 보이게 하기 */
-  }
+  /* 마우스 커서 올리면 드랍메뉴 보이게 하기 */
+  /* .menubar li:active ul {
+    display: block;
+  } */
 
   .menubar li li {
-    /* background: ${palette.gray[6]}; */
     display: block;
     float: none;
     margin: 0px;
     padding: 0px;
-    width: 130px;
-  }
-
-  .menubar li:hover li a {
+    width: 100%;
+    border-radius: 4px;
     background: none;
   }
 
-  .menubar li ul a {
-    /* border-radius: 10px; */
+  /* .menubar li:hover li a {
+    background: none;
+  } */
+
+  /* .menubar li ul a {
     width: 100%;
     display: block;
     height: 50px;
     font-size: 12px;
     font-style: normal;
-    /* margin: 0px; */
-    margin-right: 100px;
-    /* text-align: right; */
-  }
+  } */
 
   /* 클릭 시  */
-  .menubar li ul a:active,
+  /* .menubar li ul a:active,
   .menubar li ul li:active a {
     cursor: pointer;
     width: 100%;
-    /* background: ${palette.gray[13]}; */
     border: 0px;
-    /* color: ${palette.gray[0]}; */
     text-decoration: none;
-  }
+  } */
 
-  .menubar p {
-    clear: left;
+  .menubar-show {
+    display: block;
+    cursor: pointer;
+    width: 100%;
+    border: 0px;
+    text-decoration: none;
+    /* object-fit: cover; */
+  }
+  @media screen and (max-width: 612px) {
+    .menubar li ul {
+      margin-left: -100px;
+    }
+    .menubar-show {
+      margin-left: 100px;
+      width: 130px;
+    }
+    .menubar-box {
+      width: 130px;
+    }
   }
 `;
 
@@ -346,16 +363,20 @@ export default function PostReadForm({ id }) {
   var [markers, setMarkers] = useState([]);
   var [lines, setLines] = useState([]);
 
+  const [isToggled, setIsToggled] = useState(false);
+
   const dispatch = useDispatch();
   const history = useHistory();
-  // const { data } = useSelector(({ post }) => {
-  //   data: post.postRead;
-  // });
+  const { data } = useSelector(({ post }) => ({
+    data: post.postRead,
+  }));
+
+  //let [data, setData] = useState(select);
 
   //카카오 맵
   var map;
 
-  const data = {
+  const data2 = {
     id: "1",
     author: "이상훈",
     time: "2021-04-24",
@@ -430,9 +451,11 @@ export default function PostReadForm({ id }) {
       ignoreQueryPrefix: true, // 물음표를 제거하고 받아오기 위해서
     });
 
-    const id = query.id;
+    const queryId = query.id;
 
-    var request = { params: { id: id } };
+    console.log("readId: " + queryId);
+
+    var request = { params: { id: queryId } };
     dispatch(getPost(request));
   };
 
@@ -441,16 +464,21 @@ export default function PostReadForm({ id }) {
     var loc_init_x = 126.974936;
     var loc_init_y = 37.559737;
 
-    //가장 처음 장소를 기본 좌표로 설정
-    if (data.days[0][0] != null) {
-      loc_init_x = data.days[0][0].loc_x;
-      loc_init_y = data.days[0][0].loc_y;
+    if (data != undefined && data != null && JSON.stringify(data) != "{}") {
+      // 데이터의 장소 정보 검사
+      if (data.days != null) {
+        //가장 처음 장소를 기본 좌표로 설정
+        if (data.days[0][0] != null) {
+          loc_init_x = data.days[0][0].loc_x;
+          loc_init_y = data.days[0][0].loc_y;
+        }
+      }
     }
 
     var mapContainer = document.getElementById("map"), // 지도를 표시할 div
       mapOption = {
         center: new kakao.maps.LatLng(loc_init_y, loc_init_x), // 지도의 중심좌표
-        level: 11, // 지도의 확대 레벨
+        level: 13, // 지도의 확대 레벨
       };
 
     // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
@@ -695,13 +723,33 @@ export default function PostReadForm({ id }) {
   };
 
   useEffect(() => {
+    //setData(select);
     getData();
-    createMap();
-    createCustomOverlay();
-    createLine();
-    createDayButton();
-    createDayBox();
   }, []);
+
+  const placeImgFilter = () => {
+    for (let i = 0; i < data.days.length; i++) {
+      for (let j = 0; j < data.days[i].length; j++) {
+        data.days[i][j].img = BASE_URL + "/" + data.days[i][j].img;
+      }
+    }
+  };
+
+  useEffect(() => {
+    //데이터 유/무 검사
+    if (data != undefined && data != null && JSON.stringify(data) != "{}") {
+      // 데이터의 장소 정보 검사
+      createMap();
+      data.repimg = BASE_URL + "/" + data.repimg;
+      if (data.days != null) {
+        placeImgFilter();
+        createCustomOverlay();
+        createLine();
+        createDayButton();
+        createDayBox();
+      }
+    }
+  }, [data]);
 
   const linkToModify = function () {
     dispatch(loadModBuffer(data));
@@ -712,12 +760,17 @@ export default function PostReadForm({ id }) {
     dispatch(removePost({ data: { id: data.id } }));
   };
 
+  //토글 메뉴바
+  const toggleMenu = function () {
+    setIsToggled((isToggled) => !isToggled);
+  };
+
   return (
     <>
       <PRForm>
         <ImgForm>
           <div className="image-box">
-            <img className="image-inbox" src={data.repImg} />
+            <img className="image-inbox" src={data.repimg} />
           </div>
         </ImgForm>
         <TitleText>{data.postName}</TitleText> <br />
@@ -730,23 +783,33 @@ export default function PostReadForm({ id }) {
             <MenuBar>
               <div className="menubar">
                 <li>
-                  <IoMdMore size="30" color="#adb5bd" />
+                  <div className="menubar-icon-ml">
+                    <IoMdMore
+                      size="30"
+                      color="#adb5bd"
+                      onClick={() => toggleMenu()}
+                    />
+                  </div>
                   <ul>
-                    <div className="menubar-box">
-                      <li className="menubar-border-bottom">
-                        <a onClick={() => linkToModify()}>
-                          {/* <ModifyButton onClick={() => linkToModify()}> */}
-                          <div className="menubar-dark-text">수정하기</div>
-                          {/* </ModifyButton> */}
-                        </a>
-                      </li>
-                      <li>
-                        <a onClick={() => deleteBoard()}>
-                          {/* <DeleteButton onClick={() => deleteBoard()}> */}
-                          <div className="menubar-red-text">삭제하기</div>
-                          {/* </DeleteButton> */}
-                        </a>
-                      </li>
+                    <div
+                      className={isToggled ? "menubar-show" : "menubar-hide"}
+                    >
+                      <div className="menubar-box">
+                        <li className="menubar-border-bottom">
+                          <a onClick={() => linkToModify()}>
+                            {/* <ModifyButton onClick={() => linkToModify()}> */}
+                            <div className="menubar-dark-text">수정하기</div>
+                            {/* </ModifyButton> */}
+                          </a>
+                        </li>
+                        <li>
+                          <a onClick={() => deleteBoard()}>
+                            {/* <DeleteButton onClick={() => deleteBoard()}> */}
+                            <div className="menubar-red-text">삭제하기</div>
+                            {/* </DeleteButton> */}
+                          </a>
+                        </li>
+                      </div>
                     </div>
                   </ul>
                 </li>

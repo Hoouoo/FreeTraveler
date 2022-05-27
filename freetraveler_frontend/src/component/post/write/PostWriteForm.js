@@ -1,7 +1,12 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { post, changeField, clearModBuffer } from "../../../module/posting";
+import {
+  post,
+  changeField,
+  clearModBuffer,
+  getPostClear,
+} from "../../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
 import PostTemplate from "../PostTemplate";
 import palette from "../../../lib/styles/palette";
@@ -172,6 +177,8 @@ export default function PostWriteForm({ id, mode }) {
   useEffect(() => {
     if (mode == "modify") {
       setData(modBuffer);
+      //조회 폼 초기화
+      dispatch(getPostClear());
     }
   }, []);
 
@@ -187,7 +194,13 @@ export default function PostWriteForm({ id, mode }) {
         totalCost.value = data.totalCost;
         totalTrans.value = data.totalTrans;
         comment.value = data.comment;
-        setRepImagePreview(data.repImg);
+        setRepImagePreview(data.repimg);
+
+        setPostName(data.postName);
+        setTotalCost(data.totalCost);
+        setTotalTrans(data.totalTrans);
+        setComment(data.comment);
+        setRepImg("exist");
 
         //day 박스 추가
         for (let i = 0; i < data.days.length; i++) {
@@ -205,7 +218,7 @@ export default function PostWriteForm({ id, mode }) {
     }
   }, [data]);
 
-  useEffect(() => {
+  const integrityTest = () => {
     {
       if (postName.length == 0) {
         setPostNameIntegrity("포스트 제목을 입력해주세요.");
@@ -247,6 +260,10 @@ export default function PostWriteForm({ id, mode }) {
         setImgIntegrity(null);
       }
     }
+  };
+
+  useEffect(() => {
+    integrityTest();
   }, [postName, totalCost, totalTrans, comment, repImg]);
 
   // //리모컨 scroll
