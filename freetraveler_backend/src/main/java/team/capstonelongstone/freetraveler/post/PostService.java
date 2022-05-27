@@ -114,7 +114,7 @@ public class PostService {
         jsonObject.put("totalDays",board.getTotalDays());
         jsonObject.put("totalTrans",board.getTotalTrans());
         jsonObject.put("comment",board.getComment());
-        jsonObject.put("good",board.getPickCnt());
+        jsonObject.put("good",board.getGoodCnt());
 
         //day
         List<Day> allByBoardId = dayRepository.findAllByBoard(board);
