@@ -19,3 +19,6 @@ export const register = ({ username, password, name }) =>
 //로그인 상태 확인
 export const check = () =>
   client.get("/account/check", { withCredentials: true });
+
+//로그 아웃
+export const logout = () => client.get("/logout", { withCredentials: true });

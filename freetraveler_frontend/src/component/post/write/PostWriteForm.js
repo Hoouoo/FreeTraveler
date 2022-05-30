@@ -6,6 +6,8 @@ import {
   changeField,
   clearModBuffer,
   getPostClear,
+  postFailure,
+  postCheckFalse,
 } from "../../../module/posting";
 import PWDayBoxGenerator from "./generator/PWDayBoxGenerator";
 import PostTemplate from "../PostTemplate";
@@ -14,6 +16,7 @@ import { Link } from "react-scroll";
 import { IoIosArrowUp } from "react-icons/io";
 import DayButton from "../buttons/DayButton";
 import PostButton from "../buttons/PostSubButton";
+import { useHistory } from "react-router-dom";
 
 const POWBox = styled.div`
   width: auto;
@@ -162,9 +165,11 @@ export default function PostWriteForm({ id, mode }) {
 
   var [data, setData] = useState(null);
 
+  const history = useHistory();
   const dispatch = useDispatch();
-  const { modBuffer } = useSelector(({ post }) => ({
+  const { modBuffer, postCheck } = useSelector(({ post }) => ({
     modBuffer: post.modBuffer,
+    postCheck: post.postCheck,
   }));
 
   let [postNameIntegrity, setPostNameIntegrity] = useState();
@@ -472,6 +477,18 @@ export default function PostWriteForm({ id, mode }) {
       alert("양식을 다시 확인해주세요.");
     }
   };
+
+  const { postedId } = useSelector(({ post }) => ({
+    postedId: post.postWrite.id,
+  }));
+
+  useEffect(() => {
+    if (postCheck) {
+      alert("포스팅 성공");
+      history.push("/posting/read?id=" + postedId);
+      dispatch(postCheckFalse());
+    }
+  }, [postCheck]);
 
   return (
     // <POWBox>

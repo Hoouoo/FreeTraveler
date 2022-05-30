@@ -16,6 +16,12 @@ const CLEAR_MODBUFFER = "post/CLEAR_MODBUFFER";
 const SAVE_POST_INTEGRITY = "post/SAVE_POST_INTEGRITY";
 const CLEAR_POST_INTEGRITY = "post/SAVE_POST_INTERGRITY";
 
+const POST_CHECK_TRUE = "post/POSTING_CHECK_TRUE";
+const POST_CHECK_FALSE = "post/POSTING_CHECK_FALSE";
+
+const POST_REMOVE_CHECK_TRUE = "post/POST_REMOVE_CHECK_TRUE";
+const POST_REMOVE_CHECK_FALSE = "post/POST_REMOVE_CHECK_FALSE";
+
 const [POST, POST_SUCCESS, POST_FAILURE] =
   createRequestActionTypes("post/POST");
 
@@ -52,6 +58,9 @@ const initialState = {
   postReadError: null,
   postRemoveError: null,
 
+  postCheck: false,
+  postRemoveCheck: false,
+
   postIntegrity: [[]],
 };
 
@@ -63,6 +72,18 @@ export const removePost = createAction(REMOVE_POST, (data) => data);
 
 export const loadModBuffer = createAction(LOAD_MODBUFFER, (data) => data);
 export const clearModBuffer = createAction(CLEAR_MODBUFFER, (data) => data);
+
+export const postCheckTrue = createAction(POST_CHECK_TRUE, (data) => data);
+export const postCheckFalse = createAction(POST_CHECK_FALSE, (data) => data);
+
+export const postRemoveCheckTrue = createAction(
+  POST_REMOVE_CHECK_TRUE,
+  (data) => data
+);
+export const postRemoveCheckFalse = createAction(
+  POST_REMOVE_CHECK_FALSE,
+  (data) => data
+);
 
 export const savePostIntegrity = createAction(
   SAVE_POST_INTEGRITY,
@@ -100,10 +121,10 @@ const posting = handleActions(
       postError: null, //폼 전환 시 회원 인증  에러 초기화
     }),
     [POST_SUCCESS]: (state, { payload: postWrite }) => {
-      alert("포스팅 성공");
       return {
         ...state,
         posWritetError: null,
+        postCheck: true,
         postWrite,
       };
     },
@@ -111,9 +132,18 @@ const posting = handleActions(
       alert("포스팅 실패");
       return {
         ...state,
+        postCheck: false,
         postWriteError: error,
       };
     },
+    [POST_CHECK_TRUE]: (state, { payload: data }) => ({
+      ...state,
+      isPostingSuccess: true,
+    }),
+    [POST_CHECK_FALSE]: (state, { payload: data }) => ({
+      ...state,
+      isPostingFailure: false,
+    }),
     [GET_POSTLIST_SUCCESS]: (state, { payload: postList }) => ({
       ...state,
       postListError: null,
@@ -148,6 +178,7 @@ const posting = handleActions(
       alert("삭제 성공");
       return {
         ...state,
+        postRemoveCheck: true,
       };
     },
     [REMOVE_POST_FAILURE]: (state, { payload: error }) => {
@@ -155,6 +186,7 @@ const posting = handleActions(
       return {
         ...state,
         postRemoveError: error,
+        postRemoveCheck: false,
       };
     },
     [SAVE_POST_INTEGRITY]: (state, { payload: data }) => {

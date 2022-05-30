@@ -104,7 +104,7 @@ const TabBar = (props) => {
         break;
     }
     //}
-  }, [activeTabs, user]);
+  }, [activeTabs]);
 
   if (!tabbarPath.includes(history.location.pathname)) {
     return <></>;

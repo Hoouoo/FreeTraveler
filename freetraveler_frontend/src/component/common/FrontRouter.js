@@ -19,8 +19,6 @@ export default function FrontRouter() {
     "/login",
     "/register",
     "/posting/list",
-    "/posting/write",
-    "/posting/modify",
     "/posting/read",
   ];
 
@@ -42,7 +40,7 @@ export default function FrontRouter() {
         history.push("/");
       }
     }
-  }, [history, location, user]);
+  }, [history, location]);
 
   return <></>;
 }

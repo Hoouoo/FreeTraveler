@@ -9,7 +9,12 @@ import { red } from "@mui/material/colors";
 import { dom } from "@fortawesome/fontawesome-svg-core";
 import hardSet from "redux-persist/es/stateReconciler/hardSet";
 import { useDispatch, useSelector } from "react-redux";
-import { getPost, getPostClear, loadModBuffer } from "../../../module/posting";
+import {
+  getPost,
+  getPostClear,
+  loadModBuffer,
+  postCheckFalse,
+} from "../../../module/posting";
 import { useHistory } from "react-router-dom";
 import qs from "qs";
 import { removePost } from "../../../module/posting";
@@ -748,10 +753,22 @@ export default function PostReadForm({ id }) {
         createDayButton();
         createDayBox();
       }
+
+      //날짜 필터
       data.time = data.time.split("T")[0];
-      console.log(data.time);
     }
   }, [data]);
+
+  const { postRemoveCheck } = useSelector(({ post }) => ({
+    postRemoveCheck: post.postRemoveCheck,
+  }));
+
+  useEffect(() => {
+    if (postRemoveCheck) {
+      history.push("/posting/list");
+      dispatch(postCheckFalse());
+    }
+  }, [postRemoveCheck]);
 
   const linkToModify = function () {
     dispatch(loadModBuffer(data));

@@ -195,7 +195,7 @@ export default function PostListTemplate({ id }) {
       // 문자열 맨 앞의 ?를 생력
     });
 
-    console.log(query);
+    //console.log(query);
 
     const request = {
       params: {
@@ -209,7 +209,7 @@ export default function PostListTemplate({ id }) {
       },
     };
 
-    console.log(request);
+    //console.log(request);
 
     dispatch(getPostList(request));
   }, [history, location]);

@@ -11,6 +11,7 @@ import createSagaMiddleware from "@redux-saga/core";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
+import { CookiesProvider } from "react-cookie";
 
 const segaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -22,14 +23,15 @@ const persistor = persistStore(store);
 segaMiddleware.run(rootSaga);
 
 ReactDOM.render(
-  
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </PersistGate>
-  </Provider>,
+  <CookiesProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </CookiesProvider>,
   document.getElementById("root")
 );
 

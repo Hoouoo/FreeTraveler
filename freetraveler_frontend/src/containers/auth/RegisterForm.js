@@ -56,14 +56,9 @@ const RegisterForm = ({ history }) => {
     if (auth) {
       alert("회원가입 성공!");
       dispatch(check());
+      history.push("/login");
     }
   }, [auth, authError, dispatch]);
-
-  useEffect(() => {
-    if (user) {
-      history.push("/");
-    }
-  }, [user, history]);
 
   return (
     <AuthForm
