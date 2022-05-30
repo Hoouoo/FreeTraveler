@@ -63,13 +63,12 @@ public class LoginService {
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
 
-        Map userId=new HashMap<String,LoginDTO>(); //JSON변환
-        userId.put("userId",account.getUserId());
-
         if(Objects.isNull(account)){
             return new ResponseEntity("세션이 없습니다.", HttpStatus.valueOf(401));
         }
         else{
+            Map userId=new HashMap<String,LoginDTO>(); //JSON변환
+            userId.put("userId",account.getUserId());
             return new ResponseEntity(userId, HttpStatus.OK); //로그인 성공시 userId 넘김
         }
 
