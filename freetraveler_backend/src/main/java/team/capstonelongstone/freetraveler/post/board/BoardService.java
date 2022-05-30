@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import team.capstonelongstone.freetraveler.account.domain.Account;
+import team.capstonelongstone.freetraveler.good.GoodService;
+import team.capstonelongstone.freetraveler.good.domain.Good;
+import team.capstonelongstone.freetraveler.pick.PickRepository;
+import team.capstonelongstone.freetraveler.pick.domain.Pick;
 import team.capstonelongstone.freetraveler.post.board.dto.PostListDTO;
 import team.capstonelongstone.freetraveler.post.img.ImgService;
 
@@ -30,6 +34,8 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final ImgService imgService;
+    private final GoodService goodService;
+    private final PickRepository pickRepository;
 
     /**
      * 보드 생성 및 이미지 저장
@@ -89,12 +95,6 @@ public class BoardService {
             pick="false";
         }
 
-        if(postListDTO.getMethod().equals("")){
-            postListDTO.setMethod("title");
-        }else if(postListDTO.getMethod().equals("author")){
-            postListDTO.setMethod("b.author.userName");
-        }
-
         Sort sort = null;
         if(postListDTO.getOrderBy().equals("asc")) {
             if(postListDTO.getSort().equals("recent")) {
@@ -119,15 +119,24 @@ public class BoardService {
         Pageable pageable= PageRequest.of(postListDTO.getPage(), postListDTO.getPageSize(),sort);
 
         Page<Board> all=null;
-        if(pick.equals("all")){//pick all 일때
-            all = boardRepository.findAllPickAll(pageable,postListDTO.getMethod(),postListDTO.getSearch());
-        }else {
-            all = boardRepository.findAllPick(pageable, account.getId(), postListDTO.getMethod(), postListDTO.getSearch(), pick);
+        //pick all 이면서 title일 때
+        if(pick.equals("all") && (postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title"))){
+            System.out.println("all title");
+            all = boardRepository.findAllPickAllByTitle(pageable,postListDTO.getSearch());
+        }else if(pick.equals("all") && postListDTO.getMethod().equals("author")){
+            all = boardRepository.findAllPickAllByAuthor(pageable,postListDTO.getSearch());
+            System.out.println("all author");
+        }
+        else if(postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title")){
+            all = boardRepository.findAllPickByTitle(pageable, account.getId(), postListDTO.getSearch(), pick);
+            System.out.println("title");
+        }else{
+            all = boardRepository.findAllPickByAuthor(pageable, account.getId(), postListDTO.getSearch(), pick);
+            System.out.println("author");
         }
 
         List<Board> allBoard = boardRepository.findAll();
         int boardSize = allBoard.size();
-
 
         //json
         JSONObject page=new JSONObject();
@@ -139,6 +148,23 @@ public class BoardService {
         JSONArray array=new JSONArray();
         for (Board board : all) {
 
+            Good good = goodService.returnGoodStatus(account, board);
+            Pick byUserAndBoard = pickRepository.findByUserAndBoard(account, board);
+
+            String pickStatus="";
+            if(Objects.isNull(byUserAndBoard)){
+                pickStatus="false";
+            }else{
+                pickStatus=byUserAndBoard.getPickStatus();
+            }
+
+            String goodStatus="";
+            if(Objects.isNull(good)){
+                goodStatus="false";
+            }else{
+                goodStatus="true";
+            }
+
             JSONObject post = new JSONObject();
             post.put("id",board.getId());
             post.put("author",board.getAuthor().getUserId());
@@ -149,12 +175,14 @@ public class BoardService {
             post.put("totalTrans",board.getTotalTrans());
             post.put("comment",board.getComment());
             post.put("good",board.getGoodCnt());
-            post.put("isPick","false");
+            post.put("isGood",goodStatus);
+            post.put("isPick",pickStatus);
             array.put(post);
             page.put("post",array);
         }
 
         return page.toString();
     }
+
 
 }
