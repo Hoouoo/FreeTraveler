@@ -68,9 +68,8 @@ public class PostController {
      */
     @GetMapping("/post")
     @ResponseBody
-    public ResponseEntity getPost(@RequestParam("id")String boardId) throws JSONException, IOException {
-        System.out.println(boardId);
-        String post = postService.getPost(boardId);
+    public ResponseEntity getPost(@RequestParam("id")String boardId,HttpServletRequest request) throws JSONException, IOException {
+        String post = postService.getPost(boardId,request);
         return new ResponseEntity(post,HttpStatus.valueOf(200));
     }
 
