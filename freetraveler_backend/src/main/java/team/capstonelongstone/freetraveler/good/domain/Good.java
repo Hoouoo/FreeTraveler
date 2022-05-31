@@ -1,9 +1,7 @@
-package team.capstonelongstone.freetraveler.pick.domain;
+package team.capstonelongstone.freetraveler.good.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import team.capstonelongstone.freetraveler.account.domain.Account;
@@ -12,30 +10,25 @@ import team.capstonelongstone.freetraveler.post.board.Board;
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor
 @Getter
-@Setter
-public class Pick {
+@NoArgsConstructor
+public class Good {
 
     @Id @GeneratedValue
     private Long id;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "ACCOUNT_ID")
-    private Account account;
-
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
-    @ColumnDefault("false")
-    private String pickStatus;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "ACCOUNT_ID")
+    private Account account;
 
-    public Pick(Account account, Board board, String pickStatus) {
-        this.account = account;
+    public Good(Board board, Account account) {
         this.board = board;
-        this.pickStatus = pickStatus;
+        this.account = account;
     }
 }

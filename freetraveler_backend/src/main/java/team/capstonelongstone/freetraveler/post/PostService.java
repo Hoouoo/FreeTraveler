@@ -6,6 +6,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.capstonelongstone.freetraveler.account.domain.Account;
+import team.capstonelongstone.freetraveler.good.GoodRepository;
+import team.capstonelongstone.freetraveler.good.GoodService;
+import team.capstonelongstone.freetraveler.good.domain.Good;
+import team.capstonelongstone.freetraveler.pick.PickRepository;
+import team.capstonelongstone.freetraveler.pick.domain.Pick;
 import team.capstonelongstone.freetraveler.post.board.Board;
 import team.capstonelongstone.freetraveler.post.board.BoardRepository;
 import team.capstonelongstone.freetraveler.post.day.Day;
@@ -13,6 +19,8 @@ import team.capstonelongstone.freetraveler.post.day.DayRepository;
 import team.capstonelongstone.freetraveler.post.place.Place;
 import team.capstonelongstone.freetraveler.post.place.PlaceRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +29,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,6 +44,14 @@ public class PostService {
 
     @Autowired
     DayRepository dayRepository;
+
+    @Autowired
+    GoodService goodService;
+
+    @Autowired
+    PickRepository pickRepository;
+
+
 
     /**
      * 도로명 주소로 위도 경도 뽑는 API
@@ -98,10 +115,28 @@ public class PostService {
     /**
      * 게시물 JSON으로 가져오기
      */
-    public String getPost(String boardId) throws JSONException, IOException {
+    public String getPost(String boardId, HttpServletRequest request) throws JSONException, IOException {
         long id = Integer.valueOf(boardId).longValue();
+        HttpSession session=request.getSession();
+        Account account = (Account) session.getAttribute("account");
 
         Board board = boardRepository.getById(id);
+        Good good = goodService.returnGoodStatus(account, board);
+        Pick byUserAndBoard = pickRepository.findByUserAndBoard(account, board);
+
+        String pickStatus="";
+        if(Objects.isNull(byUserAndBoard)){
+            pickStatus="false";
+        }else{
+            pickStatus=byUserAndBoard.getPickStatus();
+        }
+
+        String goodStatus="";
+        if(Objects.isNull(good)){
+            goodStatus="false";
+        }else{
+            goodStatus="true";
+        }
 
         JSONObject jsonObject = new JSONObject();
 
@@ -114,7 +149,9 @@ public class PostService {
         jsonObject.put("totalDays",board.getTotalDays());
         jsonObject.put("totalTrans",board.getTotalTrans());
         jsonObject.put("comment",board.getComment());
-        jsonObject.put("good",board.getPickCnt());
+        jsonObject.put("good",board.getGoodCnt());
+        jsonObject.put("isGood",goodStatus);
+        jsonObject.put("isPick",pickStatus);
 
         //day
         List<Day> allByBoardId = dayRepository.findAllByBoard(board);
