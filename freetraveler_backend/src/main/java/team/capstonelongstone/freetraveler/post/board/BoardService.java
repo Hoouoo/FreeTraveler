@@ -120,23 +120,18 @@ public class BoardService {
 
         Page<Board> all=null;
         //pick all 이면서 title일 때
+
         if(pick.equals("all") && (postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title"))){
-            System.out.println("all title");
             all = boardRepository.findAllPickAllByTitle(pageable,postListDTO.getSearch());
         }else if(pick.equals("all") && postListDTO.getMethod().equals("author")){
             all = boardRepository.findAllPickAllByAuthor(pageable,postListDTO.getSearch());
-            System.out.println("all author");
         }
         else if(postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title")){
             all = boardRepository.findAllPickByTitle(pageable, account.getId(), postListDTO.getSearch(), pick);
-            System.out.println("title");
         }else{
             all = boardRepository.findAllPickByAuthor(pageable, account.getId(), postListDTO.getSearch(), pick);
-            System.out.println("author");
         }
-
-        List<Board> allBoard = boardRepository.findAll();
-        int boardSize = allBoard.size();
+        int boardSize=all.getSize();
 
         //json
         JSONObject page=new JSONObject();
@@ -183,6 +178,5 @@ public class BoardService {
 
         return page.toString();
     }
-
 
 }
