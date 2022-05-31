@@ -485,6 +485,10 @@ export default function PostWriteForm({ id, mode }) {
   useEffect(() => {
     if (postCheck) {
       alert("포스팅 성공");
+      history.replace(
+        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all"
+      );
+      // history.push("/posting/list");
       history.push("/posting/read?id=" + postedId);
       dispatch(postCheckFalse());
     }

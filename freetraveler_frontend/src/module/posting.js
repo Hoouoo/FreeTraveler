@@ -138,11 +138,11 @@ const posting = handleActions(
     },
     [POST_CHECK_TRUE]: (state, { payload: data }) => ({
       ...state,
-      isPostingSuccess: true,
+      postCheck: true,
     }),
     [POST_CHECK_FALSE]: (state, { payload: data }) => ({
       ...state,
-      isPostingFailure: false,
+      postCheck: false,
     }),
     [GET_POSTLIST_SUCCESS]: (state, { payload: postList }) => ({
       ...state,

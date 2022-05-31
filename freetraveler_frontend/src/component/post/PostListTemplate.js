@@ -81,10 +81,20 @@ const PostListBox = styled.div`
   }
 `;
 
+const SearchInput = styled.input``;
+
+const SearchButton = styled.div`
+  display: inline-block;
+  cursor: pointer;
+`;
+
+const SearchBox = styled.div``;
+
 const NavButton = styled.div`
   cursor: pointer;
 `;
 const PageNavigator = styled.div``;
+
 const Page = styled.div`
   cursor: pointer;
 `;
@@ -93,6 +103,9 @@ export default function PostListTemplate({ id }) {
   let [gen, setGen] = useState(new ItemCardGenerator());
   let [render, setRender] = useState(gen.render());
   let [pageNav, setPageNav] = useState();
+
+  let [search, setSearch] = useState();
+
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -100,87 +113,6 @@ export default function PostListTemplate({ id }) {
   let { data } = useSelector(({ post }) => ({
     data: post.postList,
   }));
-
-  const data2 = {
-    page: 0,
-    max: 4,
-    pageSize: 6,
-    totalPost: 22,
-    post: [
-      {
-        id: 0,
-        author: "shpusan001",
-        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-        postName: "포스트 제목",
-        totalCost: "10000",
-        totalDays: 3,
-        totalTrans: "대중교통",
-        comment: "경험자의 한마딥니다~~",
-        good: 3,
-        isPick: true,
-      },
-      {
-        id: 1,
-        author: "shpusan001",
-        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-        postName: "포스트 제목",
-        totalCost: "10000",
-        totalDays: 3,
-        totalTrans: "대중교통",
-        comment: "경험자의 한마딥니다~~",
-        good: 3,
-        isPick: true,
-      },
-      {
-        id: 2,
-        author: "shpusan001",
-        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-        postName: "포스트 제목",
-        totalCost: "10000",
-        totalDays: 3,
-        totalTrans: "대중교통",
-        comment: "경험자의 한마딥니다~~",
-        good: 3,
-        isPick: true,
-      },
-      {
-        id: 3,
-        author: "shpusan001",
-        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-        postName: "포스트 제목",
-        totalCost: "10000",
-        totalDays: 3,
-        totalTrans: "대중교통",
-        comment: "경험자의 한마딥니다~~",
-        good: 3,
-        isPick: true,
-      },
-      {
-        id: 4,
-        author: "shpusan001",
-        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-        postName: "포스트 제목",
-        totalCost: "10000",
-        totalDays: 3,
-        totalTrans: "대중교통",
-        comment: "경험자의 한마딥니다~~",
-        good: 3,
-        isPick: true,
-      },
-      {
-        id: 5,
-        author: "shpusan001",
-        repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
-        postName: "포스트 제목",
-        totalCost: "10000",
-        totalDays: 3,
-        totalTrans: "대중교통",
-        comment: "경험자의 한마딥니다~~",
-        good: 3,
-        isPick: true,
-      },
-    ],
-  };
 
   useEffect(() => {
     //조회 폼 제거
@@ -209,10 +141,12 @@ export default function PostListTemplate({ id }) {
       },
     };
 
-    //console.log(request);
+    // //console.log(request);
+    // console.log("리스트페이지");
+    // console.log(location);
 
     dispatch(getPostList(request));
-  }, [history, location]);
+  }, [location]);
 
   const generateItemCard = useCallback(() => {
     console.log(data);
@@ -261,12 +195,31 @@ export default function PostListTemplate({ id }) {
     setPageNavCallback(<PageNavigator>{pageBuf}</PageNavigator>);
   }, [data]);
 
+  const onChange = (e) => {
+    if (e.target.name == "searchInput") {
+      setSearch(e.target.value);
+    }
+  };
+
+  const searchButtonClick = () => {
+    history.push({
+      pathname: "/posting/list",
+      search: `page=${0}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=all`,
+    });
+  };
+
   return (
     <>
       <PostListBox>
         <div className="header_text_container">
           <div className="header_text_title">포스트</div>
         </div>
+        <SearchBox>
+          <SearchInput name="searchInput" value={search} onChange={onChange} />
+          <SearchButton onClick={() => searchButtonClick()}>
+            Search
+          </SearchButton>
+        </SearchBox>
         {render}
         <div className="bottom_button_container">
           <Link to="/posting/write" style={{ textDecoration: "none" }}>
@@ -288,3 +241,84 @@ export default function PostListTemplate({ id }) {
     </>
   );
 }
+
+// const data2 = {
+//   page: 0,
+//   max: 4,
+//   pageSize: 6,
+//   totalPost: 22,
+//   post: [
+//     {
+//       id: 0,
+//       author: "shpusan001",
+//       repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+//       postName: "포스트 제목",
+//       totalCost: "10000",
+//       totalDays: 3,
+//       totalTrans: "대중교통",
+//       comment: "경험자의 한마딥니다~~",
+//       good: 3,
+//       isPick: true,
+//     },
+//     {
+//       id: 1,
+//       author: "shpusan001",
+//       repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+//       postName: "포스트 제목",
+//       totalCost: "10000",
+//       totalDays: 3,
+//       totalTrans: "대중교통",
+//       comment: "경험자의 한마딥니다~~",
+//       good: 3,
+//       isPick: true,
+//     },
+//     {
+//       id: 2,
+//       author: "shpusan001",
+//       repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+//       postName: "포스트 제목",
+//       totalCost: "10000",
+//       totalDays: 3,
+//       totalTrans: "대중교통",
+//       comment: "경험자의 한마딥니다~~",
+//       good: 3,
+//       isPick: true,
+//     },
+//     {
+//       id: 3,
+//       author: "shpusan001",
+//       repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+//       postName: "포스트 제목",
+//       totalCost: "10000",
+//       totalDays: 3,
+//       totalTrans: "대중교통",
+//       comment: "경험자의 한마딥니다~~",
+//       good: 3,
+//       isPick: true,
+//     },
+//     {
+//       id: 4,
+//       author: "shpusan001",
+//       repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+//       postName: "포스트 제목",
+//       totalCost: "10000",
+//       totalDays: 3,
+//       totalTrans: "대중교통",
+//       comment: "경험자의 한마딥니다~~",
+//       good: 3,
+//       isPick: true,
+//     },
+//     {
+//       id: 5,
+//       author: "shpusan001",
+//       repImg: "http://www.epj.co.kr/news/photo/201908/22686_32938_355.jpg",
+//       postName: "포스트 제목",
+//       totalCost: "10000",
+//       totalDays: 3,
+//       totalTrans: "대중교통",
+//       comment: "경험자의 한마딥니다~~",
+//       good: 3,
+//       isPick: true,
+//     },
+//   ],
+// };
