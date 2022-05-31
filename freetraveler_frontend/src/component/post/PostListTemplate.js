@@ -9,6 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPostClear, getPostList } from "../../module/posting";
 import qs from "qs";
 import { BASE_URL } from "../../lib/api/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMagnifyingGlass,
+  faAngleRight,
+  faAngleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 const PostListBox = styled.div`
   width: auto;
@@ -81,30 +87,90 @@ const PostListBox = styled.div`
   }
 `;
 
-const SearchInput = styled.input``;
+const SearchInput = styled.input`
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  width: 100%;
+  height: 1.8rem;
+  margin-left: auto;
+  border-radius: 0.2rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${palette.gray[15]};
+  background-color: ${palette.gray[16]};
+  color: ${palette.gray[17]};
+  /* line-height: 3.6rem; */
+  position: relative;
+`;
 
 const SearchButton = styled.div`
-  display: inline-block;
+  /* display: inline-block;
+  cursor: pointer; */
+  font-weight: 900;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
+  position: absolute;
+  right: 5px;
+  z-index: 1;
+  color: ${palette.gray[17]};
+  /* top: 50%; */
+  transform: translatey(35%);
 `;
 
-const SearchBox = styled.div``;
-
-const NavButton = styled.div`
-  cursor: pointer;
+const SearchBox = styled.div`
+  position: relative;
+  margin: 10px;
+  /* grid-template-columns: 5% 95%; */
+  /* display: grid; */
 `;
+
+const NavButton = styled.li`
+  cursor: pointer;
+  width: 10px;
+  height: auto;
+`;
+
 const PageNavigator = styled.div``;
 
-const Page = styled.div`
+const Page = styled.li`
+  /* float: left; */
   cursor: pointer;
+  display: inline-block;
+  list-style: none;
+  height: 20px;
+  width: 20px;
+  /* color: #1e1e1e; */
+  font-size: 14px;
+  line-height: 18px;
+  vertical-align: middle;
+  margin: 5px;
+  .click-page {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    background-color: ${palette.mint[1]};
+    border-radius: 10px;
+  }
+`;
+
+const NavPagination = styled.ul`
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 28px 0;
+  text-align: center;
+  list-style: none;
 `;
 
 export default function PostListTemplate({ id }) {
   let [gen, setGen] = useState(new ItemCardGenerator());
   let [render, setRender] = useState(gen.render());
   let [pageNav, setPageNav] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
 
-  let [search, setSearch] = useState();
+  let [search, setSearch] = useState("");
 
   const history = useHistory();
   const location = useLocation();
@@ -179,8 +245,9 @@ export default function PostListTemplate({ id }) {
       const pageClick = function () {
         history.push({
           pathname: "/posting/list",
-          search: `page=${i}&pageSize=${6}&sort=recent&orderBy=desc&search=&method=&isMyPick=all`,
+          search: `page=${i}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=all`,
         });
+        setCurrentPage(i);
       };
       const index = pageBuf.push(
         <Page
@@ -188,11 +255,18 @@ export default function PostListTemplate({ id }) {
           key={`page_${i + 1}`}
           onClick={() => pageClick()}
         >
-          {i + 1}
+          <div className={currentPage == i ? "click-page" : ""}>{i + 1}</div>
         </Page>
       );
     }
-    setPageNavCallback(<PageNavigator>{pageBuf}</PageNavigator>);
+    setPageNavCallback(
+      <PageNavigator>
+        <FontAwesomeIcon icon={faAngleLeft} />
+        {pageBuf}
+        <FontAwesomeIcon icon={faAngleRight} />
+      </PageNavigator>
+    );
+    // setPageNavCallback(<>{pageBuf}</>);
   }, [data]);
 
   const onChange = (e) => {
@@ -211,14 +285,19 @@ export default function PostListTemplate({ id }) {
   return (
     <>
       <PostListBox>
-        <div className="header_text_container">
+        {/* <div className="header_text_container">
           <div className="header_text_title">포스트</div>
-        </div>
+        </div> */}
         <SearchBox>
-          <SearchInput name="searchInput" value={search} onChange={onChange} />
           <SearchButton onClick={() => searchButtonClick()}>
-            Search
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
           </SearchButton>
+          <SearchInput
+            name="searchInput"
+            value={search}
+            onChange={onChange}
+            placeholder="  어떤 곳으로 여행을 할까요?"
+          />
         </SearchBox>
         {render}
         <div className="bottom_button_container">
@@ -232,11 +311,7 @@ export default function PostListTemplate({ id }) {
             </PostButton>
           </Link>
         </div>
-        <div>
-          <NavButton>앞으로 </NavButton>
-          {pageNav}
-          <NavButton>뒤로 </NavButton>
-        </div>
+        <NavPagination>{pageNav}</NavPagination>
       </PostListBox>
     </>
   );

@@ -8,6 +8,25 @@ import { FormControl, TextField, NativeSelect } from "@mui/material";
 import DaumPostcode from "react-daum-postcode";
 import { IoSearchSharp } from "react-icons/io5";
 
+// const load_url = function (url) {
+//   var req = new XMLHttpRequest();
+//   req.open("GET", url, false);
+//   //XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com]
+//   req.overrideMimeType("text/plain; charset=x-user-defined");
+//   req.send(null);
+//   if (req.status != 200) return "";
+//   return req.responseText;
+// };
+
+// const srcToBinary = function (url) {
+//   // 49 => "1" (decimal)
+//   var filestream = load_url(url);
+//   var bytes = [];
+//   for (var i = 0; i < filestream.length; i++)
+//     bytes[i] = filestream.charCodeAt(i) & 0xff;
+//   return bytes;
+// };
+
 const PWPlaceBoxTemplate = styled.div`
   width: auto;
   margin: 15px;
@@ -165,7 +184,7 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
         name: data.placeName,
         loc: data.loc,
         cost: data.cost,
-        img: true,
+        img: ["exist"],
         content: data.content,
         trans: data.trans,
         integrity: false,

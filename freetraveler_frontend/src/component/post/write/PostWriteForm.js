@@ -208,16 +208,18 @@ export default function PostWriteForm({ id, mode }) {
         setRepImg("exist");
 
         //day 박스 추가
-        for (let i = 0; i < data.days.length; i++) {
-          gen.addBox({
-            id: dayIndex,
-            day: dayIndex + 1,
-            gen,
-            data: data.days[i],
-          });
-          setDayIndex(++dayIndex);
-          setTotalDays(++totalDays);
-          setDays(gen.render());
+        if (data.days != null) {
+          for (let i = 0; i < data.days.length; i++) {
+            gen.addBox({
+              id: dayIndex,
+              day: dayIndex + 1,
+              gen,
+              data: data.days[i],
+            });
+            setDayIndex(++dayIndex);
+            setTotalDays(++totalDays);
+            setDays(gen.render());
+          }
         }
       }
     }

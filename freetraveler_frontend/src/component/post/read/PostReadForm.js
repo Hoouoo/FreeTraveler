@@ -9,6 +9,11 @@ import { red } from "@mui/material/colors";
 import { dom } from "@fortawesome/fontawesome-svg-core";
 import hardSet from "redux-persist/es/stateReconciler/hardSet";
 import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp as faSolidThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp as faRegularThumbsUp } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import {
   getPost,
   getPostClear,
@@ -116,6 +121,27 @@ const TitleText = styled.div`
   margin-top: 1.8rem;
   margin-left: 0.5rem;
   width: 100%;
+`;
+
+const TitleLine = styled.div`
+  display: grid;
+  grid-template-columns: 90% 5% 5%;
+`;
+
+const IconForm = styled.div`
+  width: 100%;
+  height: 100%;
+  float: right;
+  font-size: 30px;
+  .origin-color {
+    color: ${palette.gray[13]};
+  }
+  .pick-color {
+    color: ${palette.mint[0]};
+  }
+  .like-color {
+    color: ${palette.line[12]};
+  }
 `;
 
 const TotalTextInfo = styled.div`
@@ -369,6 +395,9 @@ export default function PostReadForm({ id }) {
   var [buttons, setButtons] = useState([]);
   var [markers, setMarkers] = useState([]);
   var [lines, setLines] = useState([]);
+
+  const [isLikeToggled, setIsLikeToggled] = useState(false);
+  const [isPickToggled, setIsPickToggled] = useState(false);
 
   const [isToggled, setIsToggled] = useState(false);
 
@@ -794,7 +823,33 @@ export default function PostReadForm({ id }) {
             <img className="image-inbox" src={data.repimg} />
           </div>
         </ImgForm>
-        <TitleText>{data.postName}</TitleText> <br />
+        <TitleLine>
+          <TitleText>{data.postName}</TitleText>
+          <IconForm>
+            <div
+              className={!isPickToggled ? "origin-color" : "pick-color"}
+              onClick={() => {
+                setIsPickToggled(!isPickToggled);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={!isPickToggled ? faRegularThumbsUp : faSolidThumbsUp}
+              />
+            </div>
+          </IconForm>
+          <IconForm>
+            <div
+              className="like-color"
+              onClick={() => {
+                setIsLikeToggled(!isLikeToggled);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={!isLikeToggled ? faRegularHeart : faSolidHeart}
+              />
+            </div>
+          </IconForm>
+        </TitleLine>
         <TitleObjectText>
           <TotalText>
             <TitleLogo>

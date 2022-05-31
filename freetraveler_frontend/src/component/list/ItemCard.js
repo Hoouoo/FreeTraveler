@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { IoChevronForwardSharp } from "react-icons/io5";
 // id, imgUrl, title, totalDay, totalCost, realization, pickCnt
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp as faSolidThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp as faRegularThumbsUp } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { RiThumbUpLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
@@ -167,13 +172,12 @@ const ItemCardContentStyled = styled.div`
     text-align: left;
   }
 
-  .content_pick {
-    /* display: inline-block; */
+  /* .content_pick {
     display: flex;
-    font-size: 1rem;
+    font-size: 20px;
     text-align: right;
     float: right;
-  }
+  } */
 
   .content_second_list {
     border-top-left-radius: 0.4rem;
@@ -207,7 +211,28 @@ const ItemCardContentStyled = styled.div`
     }
   }
 `;
-
+const IconForm = styled.div`
+  width: 100%;
+  height: 100%;
+  float: right;
+  font-size: 30px;
+  .origin-color {
+    color: ${palette.gray[13]};
+  }
+  .pick-color {
+    color: ${palette.mint[0]};
+  }
+  .like-color {
+    color: ${palette.line[12]};
+  }
+  .content_pick {
+    /* display: inline-block; */
+    display: flex;
+    font-size: 20px;
+    text-align: right;
+    float: right;
+  }
+`;
 function ItemCard({
   id = "id",
   author = "작성자",
@@ -224,6 +249,10 @@ function ItemCard({
   const onClick = function (id) {
     history.push("/posting/read?id=" + id);
   };
+
+  const [isLikeToggled, setIsLikeToggled] = useState(false);
+  const [isPickToggled, setIsPickToggled] = useState(false);
+
   return (
     <ItemCardStyled onClick={() => onClick(id)}>
       <div className="itemcard">
@@ -236,10 +265,22 @@ function ItemCard({
           <div className="content_title_list">
             <div className="content_name">
               {postName /*이름*/}
-              <div className="content_pick">
-                <BsHandThumbsUp className="mt-1" size="23" color="#000" />
-                <div className="mt-1 ml-1"> +{good} </div>
-              </div>
+
+              <IconForm>
+                <div className="content_pick">
+                  <div
+                    className="mt-1 like-color"
+                    onClick={() => {
+                      setIsLikeToggled(!isLikeToggled);
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={!isLikeToggled ? faRegularHeart : faSolidHeart}
+                    />
+                  </div>
+                  <div className="mt-1 ml-1"> +{good} </div>
+                </div>
+              </IconForm>
             </div>
           </div>
           {/* 여행 방법 :  transfortation /  css - name_content_txt*/}
@@ -285,6 +326,20 @@ function ItemCard({
       <div className="itemcard_comment">
         <div className="comment_title">STORY</div>
         <div className="comment">{comment /*경험자의 한마디*/}</div>
+        <IconForm>
+          <div className="content_pick">
+            <div
+              className={!isPickToggled ? "origin-color" : "pick-color"}
+              onClick={() => {
+                setIsPickToggled(!isPickToggled);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={!isPickToggled ? faRegularThumbsUp : faSolidThumbsUp}
+              />
+            </div>
+          </div>
+        </IconForm>
       </div>
       {/* </div> */}
     </ItemCardStyled>

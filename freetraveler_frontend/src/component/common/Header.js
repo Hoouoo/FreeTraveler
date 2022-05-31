@@ -9,7 +9,7 @@ import { logout } from "../../module/user";
 import { IoChevronBack } from "react-icons/io5";
 
 const HeaderStyled = styled.div`
-  z-index: 1;
+  z-index: 2;
   max-width: 100%;
   margin: 0 auto;
   display: flex;
