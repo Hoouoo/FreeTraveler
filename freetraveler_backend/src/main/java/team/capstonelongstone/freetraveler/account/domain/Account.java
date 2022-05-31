@@ -34,4 +34,12 @@ public class Account extends BaseTime {
         this.userName = userName;
         this.roleType = roleType;
     }
+
+    public void changePassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public void changeName(String userName) {
+        this.userName = userName;
+    }
 }
