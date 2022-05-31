@@ -360,6 +360,8 @@ const { kakao } = window;
 
 const PostInput = styled.input``;
 
+//goodcheck
+
 export default function PostReadForm({ id }) {
   var [gen, setGen] = useState(new PRDayBoxGenerator());
   var [days, setDays] = useState(gen.render());

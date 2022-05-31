@@ -30,6 +30,10 @@ export default function FrontRouter() {
   }, [location.pathname]);
 
   useEffect(() => {
+    if (user == null) alert("로그아웃 되었습니다.");
+  }, [user]);
+
+  useEffect(() => {
     if (user === null) {
       if (!excludePath.includes(history.location.pathname)) {
         alert("로그인이 필요합니다.");

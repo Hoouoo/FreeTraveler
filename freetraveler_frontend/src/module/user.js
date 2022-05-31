@@ -43,7 +43,9 @@ export default handleActions(
       user,
       checkError: null,
     }),
-    [CHECK_FAILURE]: (state, { payload: user }) => ({ ...state, user: null }),
+    [CHECK_FAILURE]: (state, { payload: user }) => {
+      return { ...state, user: null };
+    },
     [LOGOUT_SUCCESS]: (state) => {
       return {
         ...state,
@@ -51,7 +53,6 @@ export default handleActions(
       };
     },
     [LOGOUT_SUCCESS]: (state, { payload: data }) => {
-      alert("로그아웃 되었습니다.");
       return {
         ...state,
         user: null,

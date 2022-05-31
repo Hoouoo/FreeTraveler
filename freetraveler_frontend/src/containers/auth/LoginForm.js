@@ -33,6 +33,7 @@ const LoginForm = ({ history }) => {
     e.preventDefault();
     const { username, password } = form;
     dispatch(login({ username, password }));
+    dispatch(check());
   };
 
   //컴포넌트가 처음 렌더링될 때 form을 초기화함
@@ -47,7 +48,6 @@ const LoginForm = ({ history }) => {
       return;
     }
     if (auth) {
-      console.log("로그인 성공");
       dispatch(check());
     }
     if (user) {

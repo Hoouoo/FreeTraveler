@@ -169,7 +169,9 @@ function Header({}) {
       <ul className="header__right">
         {user == null && (
           <li>
-            <a href="/login">Login</a>
+            <Link to={"/login"}>
+              <a href="/login">Login</a>
+            </Link>
           </li>
         )}
         {user !== null && (
