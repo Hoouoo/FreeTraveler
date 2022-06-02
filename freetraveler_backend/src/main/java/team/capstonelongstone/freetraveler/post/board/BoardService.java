@@ -100,17 +100,18 @@ public class BoardService {
             if(postListDTO.getSort().equals("recent")) {
                 sort = Sort.by(Sort.Direction.ASC, "createdDate");
             }
-            else{
-                sort = Sort.by(Sort.Direction.ASC, "pickCnt");
+            else {
+                sort = Sort.by(Sort.Direction.ASC, "goodCnt");
             }
         }
-        else{
+        else{ //desc
             if(postListDTO.getSort().equals("recent")){
                 sort = Sort.by(Sort.Direction.DESC, "createdDate");
             }
-            else{
-                sort = Sort.by(Sort.Direction.DESC, "pickCnt");
+            else {
+                sort = Sort.by(Sort.Direction.DESC, "goodCnt");
             }
+
         }
 
         HttpSession session=request.getSession();
@@ -121,15 +122,20 @@ public class BoardService {
         Page<Board> all=null;
         //pick all 이면서 title일 때
 
-        if(pick.equals("all") && (postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title"))){
-            all = boardRepository.findAllPickAllByTitle(pageable,postListDTO.getSearch());
-        }else if(pick.equals("all") && postListDTO.getMethod().equals("author")){
-            all = boardRepository.findAllPickAllByAuthor(pageable,postListDTO.getSearch());
+        if(postListDTO.getSort().equals("random")){
+            all=boardRepository.findAllPickByRand(pageable);
         }
-        else if(postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title")){
-            all = boardRepository.findAllPickByTitle(pageable, account.getId(), postListDTO.getSearch(), pick);
-        }else{
-            all = boardRepository.findAllPickByAuthor(pageable, account.getId(), postListDTO.getSearch(), pick);
+        else{
+            if(pick.equals("all") && (postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title"))){
+                all = boardRepository.findAllPickAllByTitle(pageable,postListDTO.getSearch());
+            }else if(pick.equals("all") && postListDTO.getMethod().equals("author")){
+                all = boardRepository.findAllPickAllByAuthor(pageable,postListDTO.getSearch());
+            }
+            else if(postListDTO.getMethod().equals("") || postListDTO.getMethod().equals("title")){
+                all = boardRepository.findAllPickByTitle(pageable, account.getId(), postListDTO.getSearch(), pick);
+            }else{
+                all = boardRepository.findAllPickByAuthor(pageable, account.getId(), postListDTO.getSearch(), pick);
+            }
         }
 
         int boardSize=0;
