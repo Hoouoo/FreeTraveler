@@ -26,5 +26,4 @@ public class PostListDTO {
         this.method = method;
         this.isMyPick = isMyPick;
     }
-
 }

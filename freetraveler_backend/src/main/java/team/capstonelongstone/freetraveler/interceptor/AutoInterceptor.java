@@ -41,12 +41,9 @@ public class AutoInterceptor implements HandlerInterceptor {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) { //세션 없음
-            response.sendError(400,"세션 만료");
+            response.sendError(400,"세션 만료 되었습니다.");
             //리다이렉트 할 주소 작성
             return false;
-        }
-        else{
-            System.out.println("세션 있음");
         }
 
         return HandlerInterceptor.super.preHandle(request, response, handler);

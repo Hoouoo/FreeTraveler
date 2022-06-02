@@ -22,7 +22,7 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
                                @Param("search")String search);
 
     @Query("select b from Board as b where b.postName like %:search%")
-    Page<Board> findAllPickAllByTitle(Pageable pageabl,
+    Page<Board> findAllPickAllByTitle(Pageable pageable,
                                        @Param("search")String search);
 
     @Query("select b from Board as b where b.id in (select p.board.id from Pick as p where p.pickStatus=:pick and p.account.id = :authorId and b.author.userId like %:search% )")
@@ -36,5 +36,8 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
                                     @Param("authorId")Long authorId,
                                     @Param("search")String search,
                                     @Param("pick")String pick);
+
+    @Query("SELECT b FROM Board AS b ORDER BY rand()")
+    Page<Board> findAllPickByRand(Pageable pageable);
 
 }

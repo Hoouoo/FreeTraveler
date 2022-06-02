@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.account.dto.AccountRequestDto;
 import team.capstonelongstone.freetraveler.auth.login.dto.LoginDTO;
+import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -47,6 +48,7 @@ public class AccountController {
         return new ResponseEntity(retAccount, HttpStatus.OK);
     }
 
+    @CheckSession
     @PostMapping("/account/change")
     public ResponseEntity changeAccount(@RequestBody HashMap<String,String> newAccount){
         return accountService.changeAccount(newAccount);
