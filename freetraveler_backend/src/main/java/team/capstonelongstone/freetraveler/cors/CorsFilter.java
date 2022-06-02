@@ -1,5 +1,7 @@
 package team.capstonelongstone.freetraveler.cors;
 
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -32,10 +34,15 @@ public class CorsFilter implements Filter {
         if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         }else {
-            chain.doFilter(req, res);
+            try {
+                chain.doFilter(req, res);
+            }
+            catch(FileSizeLimitExceededException e){
+                System.out.println("hi");
+                System.out.println(e.getMessage());
+            }
         }
     }
-
 
     @Override
     public void destroy() {

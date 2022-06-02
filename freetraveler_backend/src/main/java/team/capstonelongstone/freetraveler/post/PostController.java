@@ -69,7 +69,7 @@ public class PostController {
     /**
      * 게시물 조회
      */
-    @CheckSession
+
     @GetMapping("/post")
     @ResponseBody
     public ResponseEntity getPost(@RequestParam("id")String boardId,HttpServletRequest request) throws JSONException, IOException {
@@ -111,7 +111,6 @@ public class PostController {
     /**
      * 게시물 조회 리스트 출력
      */
-    @CheckSession
     @GetMapping("/post/list")
     @ResponseBody
     public String getPostList(PostListDTO postListDTO,HttpServletRequest request) throws JSONException {
