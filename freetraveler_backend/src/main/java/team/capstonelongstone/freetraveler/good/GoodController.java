@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team.capstonelongstone.freetraveler.good.dto.GoodDTO;
+import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class GoodController {
         this.goodService = goodService;
     }
 
+    @CheckSession
     @PostMapping("/post/good")
     @ResponseBody
     public ResponseEntity good(@RequestBody GoodDTO goodDTO){

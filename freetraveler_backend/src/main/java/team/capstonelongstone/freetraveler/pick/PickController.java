@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 import team.capstonelongstone.freetraveler.pick.dto.PickDTO;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public class PickController {
         this.pickService = pickService;
     }
 
-
+    @CheckSession
     @PostMapping("/post/pick")
     @ResponseBody
     public ResponseEntity pick(@RequestBody PickDTO pickDTO){
