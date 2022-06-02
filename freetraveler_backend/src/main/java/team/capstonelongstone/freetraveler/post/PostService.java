@@ -51,8 +51,6 @@ public class PostService {
     @Autowired
     PickRepository pickRepository;
 
-
-
     /**
      * 도로명 주소로 위도 경도 뽑는 API
      */
@@ -126,6 +124,7 @@ public class PostService {
         System.out.println("---------------------");
         System.out.println("byUserAndBoard = " + byUserAndBoard);
         String pickStatus="";
+
         if(Objects.isNull(byUserAndBoard)){
             pickStatus="false";
         }else{
