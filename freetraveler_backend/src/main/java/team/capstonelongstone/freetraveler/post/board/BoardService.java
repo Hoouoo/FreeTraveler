@@ -131,12 +131,24 @@ public class BoardService {
         }else{
             all = boardRepository.findAllPickByAuthor(pageable, account.getId(), postListDTO.getSearch(), pick);
         }
-        int boardSize=all.getSize();
+
+        int boardSize=0;
+        int max=0;
+        if(postListDTO.getSearch().isEmpty()){
+            List<Board> allBoardSize = boardRepository.findAll();
+            boardSize= allBoardSize.size();
+            max= (int) Math.ceil((float)boardSize/(float)postListDTO.getPageSize())-1;
+        }else{
+            max=all.getTotalPages()-1;
+        }
+        if(max==-1){
+            max=0;
+        }
 
         //json
         JSONObject page=new JSONObject();
         page.put("page",postListDTO.getPage());
-        page.put("max",Math.ceil(boardSize/postListDTO.getPageSize()));
+        page.put("max",max);
         page.put("pageSize",postListDTO.getPageSize());
         page.put("totalPost",boardSize);
 
