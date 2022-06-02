@@ -19,4 +19,5 @@ public interface GoodRepository extends JpaRepository<Good,Long> {
     Good findByAccountAndBoard(@Param("account")Account account,
                                    @Param("board") Board board);
 
+
 }

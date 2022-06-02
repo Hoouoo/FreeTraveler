@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import team.capstonelongstone.freetraveler.good.domain.Good;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -39,5 +41,12 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
 
     @Query("SELECT b FROM Board AS b ORDER BY rand()")
     Page<Board> findAllPickByRand(Pageable pageable);
+
+
+    @Modifying
+    @Transactional
+    @Query("update Board as b set b.goodCnt=:goodCnt where b.id=:id")
+    void updateGoodCnt(@Param("goodCnt")Integer goodCnt,
+                        @Param("id")Long id);
 
 }

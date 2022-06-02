@@ -9,14 +9,11 @@ import team.capstonelongstone.freetraveler.good.dto.GoodDTO;
 import team.capstonelongstone.freetraveler.post.board.Board;
 import team.capstonelongstone.freetraveler.post.board.BoardRepository;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import java.util.Objects;
 
 @Service
 public class GoodService {
-
 
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
@@ -32,7 +29,10 @@ public class GoodService {
     }
 
     public int good(GoodDTO goodDTO){ //좋아요
-        Good byAccountId = goodRepository.findByAccountId(goodDTO.getUserId());
+        long boardId = goodDTO.getBoardId().longValue();
+        Board byBoardId = boardRepository.findByBoardId(boardId);
+        Account byUserId = accountRepository.findByUserId(goodDTO.getUserId());
+        Good byAccountId = goodRepository.findByAccountAndBoard(byUserId,byBoardId);
 
         if(Objects.isNull(byAccountId)) { //좋아요
             Account account = accountRepository.findByUserId(goodDTO.getUserId());
@@ -47,7 +47,10 @@ public class GoodService {
     }
 
     public int cancelGood(GoodDTO goodDTO){
-        Good byAccountId = goodRepository.findByAccountId(goodDTO.getUserId());
+        long boardId = goodDTO.getBoardId().longValue();
+        Board byBoardId = boardRepository.findByBoardId(boardId);
+        Account byUserId = accountRepository.findByUserId(goodDTO.getUserId());
+        Good byAccountId = goodRepository.findByAccountAndBoard(byUserId,byBoardId);
 
         if(Objects.nonNull(byAccountId)){
             goodRepository.delete(byAccountId);
@@ -58,22 +61,15 @@ public class GoodService {
     }
 
     public int updateGoodCnt(Long id,String type){
-        EntityManager em=entityManagerFactory.createEntityManager();
-        EntityTransaction tx=em.getTransaction();
-        tx.begin();
-
-        Board byBoardId = em.find(Board.class, id);
+        Board byBoardId = boardRepository.findByBoardId(id);
         Integer goodCnt = byBoardId.getGoodCnt();
         if(type.equals("good")){
             goodCnt++;
-        }else if(type.equals("cancel")){
+        }
+        if(type.equals("cancel")){
             goodCnt--;
         }
-        else{
-            goodCnt=goodCnt;
-        }
-        byBoardId.changeGoodCnt(goodCnt);
-        tx.commit();
+        boardRepository.updateGoodCnt(goodCnt,id);
         return goodCnt;
     }
 
