@@ -94,7 +94,8 @@ public class BoardService {
             }
         }
 
-        List<String> list = imgService.boardSaveImg(request, file);
+        List<String> list = imgService.boardModifyImg(id, request);
+        System.out.println("list.get(0)~~~~~~~~~~~~~~~~~~~~~~~~>>> = " + list.get(0));
 
         int finalSumTotalCost = sumTotalCost;
         boardRepository.findById(id).ifPresent(target->{

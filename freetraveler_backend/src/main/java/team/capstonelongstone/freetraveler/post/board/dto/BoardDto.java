@@ -23,7 +23,7 @@ public class BoardDto {
 
     public Board toEntity(Long id){
         return Board.builder().id(id).postName(postName).totalDays(totalDays).totalTrans(totalTrans)
-                .totalCost(totalCost).comment(comment).goodCnt(goodCnt).author(author).repImgName(repImgName).repImgName(repImgName).build();
+                .totalCost(totalCost).comment(comment).goodCnt(goodCnt).author(author).repImgPath(repImgPath).repImgName(repImgName).build();
     }
 
 }
