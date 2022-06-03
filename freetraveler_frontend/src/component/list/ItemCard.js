@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoChevronForwardSharp } from "react-icons/io5";
 // id, imgUrl, title, totalDay, totalCost, realization, pickCnt
@@ -7,8 +7,6 @@ import { faThumbsUp as faSolidThumbsUp } from "@fortawesome/free-solid-svg-icons
 import { faThumbsUp as faRegularThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
-import { BsHandThumbsUp } from "react-icons/bs";
-import { RiThumbUpLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
 import palette from "../../lib/styles/palette";
 
@@ -78,6 +76,7 @@ const ItemCardStyled = styled.div`
   .comment {
     /* float: right; */
     /* padding: 15px; */
+    width: 300px;
     font-weight: 700;
     font-size: 13px;
     line-height: 24px;
@@ -219,11 +218,11 @@ const IconForm = styled.div`
   .origin-color {
     color: ${palette.gray[13]};
   }
-  .pick-color {
+  .like-color {
     color: ${palette.mint[0]};
   }
-  .like-color {
-    color: ${palette.line[12]};
+  .pick-color {
+    color: ${palette.pink[0]};
   }
   .content_pick {
     /* display: inline-block; */
@@ -243,7 +242,8 @@ function ItemCard({
   cost = "여행비용",
   comment = "경험자의 한마디",
   good = 3,
-  isPick = false,
+  isGood = "false",
+  isPick = "false",
 }) {
   const history = useHistory();
   const onClick = function (id) {
@@ -252,6 +252,31 @@ function ItemCard({
 
   const [isLikeToggled, setIsLikeToggled] = useState(false);
   const [isPickToggled, setIsPickToggled] = useState(false);
+
+  const [init, setInit] = useState(false);
+
+  if (!init) {
+    // console.log("id:" + id);
+    // console.log("isGood: " + isGood + "    " + "isPick: " + isPick);
+    if (isGood == "true") {
+      setIsLikeToggled(true);
+    } else {
+      setIsLikeToggled(false);
+    }
+
+    if (isPick == "true") {
+      setIsPickToggled(true);
+    } else {
+      setIsPickToggled(false);
+    }
+
+    // console.log(id + "의 isPick은 " + isPick + "이다");
+    setInit(true);
+  }
+
+  useEffect(() => {
+    setInit(false);
+  }, [isLikeToggled, isPickToggled]);
 
   return (
     <ItemCardStyled onClick={() => onClick(id)}>
@@ -269,13 +294,18 @@ function ItemCard({
               <IconForm>
                 <div className="content_pick">
                   <div
-                    className="mt-1 like-color"
-                    onClick={() => {
-                      setIsLikeToggled(!isLikeToggled);
-                    }}
+                    className={
+                      !(isGood == "true")
+                        ? "mt-1 origin-color"
+                        : "mt-1 like-color"
+                    }
                   >
                     <FontAwesomeIcon
-                      icon={!isLikeToggled ? faRegularHeart : faSolidHeart}
+                      icon={
+                        !(isGood == "true")
+                          ? faRegularThumbsUp
+                          : faSolidThumbsUp
+                      }
                     />
                   </div>
                   <div className="mt-1 ml-1"> +{good} </div>
@@ -328,14 +358,9 @@ function ItemCard({
         <div className="comment">{comment /*경험자의 한마디*/}</div>
         <IconForm>
           <div className="content_pick">
-            <div
-              className={!isPickToggled ? "origin-color" : "pick-color"}
-              onClick={() => {
-                setIsPickToggled(!isPickToggled);
-              }}
-            >
+            <div className="pick-color">
               <FontAwesomeIcon
-                icon={!isPickToggled ? faRegularThumbsUp : faSolidThumbsUp}
+                icon={!(isPick == "true") ? faRegularHeart : faSolidHeart}
               />
             </div>
           </div>

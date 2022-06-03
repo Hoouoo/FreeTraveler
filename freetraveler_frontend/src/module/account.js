@@ -47,13 +47,19 @@ const account = handleActions(
       account: null,
       accountError: error,
     }),
-    [CHANGE_ACCOUNT_SUCCESS]: (state, { payload: data }) => ({
-      ...state,
-    }),
-    [CHANGE_ACCOUNT_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      accountError: error,
-    }),
+    [CHANGE_ACCOUNT_SUCCESS]: (state, { payload: data }) => {
+      alert("계정 정보가 변경되었습니다.");
+      return {
+        ...state,
+      };
+    },
+    [CHANGE_ACCOUNT_FAILURE]: (state, { payload: error }) => {
+      alert("계정 정보 변경을 실패했습니다.");
+      return {
+        ...state,
+        accountError: error,
+      };
+    },
   },
   initialState
 );

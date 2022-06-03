@@ -6,4 +6,4 @@ export const getAccount = (data) =>
 
 //사용자 정보 변경
 export const changeAccount = (data) =>
-  client.post("/account/change ", { withCredentials: true });
+  client.post("/account/change ", data, { withCredentials: true });

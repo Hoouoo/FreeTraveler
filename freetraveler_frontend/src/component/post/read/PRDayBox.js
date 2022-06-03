@@ -37,16 +37,32 @@ const PRDayBoxTemplate = styled.div`
   display: flex;
   flex-direction: column; */
   /* @supports (-webkit-touch-callout: none) {
-    min-height: -webkit-fill-available;
+    min-width: -webkit-fill-available;
   } */
-
-  @media screen and (max-width: 612px) {
+  width: auto;
+  /* min-height: 90vh; */
+  /* height: auto;
+  padding: 35px;
+  margin-top: -10px;
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: white;
+  justify-content: center;
+  align-items: center; */
+  /* @media screen and (max-width: 650px) {
+    margin-left: 10%;
+    margin-right: 10%;
+  } */
+  /* @media screen and (min-width: 650px) {
+    display: flex;
+  } */
+  /* @media screen and (max-width: 612px) {
     margin-left: -40px;
     margin-right: -10px;
     padding-left: 0.1rem;
     padding-right: 0.1rem;
     padding-bottom: 0.1rem;
-  }
+  } */
 `;
 
 const DayTitleLine = styled.div`

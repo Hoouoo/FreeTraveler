@@ -71,11 +71,29 @@ const PRPlaceBoxTitle = styled.div`
 `;
 
 const PostInput = styled.div`
-  margin: 10px;
-  font-size: 1.2rem;
+  margin: 5px;
+  font-size: 1.1rem;
   font-weight: 400;
   color: rgb(26, 26, 26);
   text-align: left;
+  .title-text {
+    margin-left: -5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 55px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 24px;
+    border-radius: 4px;
+    color: white;
+    background-color: ${palette.mint[1]};
+  }
+  .title-data-text {
+    margin-top: 20px;
+  }
 `;
 
 const PlaceRemoveBtn = styled.div`
@@ -100,7 +118,7 @@ const PRPlaceBoxImage = styled.div`
   }
 `;
 const CommentBox = styled.div`
-  margin-top: 1rem;
+  /* margin-top: 1rem;
   display: inline-flex;
   outline: none;
   border-width: 1.5px;
@@ -108,10 +126,18 @@ const CommentBox = styled.div`
   border-radius: 10px;
   color: white;
   font-weight: bold;
-  /* padding: 0.9rem; */
   width: 100%;
-  /* 색상 */
-  border-color: ${palette.mint[0]};
+  border-color: ${palette.mint[0]}; */
+
+  /* display: flex;
+  background-color: rgb(248, 248, 248);
+  padding: 20px;
+
+  border-end-end-radius: 10px;
+  border-end-start-radius: 10px; */
+  .hr-color {
+    order: solid 1px ${palette.gray[16]};
+  }
 `;
 
 const trimDistance = function (distance) {
@@ -212,10 +238,16 @@ export default function PRPlaceBox({ did, pid, data = {}, line }) {
           ? "출발지"
           : getTimeToArrival(data.trans, line.getLength())}
       </PRPlaceBoxTitle>
-
       {/* 내용 출력 */}
       <CommentBox>
-        <PostInput>{data.content}</PostInput>
+        <br />
+        <hr />
+        <br />
+        {/* <hr className="hr-color" /> */}
+        <PostInput>
+          {/* <div class="title-text"> STORY </div> */}
+          {data.content}
+        </PostInput>
       </CommentBox>
     </PRPlaceBoxTemplate>
   );

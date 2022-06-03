@@ -1,5 +1,13 @@
 import React from "react";
 import ItemCard from "./ItemCard";
+import styled from "styled-components";
+
+const ItemCardStyled = styled.div`
+  list-style: none;
+  ul {
+    list-style: none;
+  }
+`;
 
 class ItemCardGenerator {
   constructor() {
@@ -21,6 +29,7 @@ class ItemCardGenerator {
           cost={itemcard.cost}
           comment={itemcard.comment}
           good={itemcard.good}
+          isGood={itemcard.isGood}
           isPick={itemcard.isPick}
         />
       </li>
@@ -56,7 +65,11 @@ class ItemCardGenerator {
 
   //렌더링
   render() {
-    return <ul id="itemcard_list">{this._array}</ul>;
+    return (
+      <ItemCardStyled>
+        <ul id="itemcard_list">{this._array}</ul>
+      </ItemCardStyled>
+    );
   }
 }
 

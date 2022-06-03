@@ -44,6 +44,12 @@ const StyledButton = styled.button`
     transition-delay: initial, initial;
     transition-property: transform, transform;
   }
+
+  @media screen and (max-width: 612px) {
+    /* 크기 */
+    height: 2rem;
+    font-size: 13px;
+  }
 `;
 
 function PostButton({ children, ...rest }) {

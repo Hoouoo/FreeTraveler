@@ -4,7 +4,7 @@ import palette from "../../../lib/styles/palette";
 
 const StyledButton = styled.button`
   /* 공통 스타일 */
-  width: 99.5%;
+  width: 95%;
   display: inline-flex;
   outline: none;
   border: none;
@@ -48,7 +48,7 @@ const StyledButton = styled.button`
   }
 
   @media screen and (max-width: 612px) {
-    width: 40%;
+    width: 98%;
     height: 2rem;
     font-size: 0.8rem;
   }

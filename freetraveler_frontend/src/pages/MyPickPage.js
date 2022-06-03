@@ -1,8 +1,15 @@
 import React from "react";
+import Footer from "../component/common/Footer";
+import MyPickContainer from "../containers/post/MypickContainer";
 import PostReadContainer from "../containers/post/PostReadContainer";
 
-const Pick = () => {
-  return <div>마이픽 페이지다.</div>;
+const MyPickPage = () => {
+  return (
+    <>
+      <MyPickContainer />
+      <Footer />
+    </>
+  );
 };
 
-export default Pick;
+export default MyPickPage;

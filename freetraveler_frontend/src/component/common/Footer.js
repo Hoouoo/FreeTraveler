@@ -4,7 +4,7 @@ import footerlogo from "../../resource/img/footerlogo.png";
 
 const FooterStyled = styled.div`
   width: 100%;
-  height: 40rem;
+  height: 300px;
   background-color: #f1f1f1;
   bottom: 0;
 

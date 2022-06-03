@@ -22,6 +22,8 @@ const POST_CHECK_FALSE = "post/POSTING_CHECK_FALSE";
 const POST_REMOVE_CHECK_TRUE = "post/POST_REMOVE_CHECK_TRUE";
 const POST_REMOVE_CHECK_FALSE = "post/POST_REMOVE_CHECK_FALSE";
 
+const POSTLIST_CLEAR = "post/POSTLIST_CLEAR";
+
 const [POST, POST_SUCCESS, POST_FAILURE] =
   createRequestActionTypes("post/POST");
 
@@ -35,6 +37,12 @@ const GET_POST_CLEAR = "post/GET_POST_CLEAR";
 
 const [REMOVE_POST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE] =
   createRequestActionTypes("post/REMOVE_POST");
+
+const [MYPICK, MYPICK_SUCCESS, MYPICK_FAILURE] =
+  createRequestActionTypes("post/MYPICK");
+
+const [GOOD, GOOD_SUCCESS, GOOD_FAILURE] =
+  createRequestActionTypes("post/GOOD");
 
 export const changeField = createAction(
   CHANGE_FEILD,
@@ -62,6 +70,12 @@ const initialState = {
   postRemoveCheck: false,
 
   postIntegrity: [[]],
+
+  postMyPick: {},
+  postMyPickError: null,
+
+  postGood: {},
+  postGoodError: null,
 };
 
 //액션 생성
@@ -96,17 +110,27 @@ export const clearPostIntegrity = createAction(
 
 export const getPostClear = createAction(GET_POST_CLEAR, (data) => data);
 
+export const good = createAction(GOOD, (data) => data);
+export const mypick = createAction(MYPICK, (data) => data);
+
+export const clearPostList = createAction(POSTLIST_CLEAR, (data) => data);
+
 //사가 생성
 const postSaga = createRequestSaga(POST, postAPI.post);
 const getPostListSaga = createRequestSaga(GET_POSTLIST, postAPI.getPostList);
 const getPostSaga = createRequestSaga(GET_POST, postAPI.getPost);
 const removePostSaga = createRequestSaga(REMOVE_POST, postAPI.removePost);
 
+const goodSaga = createRequestSaga(GOOD, postAPI.good);
+const mypickSaga = createRequestSaga(MYPICK, postAPI.mypick);
+
 export function* postingSaga() {
   yield takeLatest(POST, postSaga);
   yield takeLatest(GET_POSTLIST, getPostListSaga);
   yield takeLatest(GET_POST, getPostSaga);
   yield takeLatest(REMOVE_POST, removePostSaga);
+  yield takeLatest(GOOD, goodSaga);
+  yield takeLatest(MYPICK, mypickSaga);
 }
 
 const posting = handleActions(
@@ -189,6 +213,10 @@ const posting = handleActions(
         postRemoveCheck: false,
       };
     },
+    [POST_REMOVE_CHECK_FALSE]: (state, { payload: data }) => ({
+      ...state,
+      postRemoveCheck: false,
+    }),
     [SAVE_POST_INTEGRITY]: (state, { payload: data }) => {
       return {
         ...state,
@@ -201,6 +229,15 @@ const posting = handleActions(
         postIntegrity: [],
       };
     },
+    [GOOD_SUCCESS]: (state, { payload: data }) => ({ ...state }),
+    [GOOD_FAILURE]: (state, { payload: data }) => ({ ...state }),
+    [MYPICK_SUCCESS]: (state, { payload: data }) => ({ ...state }),
+    [MYPICK_FAILURE]: (state, { payload: data }) => ({ ...state }),
+
+    [POSTLIST_CLEAR]: (state, { payload: data }) => ({
+      ...state,
+      postList: "",
+    }),
   },
   initialState
 );

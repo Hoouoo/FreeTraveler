@@ -34,6 +34,7 @@ const palette = {
     "#0b7285",
   ],
   mint: ["#00f1b4", "rgb(0, 245, 200)"],
+  pink: ["rgb(219,86,91)"],
 
   line: [
     "#FF3412",
@@ -48,7 +49,6 @@ const palette = {
     "#011BFF",
     "#7B00FF",
     "#FF01FF",
-    "rgb(219,86,91)",
   ],
 };
 

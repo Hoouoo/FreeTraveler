@@ -6,7 +6,7 @@ import palette from "../../lib/styles/palette";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import ItemCardGenerator from "../list/ItemCardGenerator";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostClear, getPostList } from "../../module/posting";
+import { clearPostList, getPostClear, getPostList } from "../../module/posting";
 import qs from "qs";
 import { BASE_URL } from "../../lib/api/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -55,7 +55,8 @@ const PostListBox = styled.div`
   .button_icons {
     margin-left: 1px;
     margin-right: -10px;
-    margin-top: 4px;
+    margin-top: 2px;
+    font-size: 1.2rem;
   }
 
   .button_text {
@@ -84,6 +85,19 @@ const PostListBox = styled.div`
     margin-top: -1px;
     margin-left: 2px;
     margin-right: 2px;
+
+    .bottom_button_container {
+      bottom: 5vh;
+    }
+
+    .button_text {
+      height: 2rem;
+      font-size: 15px;
+    }
+    .button_icons {
+      margin-top: 1.5px;
+      font-size: 0.9rem;
+    }
   }
 `;
 
@@ -164,7 +178,7 @@ const NavPagination = styled.ul`
   list-style: none;
 `;
 
-export default function PostListTemplate({ id }) {
+export default function PostListTemplate({ id, isPick = "all" }) {
   let [gen, setGen] = useState(new ItemCardGenerator());
   let [render, setRender] = useState(gen.render());
   let [pageNav, setPageNav] = useState();
@@ -182,7 +196,9 @@ export default function PostListTemplate({ id }) {
 
   useEffect(() => {
     //조회 폼 제거
+    console.log("isPick: " + isPick);
     dispatch(getPostClear());
+    dispatch(clearPostList());
   }, []);
 
   //서버에 페이지 요청
@@ -204,29 +220,33 @@ export default function PostListTemplate({ id }) {
         search: query.search,
         method: query.method,
         isMyPick: query.isMyPick,
+        isMine: query.isMine,
       },
     };
 
-    // //console.log(request);
-    // console.log("리스트페이지");
+    console.log(request);
     // console.log(location);
 
     dispatch(getPostList(request));
-  }, [location]);
+  }, [history]);
 
   const generateItemCard = useCallback(() => {
-    console.log(data);
     if (data != undefined && data != null && JSON.stringify(data) != "{}") {
       //아이템 카드 생성
       gen.clear();
       if (data.post != null) {
         for (let i = 0; i < data.post.length; i++) {
           data.post[i].repImg = BASE_URL + "/" + data.post[i].repimg;
-          console.log(data.post[i].repImg);
+          // console.log("------data.post[" + i + "]-----");
+          // console.log(data.post[i]);
+          // console.log("---------------------------");
           gen.addItemCard(data.post[i]);
         }
+        // console.log("---------gen.render()-----------");
+        // console.log(gen.render());
         setRender(gen.render());
       }
+      setRender(gen.render());
     }
   });
 
@@ -245,7 +265,7 @@ export default function PostListTemplate({ id }) {
       const pageClick = function () {
         history.push({
           pathname: "/posting/list",
-          search: `page=${i}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=all`,
+          search: `page=${i}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=${isPick}&isMine=false`,
         });
         setCurrentPage(i);
       };
@@ -266,8 +286,10 @@ export default function PostListTemplate({ id }) {
         <FontAwesomeIcon icon={faAngleRight} />
       </PageNavigator>
     );
-    // setPageNavCallback(<>{pageBuf}</>);
-  }, [data]);
+    // // setPageNavCallback(<>{pageBuf}</>);
+    // console.log("location----");
+    // console.log(location);
+  }, [data, history, location]);
 
   const onChange = (e) => {
     if (e.target.name == "searchInput") {
@@ -278,7 +300,7 @@ export default function PostListTemplate({ id }) {
   const searchButtonClick = () => {
     history.push({
       pathname: "/posting/list",
-      search: `page=${0}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=all`,
+      search: `page=${0}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=${isPick}&isMine=false`,
     });
   };
 
@@ -306,7 +328,7 @@ export default function PostListTemplate({ id }) {
               글쓰기
               <div className="button_text"> gogo. </div>
               <div className="button_icons">
-                <IoChevronForwardSharp size="20" color="#fff" />
+                <IoChevronForwardSharp color="#fff" />
               </div>
             </PostButton>
           </Link>

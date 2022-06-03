@@ -17,9 +17,23 @@ import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import {
   getPost,
   getPostClear,
+  good,
   loadModBuffer,
+  mypick,
   postCheckFalse,
+  postRemoveCheckFalse,
 } from "../../../module/posting";
+import { BsHandThumbsUp } from "react-icons/bs";
+import { RiThumbUpLine } from "react-icons/ri";
+import { AiOutlineSmile as DayIcon1 } from "react-icons/ai";
+import { BiSmile as DayIcon2, BiWinkSmile as DayIcon3 } from "react-icons/bi";
+import { FiSmile as DayIcon4 } from "react-icons/fi";
+import { FaRegSmile as DayIcon5 } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import {
+  CgSmileMouthOpen as DayIcon6,
+  CgSmileNoMouth as DayIcon7,
+} from "react-icons/cg";
 import { useHistory } from "react-router-dom";
 import qs from "qs";
 import { removePost } from "../../../module/posting";
@@ -121,26 +135,77 @@ const TitleText = styled.div`
   margin-top: 1.8rem;
   margin-left: 0.5rem;
   width: 100%;
+  @media screen and (max-width: 1000px) {
+    grid-column-start: 1;
+    grid-column-end: 4;
+  }
 `;
 
 const TitleLine = styled.div`
   display: grid;
-  grid-template-columns: 90% 5% 5%;
+  grid-template-columns: 70% 15% 15%;
+  grid-template-rows: 50% 0;
+  @media screen and (max-width: 1000px) {
+    grid-template-columns: 70% 5% 25%;
+    grid-template-rows: 30% 5% 0;
+  }
 `;
 
 const IconForm = styled.div`
+  margin-top: 40px;
   width: 100%;
   height: 100%;
   float: right;
-  font-size: 30px;
+  font-size: 20px;
   .origin-color {
+    width: 100px;
     color: ${palette.gray[13]};
-  }
-  .pick-color {
-    color: ${palette.mint[0]};
+    /* background-color: white;
+    border-radius: 4px;
+    border: 1px solid ${palette.gray[14]}; */
   }
   .like-color {
-    color: ${palette.line[12]};
+    width: 100px;
+    color: ${palette.mint[0]};
+    /* background-color: white;
+    border-radius: 4px;
+    border: 1px solid ${palette.gray[14]}; */
+  }
+  .pick-color {
+    width: 100px;
+    color: ${palette.pink[0]};
+    /* background-color: white;
+    border-radius: 4px;
+    border: 1px solid rgba(64, 64, 64, 50%); */
+  }
+  .num-font-size {
+    margin: 5px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  @media screen and (max-width: 1124px) {
+    .pick-color {
+      width: 100px;
+      margin-left: -30px;
+    }
+  }
+  @media screen and (max-width: 1000px) {
+    .pick-color {
+      width: 80px;
+      margin-left: 70%;
+    }
+    .num-font-size {
+      font-size: 12px;
+    }
+  }
+  @media screen and (max-width: 770px) {
+    .pick-color {
+      width: 80px;
+      margin-left: 60%;
+    }
+    .num-font-size {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -150,6 +215,14 @@ const TotalTextInfo = styled.div`
   font-weight: 500;
   color: rgb(26, 26, 26);
   text-align: left;
+  .title-text {
+    margin-bottom: 5px;
+    margin-right: 5px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: ${palette.mint[0]};
+  }
 `;
 
 const MapMarker = styled.div`
@@ -158,21 +231,55 @@ const MapMarker = styled.div`
 `;
 
 const DayButtonForm = styled.div`
-  height: auto;
+  /* height: auto;
   border: solid 2px;
   border-color: ${palette.mint[0]};
   padding: 0.5rem;
-  border-radius: 0.4rem;
+  border-radius: 0.4rem; */
+`;
+
+const DayMapClickTitle = styled.div`
+  margin-bottom: 5px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 24px;
+  margin-left: 10px;
+  color: ${palette.mint[0]};
 `;
 
 const DayButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: center;
+  align-content: center;
+  align-items: center;
   display: inline-block;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+
+  /* border-width: 1.5px; */
+  /* border-style: solid; */
   margin: 0.2rem;
-  border-radius: 0.2rem;
-  color: black;
+  border-radius: 3rem;
+  color: gray;
+  font-weight: 400;
   cursor: pointer;
+  .text-form {
+    font-size: 13px;
+    font-weight: 800;
+    color: gray;
+  }
+  :hover > .text-form {
+    /* background-color: ${palette.gray[3]}; */
+    color: white;
+  }
+  :hover {
+    background-color: ${palette.gray[3]};
+    color: white;
+  }
 `;
 
 const ModifyButton = styled.div`
@@ -380,6 +487,11 @@ const MenuBar = styled.div`
       width: 130px;
     }
   }
+  @media screen and (max-width: 321px) {
+    .menubar li {
+      margin-top: -20px;
+    }
+  }
 `;
 
 const { kakao } = window;
@@ -407,80 +519,14 @@ export default function PostReadForm({ id }) {
     data: post.postRead,
   }));
 
+  const { user } = useSelector(({ user }) => ({ user: user.user }));
+
+  const [tempGoodPlus, setTempGoodPlus] = useState(0);
+
   //let [data, setData] = useState(select);
 
   //카카오 맵
   var map;
-
-  const data2 = {
-    id: "1",
-    author: "이상훈",
-    time: "2021-04-24",
-    repImg:
-      "https://file.mk.co.kr/meet/neds/2022/05/image_readtop_2022_413241_16521705595037804.jpg",
-    postName: "서울 여행",
-    totalCost: "100만원",
-    totalDays: "4",
-    totalTrans: "대중교통",
-    comment: "에버랜드 재밌어요!",
-    good: 3, // 추천 수
-    days: [
-      [
-        {
-          placeName: "에버랜드",
-          loc: "에버랜드 주소",
-          loc_y: 37.2977,
-          loc_x: 127.194794,
-          cost: "72만원",
-          img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
-          content: "와우와우와우! 티익스프레스 개꿀잼!",
-          trans: "walk",
-        },
-        {
-          placeName: "서대문 형무소",
-          loc: "서대문형무소 주소",
-          loc_y: 37.574756,
-          loc_x: 126.95517,
-          cost: "72만원",
-          img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
-          content: "와우와우와우! 오늘도 개꿀잼!",
-          trans: "walk",
-        },
-      ],
-      [
-        {
-          placeName: "종묘",
-          loc: "종묘 주소",
-          loc_y: 37.575919,
-          loc_x: 126.993556,
-          cost: "72만원",
-          img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
-          content: "와우와우와우! 내일도 개꿀잼!",
-          trans: "walk",
-        },
-        {
-          placeName: "숭례문",
-          loc: "숭례문 주소",
-          loc_y: 37.559737,
-          loc_x: 126.974936,
-          cost: "72만원",
-          img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
-          content: "와우와우와우! 그냥 개꿀잼!",
-          trans: "walk",
-        },
-        {
-          placeName: "서해",
-          loc: "서해 주소",
-          loc_y: 35.549737,
-          loc_x: 125.984936,
-          cost: "72만원",
-          img: "https://img.hankyung.com/photo/202011/AA.24246710.1.jpg",
-          content: "와우와우와우! 그냥 개꿀잼!",
-          trans: "car",
-        },
-      ],
-    ],
-  };
 
   const getData = function () {
     const query = qs.parse(history.location.search, {
@@ -622,6 +668,7 @@ export default function PostReadForm({ id }) {
     //버튼을 생성합니다
     buttons.push(
       <DayButton key={"daybutton_0"} id={"daybutton_0"}>
+        <FaMapMarkerAlt size="15" color="gray" />
         All Day
       </DayButton>
     );
@@ -633,7 +680,10 @@ export default function PostReadForm({ id }) {
       for (var i = 1; i < data.days.length + 1; i++) {
         buttons.push(
           <DayButton key={"daybutton_" + i} id={"daybutton_" + i}>
-            {i} Day
+            <label className="text-form">
+              #{i} {"   "}
+            </label>
+            day
           </DayButton>
         );
       }
@@ -643,7 +693,7 @@ export default function PostReadForm({ id }) {
         for (var i = 1; i < data.days.length + 1; i++) {
           //버튼에 색상 주기
           var domObj = document.getElementById("daybutton_" + i);
-          domObj.style.backgroundColor = palette.line[i % palette.line.length];
+          domObj.style.backgroundColor = palette.cyan[i % palette.cyan.length];
 
           const colorRGB = domObj.style.backgroundColor
             .slice(4)
@@ -787,6 +837,21 @@ export default function PostReadForm({ id }) {
 
       //날짜 필터
       data.time = data.time.split("T")[0];
+
+      console.log(data);
+
+      //좋아요, 마이픽
+      if (data.isGood == "true") {
+        setIsLikeToggled(true);
+      } else {
+        setIsLikeToggled(false);
+      }
+
+      if (data.isPick == "true") {
+        setIsPickToggled(true);
+      } else {
+        setIsPickToggled(false);
+      }
     }
   }, [data]);
 
@@ -796,8 +861,10 @@ export default function PostReadForm({ id }) {
 
   useEffect(() => {
     if (postRemoveCheck) {
-      history.push("/posting/list");
-      dispatch(postCheckFalse());
+      history.push(
+        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false"
+      );
+      dispatch(postRemoveCheckFalse());
     }
   }, [postRemoveCheck]);
 
@@ -815,6 +882,50 @@ export default function PostReadForm({ id }) {
     setIsToggled((isToggled) => !isToggled);
   };
 
+  //마이픽 클릭
+  const onClickMyPick = function () {
+    if (!isPickToggled) {
+      const request = {
+        boardId: data.id,
+        userId: user.userId,
+        action: "pick",
+      };
+      dispatch(mypick(request));
+      setIsPickToggled(!isPickToggled);
+    } else {
+      const request = {
+        boardId: data.id,
+        userId: user.userId,
+        action: "cancel",
+      };
+      dispatch(mypick(request));
+      setIsPickToggled(!isPickToggled);
+    }
+  };
+
+  //좋아요 클릭
+  const onClickLike = function () {
+    if (!isLikeToggled) {
+      const request = {
+        boardId: data.id,
+        userId: user.userId,
+        action: "good",
+      };
+      dispatch(good(request));
+      setIsLikeToggled(!isLikeToggled);
+      setTempGoodPlus(1);
+    } else {
+      const request = {
+        boardId: data.id,
+        userId: user.userId,
+        action: "cancel",
+      };
+      dispatch(good(request));
+      setIsLikeToggled(!isLikeToggled);
+      setTempGoodPlus(0);
+    }
+  };
+
   return (
     <>
       <PRForm>
@@ -827,26 +938,30 @@ export default function PostReadForm({ id }) {
           <TitleText>{data.postName}</TitleText>
           <IconForm>
             <div
-              className={!isPickToggled ? "origin-color" : "pick-color"}
+              className="pick-color"
               onClick={() => {
-                setIsPickToggled(!isPickToggled);
+                onClickMyPick();
               }}
             >
               <FontAwesomeIcon
-                icon={!isPickToggled ? faRegularThumbsUp : faSolidThumbsUp}
+                icon={!isPickToggled ? faRegularHeart : faSolidHeart}
               />
+              <label class="num-font-size">My Pick</label>
             </div>
           </IconForm>
           <IconForm>
             <div
-              className="like-color"
+              className={!isLikeToggled ? "origin-color" : "like-color"}
               onClick={() => {
-                setIsLikeToggled(!isLikeToggled);
+                onClickLike();
               }}
             >
               <FontAwesomeIcon
-                icon={!isLikeToggled ? faRegularHeart : faSolidHeart}
+                icon={!isLikeToggled ? faRegularThumbsUp : faSolidThumbsUp}
               />
+              <label class="num-font-size">
+                좋아요 +{data.good + tempGoodPlus}
+              </label>
             </div>
           </IconForm>
         </TitleLine>
@@ -855,7 +970,8 @@ export default function PostReadForm({ id }) {
             <TitleLogo>
               <VscAccount size="30" color="#000" />
             </TitleLogo>
-            <b>{data.author}</b> {data.time}
+            <b>{data.author}</b> <br />
+            {data.time}
             <MenuBar>
               <div className="menubar">
                 <li>
@@ -909,15 +1025,21 @@ export default function PostReadForm({ id }) {
           {data.totalTrans}
         </TotalTextInfo>
         <br />
-        <CommentBox>
-          <TotalTextInfo>{data.comment}</TotalTextInfo>
-        </CommentBox>
+        {/* <CommentBox> */}
+        <TotalTextInfo>
+          <div class="title-text">STORY</div>
+          {data.comment}
+        </TotalTextInfo>
+        {/* </CommentBox> */}
         {/* 여기가 지도 넣을 곳 */}
         <MapBoxForm>
           <MapForm id="map"></MapForm>
           <br />
         </MapBoxForm>
-        <DayButtonForm>{buttons}</DayButtonForm>
+        <DayButtonForm>
+          <DayMapClickTitle>여행 경로 정보</DayMapClickTitle>
+          {buttons}
+        </DayButtonForm>
         <br />
         {/* 여기가 지도 넣을 곳 */}
         {/* 데이 박스 */}

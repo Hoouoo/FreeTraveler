@@ -4,7 +4,9 @@ import palette from "../../../lib/styles/palette";
 
 const StyledButton = styled.button`
   /* 공통 스타일 */
-  width: 49%;
+  /* position: absolute; */
+  margin: 2.4%;
+  width: 45%;
   display: inline-flex;
   outline: none;
   border: none;
@@ -46,13 +48,15 @@ const StyledButton = styled.button`
     transition-property: transform, transform;
   }
 
-  @media screen and (max-width: 1007px) {
+  /* @media screen and (max-width: 1007px) {
     width: 48%;
     height: 2rem;
-    font-size: 0.8rem;
-  }
+    font-size: 0.8rem; 
+  }*/
   @media screen and (max-width: 638px) {
-    width: 48%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    width: 45%;
     height: 2rem;
     font-size: 0.8rem;
   }

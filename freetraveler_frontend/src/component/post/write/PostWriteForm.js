@@ -19,43 +19,56 @@ import PostButton from "../buttons/PostSubButton";
 import { useHistory } from "react-router-dom";
 
 const POWBox = styled.div`
+  display: flex;
   width: auto;
-  height: 100%;
+  min-height: 100%;
+  overflow: auto;
+  height: auto;
   padding: 35px;
   margin-top: -10px;
   margin-left: 10%;
   margin-right: 10%;
-  background-color: white;
+  /* background-color: black; */
   @media screen and (max-width: 612px) {
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 0px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 100px;
+    /* padding-right: 200px; */
   }
 `;
 
 const PWOABox = styled.div`
   width: auto;
-  height: 90vh;
+  min-height: 90vh;
+  height: auto;
   padding: 35px;
   margin-top: -10px;
   margin-left: 10%;
   margin-right: 10%;
   background-color: white;
-  display: flex;
   justify-content: center;
   align-items: center;
-  @media screen and (max-width: 612px) {
-    margin-left: 10px;
-    margin-right: 10px;
+  @media screen and (max-width: 650px) {
     padding: 0px;
+    padding-top: 70px;
+    margin-left: 20px;
+    margin-right: 20px;
   }
+  @media screen and (min-width: 650px) {
+    display: flex;
+  }
+  /* @supports (-webkit-touch-callout: none) {
+    min-height: -webkit-fill-available;
+  } */
 `;
 
 const PWDayBox = styled.div``;
 
 const PWForm = styled.form`
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
   width: auto;
-  /* padding: 50px; */
   margin-top: -10px;
   margin-left: 10%;
   margin-right: 10%;
@@ -66,11 +79,6 @@ const PWForm = styled.form`
     margin-left: 15%;
     margin-right: 15%;
   }
-  /* background-color: white; */
-  /* width: auto;
-  height: 100%;
-  padding: 50px;
-  text-align: center; */
 `;
 
 const ScrollBar = styled.div`
@@ -102,10 +110,9 @@ const PostInput = styled.input`
   margin-bottom: 1rem;
   border-bottom: 1px solid ${palette.mint[0]};
   /* border: 1px solid rgba(var(--c8c, 168, 168, 168), 1); */
-  @media screen and (max-width: 612px) {
-    text-align: left;
+  /* @media screen and (max-width: 650px) {
     width: 60%;
-  }
+  } */
 `;
 
 const TitleInput = styled.input`
@@ -116,6 +123,9 @@ const TitleInput = styled.input`
   border-bottom: 1px solid ${palette.gray[4]};
   margin-bottom: 1rem;
   width: 100%;
+  /* @media screen and (max-width: 650px) {
+    width: 60%;
+  } */
 `;
 
 const PostObjectTitle = styled.div`
@@ -124,18 +134,23 @@ const PostObjectTitle = styled.div`
   margin-bottom: 0.5rem;
   font-weight: bold;
   font-size: 1rem;
-  width: 100%;
+  width: auto;
+  min-width: 100%;
 `;
 
 const PostPreviewImage = styled.div`
   justify-content: center;
   align-self: center;
   align-content: center;
-  width: 500px;
+  /* width: 500px; */
   height: auto;
   img {
+    display: flex;
     width: 100%;
-    height: 100%;
+    height: auto;
+    justify-content: center;
+    align-self: center;
+    align-content: center;
   }
 `;
 
@@ -205,7 +220,7 @@ export default function PostWriteForm({ id, mode }) {
         setTotalCost(data.totalCost);
         setTotalTrans(data.totalTrans);
         setComment(data.comment);
-        setRepImg("exist");
+        setRepImg(" ");
 
         //day 박스 추가
         if (data.days != null) {
@@ -410,7 +425,8 @@ export default function PostWriteForm({ id, mode }) {
     for (let i = 1; i <= dayIndex; i++) {
       dayInputIndex.push(
         <Link to={i} spy={true} smooth={true}>
-          <span key={i}>{i + " DAY"}</span>
+          <button key={i}>{i + " DAY"}</button>
+          <br />
           <br />
         </Link>
       );
@@ -488,9 +504,8 @@ export default function PostWriteForm({ id, mode }) {
     if (postCheck) {
       alert("포스팅 성공");
       history.replace(
-        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all"
+        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false"
       );
-      // history.push("/posting/list");
       history.push("/posting/read?id=" + postedId);
       dispatch(postCheckFalse());
     }

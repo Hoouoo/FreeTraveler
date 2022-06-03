@@ -16,3 +16,13 @@ export const removePost = (data) =>
   client.delete("/post", data, {
     withCredentials: true,
   });
+
+export const good = (data) =>
+  client.post("/post/good", data, {
+    withCredentials: true,
+  });
+
+export const mypick = (data) =>
+  client.post("/post/pick", data, {
+    withCredentials: true,
+  });
