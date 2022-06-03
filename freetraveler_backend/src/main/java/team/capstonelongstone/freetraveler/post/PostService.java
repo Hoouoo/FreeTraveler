@@ -121,8 +121,6 @@ public class PostService {
         Board board = boardRepository.getById(id);
         Good good = goodService.returnGoodStatus(account, board);
         Pick byUserAndBoard = pickRepository.findByUserAndBoard(account, board);
-        System.out.println("---------------------");
-        System.out.println("byUserAndBoard = " + byUserAndBoard);
         String pickStatus="";
 
         if(Objects.isNull(byUserAndBoard)){
