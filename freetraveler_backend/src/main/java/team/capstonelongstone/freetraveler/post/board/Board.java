@@ -1,5 +1,6 @@
 package team.capstonelongstone.freetraveler.post.board;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Board extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,18 +33,18 @@ public class Board extends BaseTime {
     private String repImgPath;
     private String repImgName;
 
-    @Builder
-    public Board(String postName, Integer totalDays, String totalTrans, Integer totalCost, String comment, Integer goodCnt, Account author, String repImgPath, String repImgName) {
-        this.postName = postName;
-        this.totalDays = totalDays;
-        this.totalTrans = totalTrans;
-        this.totalCost = totalCost;
-        this.comment = comment;
-        this.goodCnt = goodCnt;
-        this.author = author;
-        this.repImgPath = repImgPath;
-        this.repImgName = repImgName;
-    }
+//    @Builder
+//    public Board(String postName, Integer totalDays, String totalTrans, Integer totalCost, String comment, Integer goodCnt, Account author, String repImgPath, String repImgName) {
+//        this.postName = postName;
+//        this.totalDays = totalDays;
+//        this.totalTrans = totalTrans;
+//        this.totalCost = totalCost;
+//        this.comment = comment;
+//        this.goodCnt = goodCnt;
+//        this.author = author;
+//        this.repImgPath = repImgPath;
+//        this.repImgName = repImgName;
+//    }
 
     public void changeGoodCnt(Integer goodCnt) {
         this.goodCnt = goodCnt;

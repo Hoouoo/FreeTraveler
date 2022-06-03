@@ -11,6 +11,7 @@ import team.capstonelongstone.freetraveler.good.domain.Good;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board,Long>{
@@ -38,6 +39,9 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
                                     @Param("authorId")Long authorId,
                                     @Param("search")String search,
                                     @Param("pick")String pick);
+
+
+    Optional<Board> findById(Long id);
 
     @Query("SELECT b FROM Board AS b ORDER BY rand()")
     Page<Board> findAllPickByRand(Pageable pageable);

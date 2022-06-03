@@ -1,5 +1,6 @@
 package team.capstonelongstone.freetraveler.post.place;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Place {
 
     @Id
@@ -42,18 +45,4 @@ public class Place {
 
     private String placeImgPath;
     private String placeImgName;
-
-    @Builder
-    public Place(Day day, String name, String address, Integer cost, String review, String transportation, Double lat, Double lng, String placeImgPath, String placeImgName) {
-        this.day = day;
-        this.name = name;
-        this.address = address;
-        this.cost = cost;
-        this.review = review;
-        this.transportation = transportation;
-        this.lat = lat;
-        this.lng = lng;
-        this.placeImgPath = placeImgPath;
-        this.placeImgName = placeImgName;
-    }
 }
