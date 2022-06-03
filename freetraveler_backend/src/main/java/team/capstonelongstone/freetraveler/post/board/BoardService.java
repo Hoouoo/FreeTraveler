@@ -16,8 +16,10 @@ import team.capstonelongstone.freetraveler.good.GoodService;
 import team.capstonelongstone.freetraveler.good.domain.Good;
 import team.capstonelongstone.freetraveler.pick.PickRepository;
 import team.capstonelongstone.freetraveler.pick.domain.Pick;
+import team.capstonelongstone.freetraveler.post.board.dto.BoardDto;
 import team.capstonelongstone.freetraveler.post.board.dto.PostListDTO;
 import team.capstonelongstone.freetraveler.post.img.ImgService;
+import team.capstonelongstone.freetraveler.post.place.PlaceRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,6 +35,7 @@ import java.util.Objects;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final PlaceRepository placeRepository;
     private final ImgService imgService;
     private final GoodService goodService;
     private final PickRepository pickRepository;
@@ -68,6 +71,39 @@ public class BoardService {
                 .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
         saveBoard(board);
         return board;
+    }
+
+    public void modifyBoard(Long id,HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws IOException {
+        HttpSession session=request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        String postName = request.getParameter("postName");
+        Integer totalDays = Integer.valueOf(request.getParameter("totalDays"));
+        String comment = request.getParameter("comment");
+        String totalTrans=request.getParameter("totalTrans");
+
+        Account author = account;
+        int sumTotalCost = 0;
+
+        for (int day=0;day<totalDays;day++) {
+            String varPlength = day + "_plength";
+            Integer _plength = Integer.valueOf(request.getParameter(varPlength));
+            for (int j = 0; j < _plength; j++) {
+                Integer cost = Integer.valueOf(request.getParameter(day + "_" + j + "_" + "cost"));
+                sumTotalCost+=cost;
+            }
+        }
+
+        List<String> list = imgService.boardSaveImg(request, file);
+
+        int finalSumTotalCost = sumTotalCost;
+        boardRepository.findById(id).ifPresent(target->{
+            BoardDto boardDto = BoardDto.builder().postName(postName).totalDays(totalDays).totalCost(finalSumTotalCost).comment(comment).goodCnt(0)
+                    .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
+
+            Board targetBoard = boardDto.toEntity(id);
+            boardRepository.save(targetBoard);
+        });
     }
 
     /**
@@ -191,4 +227,7 @@ public class BoardService {
         return page.toString();
     }
 
+    public Board getBoard(Long id){
+        return boardRepository.findById(id).orElse(null);
+    }
 }

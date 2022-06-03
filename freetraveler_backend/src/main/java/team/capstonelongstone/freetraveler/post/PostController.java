@@ -1,6 +1,7 @@
 package team.capstonelongstone.freetraveler.post;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * @author 정순범
@@ -28,6 +30,7 @@ import java.util.HashMap;
  */
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final BoardService boardService;
@@ -41,13 +44,13 @@ public class PostController {
      */
     @PostMapping("/post") 
     @ResponseBody
-    public ResponseEntity generateBoard(HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws JSONException, IOException {
+    public ResponseEntity<?> generateBoard(HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws JSONException, IOException {
 
         String mode = request.getParameter("mode");
         if (mode.equals("write")) { //게시글 등록
             try {
                 Board board = boardService.generateBoard(request, file);
-                dayService.generateDay(request, board);
+                dayService.generateDay(null, request, board);
 
                 HashMap<String,Integer> boardId=new HashMap<>();
                 boardId.put("id",board.getId().intValue());
@@ -58,8 +61,24 @@ public class PostController {
             }
         }
         else{ //게시글 수정
-            System.out.println("게시글 수정");
-            return new ResponseEntity(HttpStatus.valueOf(201)); //로그인 성공시 userId 넘김
+            log.info("수정영역입니둥~~");
+            try {
+                Long targetBoardId = Long.parseLong(request.getParameter("id"));
+                Board board = boardService.getBoard(targetBoardId);
+                if (Objects.nonNull(board)) {
+                    boardService.modifyBoard(targetBoardId, request, file);
+                    dayService.generateDay(targetBoardId, request, board);
+
+                    HashMap<String, Integer> boardId = new HashMap<>();
+                    boardId.put("id", board.getId().intValue());
+                    return new ResponseEntity(boardId, HttpStatus.valueOf(201));
+                }else{
+                    return new ResponseEntity(HttpStatus.valueOf(409));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity(HttpStatus.valueOf(409));
+            }
         }
     }
 

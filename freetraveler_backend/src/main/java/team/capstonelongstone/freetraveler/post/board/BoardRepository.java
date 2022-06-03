@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board,Long>{
@@ -37,4 +38,5 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
                                     @Param("search")String search,
                                     @Param("pick")String pick);
 
+    Optional<Board> findById(Long id);
 }
