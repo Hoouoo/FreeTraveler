@@ -1,46 +1,56 @@
 package team.capstonelongstone.freetraveler.post.img;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.post.board.Board;
 import team.capstonelongstone.freetraveler.post.board.BoardRepository;
+import team.capstonelongstone.freetraveler.post.place.Place;
+import team.capstonelongstone.freetraveler.post.place.PlaceRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 정순범, 박성호
  * 이미저 저장 기능
  */
 @Service
+@RequiredArgsConstructor
 public class ImgService {
 
 
     @Autowired
     BoardRepository boardRepository;
 
+    private final PlaceRepository placeRepository;
+
+
     /**
      * 이미지 저장
      */
     public void uploadImg(MultipartFile file, String imgName, String suffix) throws IOException {
         String myDirectory = System.getProperty("user.dir");
-        file.transferTo(new File(myDirectory ,imgName + suffix));
+        file.transferTo(new File(myDirectory, imgName + suffix));
     }
 
     /**
      * 이미지 경로 설정
      */
     public List<String> getImgPath_Name(String imgName, String suffix) {
-        List<String> list=new ArrayList<>();
+        List<String> list = new ArrayList<>();
         String myDirectory = System.getProperty("user.dir");
+        System.out.println("~~~~~~~~~~~~~~~~~> >>>> myDirectory = " + myDirectory);
         list.add(myDirectory);
-        list.add(imgName+suffix);
+        list.add(imgName + suffix);
         return list;
     }
 
@@ -69,14 +79,31 @@ public class ImgService {
      */
     public List<String> boardSaveImg(HttpServletRequest request, MultipartFile file) throws IOException {
 
-        HttpSession session=request.getSession();
+        HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        String ImgUUID = account.getUserId() + "_"+getImgId(); //대표 이미지 UUID
+        String ImgUUID = account.getUserId() + "_" + (getImgId()+1); //대표 이미지 UUID
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
-
         uploadImg(file, ImgUUID, suffix);
 
-        return getImgPath_Name(ImgUUID,suffix);
+        return getImgPath_Name(ImgUUID, suffix);
+
+    }
+
+    /**
+     * 보드 수정 시 사용할 메서드
+     */
+    public List<String> boardModifyImg(Long id, HttpServletRequest request) throws IOException{
+
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        String ImgUUID = account.getUserId() + "_" + getImgId(); //대표 이미지 UUID
+        // 이미지가 null 일 경우
+        Board targetBoard = boardRepository.findById(id).orElse(null);
+        if(Objects.nonNull(targetBoard)){
+            String suffix = targetBoard.getRepImgName().substring(targetBoard.getRepImgName().lastIndexOf("."));
+            return getImgPath_Name(ImgUUID, suffix);
+        }
+        return null;
     }
 
     /**
@@ -84,15 +111,29 @@ public class ImgService {
      */
     public List<String> daySaveImg(HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
 
-        HttpSession session=request.getSession();
+        HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
-        String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" +getImgId();
+        String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" + getImgId();
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
         uploadImg(file, ImgUUID, suffix);
-        return getImgPath_Name(ImgUUID,suffix);
+        return getImgPath_Name(ImgUUID, suffix);
     }
 
+    public List<String> dayModifyImg(Long placeId, HttpServletRequest request, int day, int j) throws IOException {
 
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" + getImgId();
+
+        Place targetPlace = placeRepository.findById(placeId).orElse(null);
+        if(Objects.isNull(targetPlace)){
+            return null;
+        }
+
+        String suffix = targetPlace.getPlaceImgName().substring(targetPlace.getPlaceImgName().lastIndexOf("."));
+        return getImgPath_Name(ImgUUID, suffix);
+    }
 }

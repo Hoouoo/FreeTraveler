@@ -114,7 +114,7 @@ public class PostController {
     /**
      * 이미지 가져오기
      */
-    @CheckSession
+
     @GetMapping(value = "/{boardImg}", produces = MediaType.IMAGE_JPEG_VALUE) //이미지 접근 링크
     public ResponseEntity<byte[]> files(@PathVariable String boardImg) throws Exception {
 
