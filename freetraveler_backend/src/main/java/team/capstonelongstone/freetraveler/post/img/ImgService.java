@@ -81,7 +81,6 @@ public class ImgService {
 
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
-
         String ImgUUID = account.getUserId() + "_"+getImgId(); //대표 이미지 UUID
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
