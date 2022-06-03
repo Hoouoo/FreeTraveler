@@ -196,7 +196,6 @@ export default function PostListTemplate({ id, isPick = "all" }) {
 
   useEffect(() => {
     //조회 폼 제거
-    console.log("isPick: " + isPick);
     dispatch(getPostClear());
     dispatch(clearPostList());
   }, []);
