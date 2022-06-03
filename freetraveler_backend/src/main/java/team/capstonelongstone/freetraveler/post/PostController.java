@@ -2,6 +2,7 @@ package team.capstonelongstone.freetraveler.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Check;
 import org.json.JSONException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 import team.capstonelongstone.freetraveler.post.board.Board;
 import team.capstonelongstone.freetraveler.post.board.BoardRepository;
 import team.capstonelongstone.freetraveler.post.board.BoardService;
@@ -42,6 +44,7 @@ public class PostController {
     /**
      * 게시물 등록 및 수정
      */
+    @CheckSession
     @PostMapping("/post") 
     @ResponseBody
     public ResponseEntity<?> generateBoard(HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws JSONException, IOException {
@@ -85,6 +88,7 @@ public class PostController {
     /**
      * 게시물 조회
      */
+
     @GetMapping("/post")
     @ResponseBody
     public ResponseEntity getPost(@RequestParam("id")String boardId,HttpServletRequest request) throws JSONException, IOException {
@@ -95,6 +99,7 @@ public class PostController {
     /**
      * 게시물 삭제
      */
+    @CheckSession
     @DeleteMapping("/post")
     public ResponseEntity deletePost(@RequestBody HashMap<String,String >id){
         String boardId = id.get("id");
@@ -109,6 +114,7 @@ public class PostController {
     /**
      * 이미지 가져오기
      */
+    @CheckSession
     @GetMapping(value = "/{boardImg}", produces = MediaType.IMAGE_JPEG_VALUE) //이미지 접근 링크
     public ResponseEntity<byte[]> files(@PathVariable String boardImg) throws Exception {
 

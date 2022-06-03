@@ -40,8 +40,8 @@ public class LoginController {
      * 로그인 체크 컨트롤러
      */
     @GetMapping("/account/check")
-    public ResponseEntity checkLogin(HttpServletRequest request,HttpServletResponse response){
-        return loginService.checkLogin(request,response);
+    public ResponseEntity checkLogin(HttpServletRequest request){
+        return loginService.checkLogin(request);
     }
 
 }

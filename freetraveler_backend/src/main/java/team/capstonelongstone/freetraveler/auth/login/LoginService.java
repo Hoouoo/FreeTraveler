@@ -59,7 +59,7 @@ public class LoginService {
     /**
      * 로그인 체크 여부 로직
      */
-    public ResponseEntity checkLogin(HttpServletRequest request,HttpServletResponse response){
+    public ResponseEntity checkLogin(HttpServletRequest request){
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
 
