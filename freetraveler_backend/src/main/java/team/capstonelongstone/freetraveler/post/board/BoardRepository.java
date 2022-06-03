@@ -11,6 +11,7 @@ import team.capstonelongstone.freetraveler.good.domain.Good;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board,Long>{
@@ -39,6 +40,9 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
                                     @Param("search")String search,
                                     @Param("pick")String pick);
 
+
+    Optional<Board> findById(Long id);
+
     @Query("SELECT b FROM Board AS b ORDER BY rand()")
     Page<Board> findAllPickByRand(Pageable pageable);
 
@@ -48,5 +52,9 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
     @Query("update Board as b set b.goodCnt=:goodCnt where b.id=:id")
     void updateGoodCnt(@Param("goodCnt")Integer goodCnt,
                         @Param("id")Long id);
+
+    @Query("select b from Board as b where b.author.id=:id")
+    Page<Board> findAllIsMine(Pageable pageableMine,
+                              @Param("id")Long id);
 
 }
