@@ -153,7 +153,7 @@ public class ImgService {
         Board byBoardId = boardRepository.findByBoardId(LongBoardId);
 
         List<Day> allByBoard = dayRepository.findAllByBoard(byBoardId);
-        String boardImg = byBoardId.getRepImgPath() + "\\"+ byBoardId.getRepImgName();
+        String boardImg = byBoardId.getRepImgPath() + "/"+ byBoardId.getRepImgName();
 
         File file=new File(boardImg);
         if(file.exists()){
@@ -164,7 +164,7 @@ public class ImgService {
             List<Place> allBYDayId = placeRepository.findAllBYDayId(day.getId());
 
             for (Place place : allBYDayId) {
-                String placeImg=place.getPlaceImgPath() + "\\" + place.getPlaceImgName();
+                String placeImg=place.getPlaceImgPath() + "/" + place.getPlaceImgName();
                 System.out.println(placeImg);
                 File file2=new File(placeImg);
                 if(file2.exists()){
