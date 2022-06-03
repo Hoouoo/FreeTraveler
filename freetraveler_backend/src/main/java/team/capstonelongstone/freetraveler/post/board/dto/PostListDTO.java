@@ -15,9 +15,10 @@ public class PostListDTO {
     String search;
     String method;
     String isMyPick;
+    String isMine;
 
     @Builder
-    public PostListDTO(Integer page, Integer pageSize, String sort, String orderBy, String search, String method, String isMyPick) {
+    public PostListDTO(Integer page, Integer pageSize, String sort, String orderBy, String search, String method, String isMyPick, String isMine) {
         this.page = page;
         this.pageSize = pageSize;
         this.sort = sort;
@@ -25,5 +26,6 @@ public class PostListDTO {
         this.search = search;
         this.method = method;
         this.isMyPick = isMyPick;
+        this.isMine = isMine;
     }
 }

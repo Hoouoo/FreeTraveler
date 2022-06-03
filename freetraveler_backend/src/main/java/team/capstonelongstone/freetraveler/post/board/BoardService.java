@@ -138,6 +138,18 @@ public class BoardService {
             }
         }
 
+        if(postListDTO.getIsMine().equals("true")){
+            System.out.println("isMine");
+            if(postListDTO.getOrderBy().equals("asc")) {
+                System.out.println("asc");
+                sort = Sort.by(Sort.Direction.ASC, "createdDate");
+            }else{
+                sort = Sort.by(Sort.Direction.DESC, "createdDate");
+            }
+            Pageable pageableMine= PageRequest.of(postListDTO.getPage(), postListDTO.getPageSize(),sort);
+            all = boardRepository.findAllIsMine(pageableMine, account.getId());
+        }
+
         int boardSize=0;
         int max=0;
         if(postListDTO.getSearch().isEmpty()){
