@@ -18,6 +18,7 @@ import team.capstonelongstone.freetraveler.post.board.BoardRepository;
 import team.capstonelongstone.freetraveler.post.board.BoardService;
 import team.capstonelongstone.freetraveler.post.board.dto.PostListDTO;
 import team.capstonelongstone.freetraveler.post.day.DayService;
+import team.capstonelongstone.freetraveler.post.img.ImgService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -40,6 +41,8 @@ public class PostController {
     private final DayService dayService;
 
     private final PostService postService;
+
+    private final ImgService imgService;
 
     /**
      * 게시물 등록 및 수정
@@ -104,12 +107,20 @@ public class PostController {
     public ResponseEntity deletePost(@RequestBody HashMap<String,String >id){
         String boardId = id.get("id");
         try {
+            imgService.deleteImg(boardId);
             postService.deletePost(boardId); //board 지우면 day, place 같이 지워짐
             return new ResponseEntity(HttpStatus.valueOf(201));
         }catch (Exception e){
             return new ResponseEntity(HttpStatus.valueOf(409));
         }
     }
+
+    @GetMapping("/deleteImg")
+    public void deleteImg(@RequestBody HashMap<String,String >id){
+        String boardId = id.get("id");
+        imgService.deleteImg(boardId);
+    }
+
 
     /**
      * 이미지 가져오기

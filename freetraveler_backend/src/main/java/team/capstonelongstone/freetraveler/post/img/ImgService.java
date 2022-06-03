@@ -7,6 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.post.board.Board;
 import team.capstonelongstone.freetraveler.post.board.BoardRepository;
+
+import team.capstonelongstone.freetraveler.post.day.Day;
+import team.capstonelongstone.freetraveler.post.day.DayRepository;
+
 import team.capstonelongstone.freetraveler.post.place.Place;
 import team.capstonelongstone.freetraveler.post.place.PlaceRepository;
 
@@ -31,7 +35,14 @@ public class ImgService {
     @Autowired
     BoardRepository boardRepository;
 
+
     private final PlaceRepository placeRepository;
+
+    @Autowired
+    PlaceRepository placeRepository;
+
+    @Autowired
+    DayRepository dayRepository;
 
 
     /**
@@ -121,6 +132,7 @@ public class ImgService {
         return getImgPath_Name(ImgUUID, suffix);
     }
 
+
     public List<String> dayModifyImg(Long placeId, HttpServletRequest request, int day, int j) throws IOException {
 
         HttpSession session = request.getSession();
@@ -132,6 +144,36 @@ public class ImgService {
         if(Objects.isNull(targetPlace)){
             return null;
         }
+
+    /**
+     * 이미지 삭제
+     */
+    public void deleteImg(String boardId){
+        Long LongBoardId=Integer.valueOf(boardId).longValue();
+        Board byBoardId = boardRepository.findByBoardId(LongBoardId);
+
+        List<Day> allByBoard = dayRepository.findAllByBoard(byBoardId);
+        String boardImg = byBoardId.getRepImgPath() + "\\"+ byBoardId.getRepImgName();
+
+        File file=new File(boardImg);
+        if(file.exists()){
+            file.delete();
+        }
+
+        for (Day day : allByBoard) {
+            List<Place> allBYDayId = placeRepository.findAllBYDayId(day.getId());
+
+            for (Place place : allBYDayId) {
+                String placeImg=place.getPlaceImgPath() + "\\" + place.getPlaceImgName();
+                System.out.println(placeImg);
+                File file2=new File(placeImg);
+                if(file2.exists()){
+                    file2.delete();
+                }
+            }
+        }
+
+    }
 
         String suffix = targetPlace.getPlaceImgName().substring(targetPlace.getPlaceImgName().lastIndexOf("."));
         return getImgPath_Name(ImgUUID, suffix);
