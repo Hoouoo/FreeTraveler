@@ -49,4 +49,8 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
     void updateGoodCnt(@Param("goodCnt")Integer goodCnt,
                         @Param("id")Long id);
 
+    @Query("select b from Board as b where b.author.id=:id")
+    Page<Board> findAllIsMine(Pageable pageableMine,
+                              @Param("id")Long id);
+
 }
