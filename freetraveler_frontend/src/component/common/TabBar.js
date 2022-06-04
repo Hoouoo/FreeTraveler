@@ -11,6 +11,8 @@ import {
   RiHomeSmile2Fill,
   RiUser5Fill,
   RiFileList2Line,
+  RiUserHeartFill,
+  RiUserHeartLine,
 } from "react-icons/ri";
 import {
   RiUser5Line,
@@ -48,7 +50,7 @@ const TabBarStyled = styled.div`
   }
   .bn-tab {
     cursor: pointer;
-    width: 22%;
+    width: 15%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -71,6 +73,10 @@ const TabBarStyled = styled.div`
       flex-direction: column;
       align-items: center;
     }
+    .bn-tab {
+      width: 22%;
+      font-size: 12px;
+    }
   }
 `;
 
@@ -80,7 +86,14 @@ const TabBar = (props) => {
 
   const [activeTabs, setActiveTabs] = useState(props.name);
 
-  const tabbarPath = ["/", "/home", "/pick", "/posting/list", "/account"];
+  const tabbarPath = [
+    "/",
+    "/home",
+    "/pick",
+    "/posting/list",
+    "/account",
+    "/follow",
+  ];
 
   const { user } = useSelector(({ user }) => ({
     user: user.user,
@@ -101,6 +114,9 @@ const TabBar = (props) => {
         break;
       case "/account":
         setActiveTabs("account");
+        break;
+      case "/follow":
+        setActiveTabs("follow");
         break;
     }
   }, [activeTabs, location]);
@@ -129,6 +145,10 @@ const TabBar = (props) => {
 
   const accountButtonClick = () => {
     history.push("/account");
+  };
+
+  const followButtonClick = () => {
+    history.push("/follow");
   };
 
   return (
@@ -163,6 +183,16 @@ const TabBar = (props) => {
             )}
           </div>
           <div className="box">POST</div>
+        </div>
+        <div className="bn-tab" onClick={() => followButtonClick()}>
+          <div className="box">
+            {activeTabs == "follow" ? (
+              <RiUserHeartFill size="25" color="#000" />
+            ) : (
+              <RiUserHeartLine size="25" color="#000" />
+            )}
+          </div>
+          <div className="box">FOLLOW</div>
         </div>
         <div className="bn-tab" onClick={() => accountButtonClick()}>
           <div className="box">

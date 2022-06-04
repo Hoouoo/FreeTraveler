@@ -13,6 +13,10 @@ export default function FrontRouter() {
     user: user.user,
   }));
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   //로그인 안되었을 때 접근 가능 영역
   const excludePath = [
     "/",

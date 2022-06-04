@@ -17,6 +17,7 @@ import PostReadPage from "./pages/PostReadPage";
 import PostWritePage from "./pages/PostWritePage";
 import RegisterPage from "./pages/RegisterPage";
 import Search from "./pages/SearchPage";
+import Follow from "./pages/FollowPage";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/posting/write" component={PostWritePage}/>
           <Route path="/posting/modify" component={PostModifyPage}/>
           <Route path="/posting/read" component={PostReadPage} />
+          <Route path="/follow" component={Follow} />
         </ContentTemplate>
       </Switch>
       <TabBar />

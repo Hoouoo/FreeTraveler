@@ -149,13 +149,11 @@ const NavButton = styled.li`
 const PageNavigator = styled.div``;
 
 const Page = styled.li`
-  /* float: left; */
   cursor: pointer;
   display: inline-block;
   list-style: none;
   height: 20px;
   width: 20px;
-  /* color: #1e1e1e; */
   font-size: 14px;
   line-height: 18px;
   vertical-align: middle;
@@ -182,7 +180,7 @@ export default function PostListTemplate({ id, isPick = "all" }) {
   let [gen, setGen] = useState(new ItemCardGenerator());
   let [render, setRender] = useState(gen.render());
   let [pageNav, setPageNav] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
   let [search, setSearch] = useState("");
 
@@ -227,7 +225,7 @@ export default function PostListTemplate({ id, isPick = "all" }) {
     // console.log(location);
 
     dispatch(getPostList(request));
-  }, [history]);
+  }, [history, location]);
 
   const generateItemCard = useCallback(() => {
     if (data != undefined && data != null && JSON.stringify(data) != "{}") {
@@ -278,6 +276,7 @@ export default function PostListTemplate({ id, isPick = "all" }) {
         </Page>
       );
     }
+
     setPageNavCallback(
       <PageNavigator>
         <FontAwesomeIcon icon={faAngleLeft} />

@@ -191,7 +191,7 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
         name: data.placeName,
         loc: data.loc,
         cost: data.cost,
-        img: " ",
+        img: "exist",
         content: data.content,
         trans: data.trans,
         integrity: false,

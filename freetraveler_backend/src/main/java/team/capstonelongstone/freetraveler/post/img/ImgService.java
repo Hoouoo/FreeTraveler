@@ -35,11 +35,7 @@ public class ImgService {
     @Autowired
     BoardRepository boardRepository;
 
-
     private final PlaceRepository placeRepository;
-
-    @Autowired
-    PlaceRepository placeRepository;
 
     @Autowired
     DayRepository dayRepository;
@@ -107,10 +103,12 @@ public class ImgService {
 
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
-        String ImgUUID = account.getUserId() + "_" + getImgId(); //대표 이미지 UUID
+
         // 이미지가 null 일 경우
         Board targetBoard = boardRepository.findById(id).orElse(null);
         if(Objects.nonNull(targetBoard)){
+            String ImgUUID = targetBoard.getRepImgName().substring(0, targetBoard.getRepImgName().lastIndexOf(".")); //대표 이미지 UUID
+
             String suffix = targetBoard.getRepImgName().substring(targetBoard.getRepImgName().lastIndexOf("."));
             return getImgPath_Name(ImgUUID, suffix);
         }
@@ -145,6 +143,10 @@ public class ImgService {
             return null;
         }
 
+        String suffix = targetPlace.getPlaceImgName().substring(targetPlace.getPlaceImgName().lastIndexOf("."));
+        return getImgPath_Name(ImgUUID, suffix);
+    }
+
     /**
      * 이미지 삭제
      */
@@ -172,10 +174,5 @@ public class ImgService {
                 }
             }
         }
-
-    }
-
-        String suffix = targetPlace.getPlaceImgName().substring(targetPlace.getPlaceImgName().lastIndexOf("."));
-        return getImgPath_Name(ImgUUID, suffix);
     }
 }

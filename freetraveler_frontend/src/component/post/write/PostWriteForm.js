@@ -88,7 +88,7 @@ const ScrollBar = styled.div`
   align-content: center;
   position: fixed;
   right: 1.2rem;
-  bottom: 40%;
+  bottom: 35%;
   z-index: 10;
   transform: translateY(-5rem);
   transition-duration: 0.25s, 0.25s;
@@ -96,6 +96,20 @@ const ScrollBar = styled.div`
     cubic-bezier(0.75, 0.25, 0.25, 0.75);
   transition-delay: initial, initial;
   transition-property: transform, transform;
+`;
+
+const ScrollBarButton = styled.button`
+  display: inline-block;
+  padding: 0.2em 0.5em;
+  color: black;
+  font-size: 12px;
+  line-height: normal;
+  vertical-align: middle;
+  background-color: #fdfdfd;
+  cursor: pointer;
+  border: 1px solid #ebebeb;
+  border-bottom-color: #e2e2e2;
+  border-radius: 0.35em;
 `;
 
 const PostInput = styled.input`
@@ -113,6 +127,30 @@ const PostInput = styled.input`
   /* @media screen and (max-width: 650px) {
     width: 60%;
   } */
+`;
+
+const FileInput = styled.div`
+  label {
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    color: black;
+    font-size: 12px;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #fdfdfd;
+    cursor: pointer;
+    border: 1px solid #ebebeb;
+    border-bottom-color: #e2e2e2;
+    border-radius: 0.35em;
+  }
+  input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+  }
 `;
 
 const TitleInput = styled.input`
@@ -211,7 +249,7 @@ export default function PostWriteForm({ id, mode }) {
         const comment = document.getElementById("comment");
 
         postName.value = data.postName;
-        totalCost.value = data.totalCost;
+        // totalCost.value = data.totalCost;
         totalTrans.value = data.totalTrans;
         comment.value = data.comment;
         setRepImagePreview(data.repimg);
@@ -220,7 +258,7 @@ export default function PostWriteForm({ id, mode }) {
         setTotalCost(data.totalCost);
         setTotalTrans(data.totalTrans);
         setComment(data.comment);
-        setRepImg(" ");
+        setRepImg("exist");
 
         //day 박스 추가
         if (data.days != null) {
@@ -248,13 +286,13 @@ export default function PostWriteForm({ id, mode }) {
         setPostNameIntegrity(null);
       }
     }
-    {
-      if (totalCost.length == 0) {
-        setTotalCostIntegrity("총 금액을 입력해주세요.");
-      } else {
-        setTotalCostIntegrity(null);
-      }
-    }
+    // {
+    //   if (totalCost.length == 0) {
+    //     setTotalCostIntegrity("총 금액을 입력해주세요.");
+    //   } else {
+    //     setTotalCostIntegrity(null);
+    //   }
+    // }
     {
       if (totalTrans.length == 0) {
         setTotalTransIntegrity("교통 수단을 입력해주세요.");
@@ -321,9 +359,9 @@ export default function PostWriteForm({ id, mode }) {
       case "postName":
         setPostName(value);
         break;
-      case "totalCost":
-        setTotalCost(value);
-        break;
+      // case "totalCost":
+      //   setTotalCost(value);
+      //   break;
       case "totalDays":
         setTotalDays(value);
         break;
@@ -350,7 +388,8 @@ export default function PostWriteForm({ id, mode }) {
         {postNameIntegrity != null && (
           <ErrorMesageBox>{postNameIntegrity}</ErrorMesageBox>
         )}
-        <PostObjectTitle> 여행 비용 </PostObjectTitle>
+
+        {/* <PostObjectTitle> 여행 비용 </PostObjectTitle>
         <PostInput
           id="totalCost"
           name="totalCost"
@@ -358,10 +397,11 @@ export default function PostWriteForm({ id, mode }) {
           placeholder="여행 비용"
           onChange={onChange}
         />
-        {/* 무결성 에러 표시 */}
+
         {totalCostIntegrity != null && (
           <ErrorMesageBox>{totalCostIntegrity}</ErrorMesageBox>
-        )}
+        )} */}
+
         <PostObjectTitle> 여행 일수 </PostObjectTitle>
         <PostInput
           id="totalDays"
@@ -388,12 +428,17 @@ export default function PostWriteForm({ id, mode }) {
         <PostPreviewImage>
           <img id="repImg" src={repImgPreview} />
         </PostPreviewImage>
-        <PostInput
-          name="repImg"
-          type="file"
-          onChange={onChange}
-          accept="image/*"
-        />
+        <FileInput>
+          {/* <input class="upload-name" value="첨부파일" placeholder="첨부파일" /> */}
+          <label for="file">파일찾기</label>
+          <input
+            name="repImg"
+            type="file"
+            onChange={onChange}
+            accept="image/*"
+            id="file"
+          />
+        </FileInput>
         {/* 무결성 에러 표시 */}
         {repImgIntegrity != null && (
           <ErrorMesageBox>{repImgIntegrity}</ErrorMesageBox>
@@ -425,7 +470,7 @@ export default function PostWriteForm({ id, mode }) {
     for (let i = 1; i <= dayIndex; i++) {
       dayInputIndex.push(
         <Link to={i} spy={true} smooth={true}>
-          <button key={i}>{i + " DAY"}</button>
+          <ScrollBarButton key={i}>{i + " DAY"}</ScrollBarButton>
           <br />
           <br />
         </Link>

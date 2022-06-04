@@ -34,7 +34,7 @@ import {
   CgSmileMouthOpen as DayIcon6,
   CgSmileNoMouth as DayIcon7,
 } from "react-icons/cg";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import qs from "qs";
 import { removePost } from "../../../module/posting";
 import { IoMdMore } from "react-icons/io";
@@ -415,8 +415,8 @@ const MenuBar = styled.div`
   .menubar-dark-text {
     /* width: 10px; */
     font-size: 14px;
-    font-weight: 300;
-    color: ${palette.gray[10]};
+    font-weight: 400;
+    color: ${palette.gray[13]};
     /* object-fit: cover; */
     /* border-radius: 4px; */
     /* text-align: left;
@@ -425,7 +425,7 @@ const MenuBar = styled.div`
   .menubar-red-text {
     /* width: 10px; */
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     color: red;
     /* border-radius: 4px; */
     object-fit: cover;
@@ -519,6 +519,7 @@ export default function PostReadForm({ id }) {
     data: post.postRead,
   }));
 
+  const location = useLocation();
   const { user } = useSelector(({ user }) => ({ user: user.user }));
 
   const [tempGoodPlus, setTempGoodPlus] = useState(0);
@@ -535,7 +536,7 @@ export default function PostReadForm({ id }) {
 
     const queryId = query.id;
 
-    console.log("readId: " + queryId);
+    //console.log("readId: " + queryId);
 
     var request = { params: { id: queryId } };
     dispatch(getPost(request));
@@ -810,6 +811,7 @@ export default function PostReadForm({ id }) {
 
   useEffect(() => {
     //setData(select);
+    //캐시 비우기
     getData();
   }, []);
 
@@ -838,8 +840,6 @@ export default function PostReadForm({ id }) {
       //날짜 필터
       data.time = data.time.split("T")[0];
 
-      console.log(data);
-
       //좋아요, 마이픽
       if (data.isGood == "true") {
         setIsLikeToggled(true);
@@ -853,7 +853,7 @@ export default function PostReadForm({ id }) {
         setIsPickToggled(false);
       }
     }
-  }, [data]);
+  }, [data, location]);
 
   const { postRemoveCheck } = useSelector(({ post }) => ({
     postRemoveCheck: post.postRemoveCheck,
@@ -986,22 +986,26 @@ export default function PostReadForm({ id }) {
                     <div
                       className={isToggled ? "menubar-show" : "menubar-hide"}
                     >
-                      <div className="menubar-box">
-                        <li className="menubar-border-bottom">
-                          <a onClick={() => linkToModify()}>
-                            {/* <ModifyButton onClick={() => linkToModify()}> */}
-                            <div className="menubar-dark-text">수정하기</div>
-                            {/* </ModifyButton> */}
-                          </a>
-                        </li>
-                        <li>
-                          <a onClick={() => deleteBoard()}>
-                            {/* <DeleteButton onClick={() => deleteBoard()}> */}
-                            <div className="menubar-red-text">삭제하기</div>
-                            {/* </DeleteButton> */}
-                          </a>
-                        </li>
-                      </div>
+                      {user.userId == data.author && (
+                        <div className="menubar-box">
+                          <li className="menubar-border-bottom">
+                            <a onClick={() => linkToModify()}>
+                              {/* <ModifyButton onClick={() => linkToModify()}> */}
+
+                              <div className="menubar-dark-text">수정하기</div>
+
+                              {/* </ModifyButton> */}
+                            </a>
+                          </li>
+                          <li>
+                            <a onClick={() => deleteBoard()}>
+                              {/* <DeleteButton onClick={() => deleteBoard()}> */}
+                              <div className="menubar-red-text">삭제하기</div>
+                              {/* </DeleteButton> */}
+                            </a>
+                          </li>
+                        </div>
+                      )}
                     </div>
                   </ul>
                 </li>

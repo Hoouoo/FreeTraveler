@@ -24,6 +24,7 @@ import team.capstonelongstone.freetraveler.post.place.PlaceRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 /**
@@ -74,6 +75,7 @@ public class BoardService {
     }
 
     public void modifyBoard(Long id,HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws IOException {
+
         HttpSession session=request.getSession();
         Account account = (Account) session.getAttribute("account");
 
@@ -94,17 +96,28 @@ public class BoardService {
             }
         }
 
-        List<String> list = imgService.boardModifyImg(id, request);
-        System.out.println("list.get(0)~~~~~~~~~~~~~~~~~~~~~~~~>>> = " + list.get(0));
+        if(Objects.isNull(file)) {
+            List<String>list = imgService.boardModifyImg(id, request);
+            int finalSumTotalCost = sumTotalCost;
+            boardRepository.findById(id).ifPresent(target -> {
+                BoardDto boardDto = BoardDto.builder().postName(postName).totalDays(totalDays).totalCost(finalSumTotalCost).comment(comment).goodCnt(0)
+                        .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
 
-        int finalSumTotalCost = sumTotalCost;
-        boardRepository.findById(id).ifPresent(target->{
-            BoardDto boardDto = BoardDto.builder().postName(postName).totalDays(totalDays).totalCost(finalSumTotalCost).comment(comment).goodCnt(0)
-                    .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
+                Board targetBoard = boardDto.toEntity(id);
+                boardRepository.save(targetBoard);
+            });
+        }else{
+            List<String>list = imgService.boardSaveImg(request, file);
+            int finalSumTotalCost = sumTotalCost;
+            boardRepository.findById(id).ifPresent(target -> {
+                BoardDto boardDto = BoardDto.builder().postName(postName).totalDays(totalDays).totalCost(finalSumTotalCost).comment(comment).goodCnt(0)
+                        .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
 
-            Board targetBoard = boardDto.toEntity(id);
-            boardRepository.save(targetBoard);
-        });
+                Board targetBoard = boardDto.toEntity(id);
+                boardRepository.save(targetBoard);
+            });
+        }
+
     }
 
     /**

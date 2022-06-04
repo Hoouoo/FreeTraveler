@@ -39,8 +39,13 @@ function Footer() {
         <img className="logo" src={footerlogo} />
         <br />
         <div className="txt__left">
-          내가 가고싶은 곳이 재조명 받는다면? free-traveler (이거는 나중에
-          원하는 멘트로 변경해야함.)
+          내가 가고싶은 곳이 재조명 받는다면? free-traveler
+          <br />
+          (주)gogo. | 대표이사 : 이상훈, 박성호, 정순범 손민 |
+          <br />
+          메일 : shapusan001@naver.com, shapusan001@gmail.com |
+          <br />
+          주소 : 부산광역시 엄광로 176 정보관 919호
         </div>
       </div>
       <div className="footer__center"> Copyright©Capstone-Longstone. </div>

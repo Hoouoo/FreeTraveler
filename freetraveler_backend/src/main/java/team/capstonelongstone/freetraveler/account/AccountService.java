@@ -80,6 +80,7 @@ public class AccountService {
      * 회원 정보 변경
      */
     public ResponseEntity changeAccount(HashMap<String,String> newAccount){
+        System.out.println(newAccount.toString());
         String userId = newAccount.get("userId");
         Account byUserId = accountRepository.findByUserId(userId);
         if(Objects.isNull(byUserId)){

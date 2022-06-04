@@ -13,7 +13,8 @@ export const getPost = (data) =>
   client.get("/post", { ...data, withCredentials: true });
 
 export const removePost = (data) =>
-  client.delete("/post", data, {
+  client.delete("/post", {
+    data: data,
     withCredentials: true,
   });
 
