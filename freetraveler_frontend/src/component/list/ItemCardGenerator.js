@@ -1,5 +1,13 @@
 import React from "react";
 import ItemCard from "./ItemCard";
+import styled from "styled-components";
+
+const ItemCardStyled = styled.div`
+  list-style: none;
+  ul {
+    list-style: none;
+  }
+`;
 
 class ItemCardGenerator {
   constructor() {
@@ -10,14 +18,19 @@ class ItemCardGenerator {
   //단일 아이템 카드 삽입
   addItemCard(itemcard) {
     this._array[this._index] = (
-      <li id={"itemcard_" + itemcard.id}>
+      <li key={"itemcard_" + itemcard.id} id={"itemcard_" + itemcard.id}>
         <ItemCard
-          img={itemcard.img}
-          name={itemcard.name}
-          how={itemcard.how}
-          days={itemcard.days}
+          id={itemcard.id}
+          author={itemcard.author}
+          repImg={itemcard.repImg}
+          postName={itemcard.postName}
+          totalTrans={itemcard.totalTrans}
+          totalDays={itemcard.totalDays}
           cost={itemcard.cost}
-          desc={itemcard.desc}
+          comment={itemcard.comment}
+          good={itemcard.good}
+          isGood={itemcard.isGood}
+          isPick={itemcard.isPick}
         />
       </li>
     );
@@ -30,6 +43,7 @@ class ItemCardGenerator {
       this._array[this._index] = (
         <li id={"itemcard_" + itemcard.id}>
           <ItemCard
+            id={itemcard.id}
             img={itemcard.img}
             name={itemcard.name}
             how={itemcard.how}
@@ -51,7 +65,11 @@ class ItemCardGenerator {
 
   //렌더링
   render() {
-    return <ul id="itemcard_list">{this._array}</ul>;
+    return (
+      <ItemCardStyled>
+        <ul id="itemcard_list">{this._array}</ul>
+      </ItemCardStyled>
+    );
   }
 }
 

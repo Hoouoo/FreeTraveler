@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import palette from "../../lib/styles/palette";
@@ -100,44 +101,181 @@ const textMap = {
 
 const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
   const text = textMap[type];
+
+  let [idIntegrity, setIdIntegrity] = useState("");
+  let [passwordIntegrity, setPasswordIntegrity] = useState("");
+  let [passConfirmIntegrity, setPassConfirmIntegrity] = useState("");
+  let [nameIntegrity, setNameIntegrity] = useState("");
+
+  let [passing, setPassing] = useState([false, false, false, false]);
+
+  let { password, passwordConfirm } = useSelector(({ auth: { register } }) => ({
+    password: register.password,
+    passwordConfirm: register.passwordConfirm,
+  }));
+
+  const onSubmitForm = (e) => {
+    e.preventDefault();
+    let tick = true;
+
+    if (type == "login") {
+      passing[1] = true;
+      passing[2] = true;
+      passing[3] = true;
+    }
+    for (let i = 0; i < passing.length; i++) {
+      if (passing[i] == false) {
+        console.log(passing[i]);
+        tick = false;
+      }
+    }
+    console.log(passing);
+    if (tick) {
+      onSubmit(e);
+    } else {
+      alert("입력을 다시 확인해주세요.");
+    }
+  };
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+
+    switch (name) {
+      case "username": {
+        let pass = false;
+        const regex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+        pass = regex.test(value);
+        if (!pass) {
+          setIdIntegrity("이메일 형식으로 입력해주세요.");
+        } else {
+          setIdIntegrity("");
+        }
+        passing[0] = pass;
+        break;
+      }
+      case "password": {
+        let pass = false;
+
+        if (type == "register") {
+          const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,20}$/;
+          pass = regex.test(value);
+          if (!pass) {
+            setPasswordIntegrity(
+              "알파벳, 숫자, 특수문자의 조합으로 8자에서 20자 사이로 입력해주세요."
+            );
+          } else {
+            setPasswordIntegrity("");
+            passing[1] = pass;
+          }
+          //비밀번호 일치 확인
+          pass = passwordConfirm == value;
+          if (!pass) {
+            setPassConfirmIntegrity("비밀번호와 일치 하지 않습니다.");
+          } else {
+            setPassConfirmIntegrity("");
+          }
+        } else if (type == "login") {
+          pass = value != "";
+          if (!pass) {
+            setPasswordIntegrity("비밀번호를 입력해주세요.");
+          } else {
+            setPasswordIntegrity("");
+          }
+        }
+        break;
+      }
+      case "passwordConfirm": {
+        let pass = false;
+        pass = password == value;
+        if (!pass) {
+          setPassConfirmIntegrity("비밀번호와 일치 하지 않습니다.");
+        } else {
+          setPassConfirmIntegrity("");
+        }
+        passing[2] = type == "register" ? pass : type == "login" ? true : false;
+        break;
+      }
+      case "name": {
+        let pass = false;
+        const regex = /^([가-힣]{2,4}|[a-zA-Z]{2,16})$/;
+        pass = regex.test(value);
+        if (!pass) {
+          setNameIntegrity(
+            "2자에서 4자사이 한글이나, 2자에서 16자사이 영어로 입력해주세요."
+          );
+        } else {
+          setNameIntegrity("");
+        }
+        passing[3] = type == "register" ? pass : type == "login" ? true : false;
+        break;
+      }
+    }
+  };
+
   return (
     <AuthFormBlock>
       <h3>{text}</h3>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmitForm}>
         <ErrorMesageBox>{error}</ErrorMesageBox>
         <LoginIdInput
           autoComplete="username"
           name="username"
           placeholder="아이디"
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e);
+            onChangeInput(e);
+          }}
           value={form.username}
         />
+        {idIntegrity != null && <ErrorMesageBox>{idIntegrity}</ErrorMesageBox>}
         <LoginPwInput
           autoComplete="new-password"
           name="password"
           placeholder="비밀번호"
           type="password"
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e);
+            onChangeInput(e);
+          }}
           value={form.password}
         />
-        {type === "register" && (
-          <LoginPwInput
-            autoComplete="new-password"
-            name="passwordConfirm"
-            placeholder="비밀번호 확인"
-            type="password"
-            onChange={onChange}
-            value={form.passwordConfirm}
-          />
+        {passwordIntegrity != null && (
+          <ErrorMesageBox>{passwordIntegrity}</ErrorMesageBox>
         )}
         {type === "register" && (
-          <LoginPwInput
-            autoComplete="name"
-            name="name"
-            placeholder="이름"
-            onChange={onChange}
-            value={form.name}
-          />
+          <>
+            <LoginPwInput
+              autoComplete="new-password"
+              name="passwordConfirm"
+              placeholder="비밀번호 확인"
+              type="password"
+              onChange={(e) => {
+                onChange(e);
+                onChangeInput(e);
+              }}
+              value={form.passwordConfirm}
+            />
+            {passwordIntegrity != null && (
+              <ErrorMesageBox>{passConfirmIntegrity}</ErrorMesageBox>
+            )}
+          </>
+        )}
+        {type === "register" && (
+          <>
+            <LoginPwInput
+              autoComplete="name"
+              name="name"
+              placeholder="이름"
+              onChange={(e) => {
+                onChange(e);
+                onChangeInput(e);
+              }}
+              value={form.name}
+            />
+            {nameIntegrity != null && (
+              <ErrorMesageBox>{nameIntegrity}</ErrorMesageBox>
+            )}
+          </>
         )}
         <ButtonWithMarginTop cyan fullWidth>
           {text}

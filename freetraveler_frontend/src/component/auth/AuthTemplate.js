@@ -79,13 +79,6 @@ const AuthTemplate = ({ children }) => {
             history.goBack();
           }}
         />
-        <LogoStyled>
-          <div className="logo">
-            <Link to="/">
-              <img className="logo__center" src={ftlogo} />
-            </Link>
-          </div>
-        </LogoStyled>
         {children}
       </WhiteBox>
     </AuthTemplateBlock>

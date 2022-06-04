@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 import team.capstonelongstone.freetraveler.post.board.Board;
 import team.capstonelongstone.freetraveler.post.board.BoardRepository;
@@ -21,6 +22,7 @@ import team.capstonelongstone.freetraveler.post.day.DayService;
 import team.capstonelongstone.freetraveler.post.img.ImgService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -50,8 +52,9 @@ public class PostController {
     @CheckSession
     @PostMapping("/post") 
     @ResponseBody
-    public ResponseEntity<?> generateBoard(HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws JSONException, IOException {
+    public ResponseEntity<?> generateBoard(HttpServletRequest request, @RequestParam(value = "repImg", required = false)MultipartFile file) throws JSONException, IOException {
 
+        String requestFile = request.getParameter("repImg");
         String mode = request.getParameter("mode");
         if (mode.equals("write")) { //게시글 등록
             try {
@@ -67,7 +70,6 @@ public class PostController {
             }
         }
         else{ //게시글 수정
-            log.info("수정영역입니둥~~");
             try {
                 Long targetBoardId = Long.parseLong(request.getParameter("id"));
                 Board board = boardService.getBoard(targetBoardId);
@@ -104,8 +106,8 @@ public class PostController {
      */
     @CheckSession
     @DeleteMapping("/post")
-    public ResponseEntity deletePost(@RequestBody HashMap<String,String >id){
-        String boardId = id.get("id");
+    public ResponseEntity deletePost(@RequestBody HashMap<String,HashMap<String, String> >id){
+        String boardId = id.get("data").get("id");
         try {
             imgService.deleteImg(boardId);
             postService.deletePost(boardId); //board 지우면 day, place 같이 지워짐

@@ -16,6 +16,7 @@ import team.capstonelongstone.freetraveler.post.place.PlaceRepository;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,8 +57,8 @@ public class DayService {
 
                 MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
                 MultipartFile file = multipartRequest.getFile(varImg);
-                List<String> list = null;
-                if (file.getSize() != 0) {
+                List<String> list = new ArrayList<>();
+                if (file != null && !file.isEmpty()) {
                     list = imgService.daySaveImg(request, file, day, j);
                 }
 
@@ -71,8 +72,11 @@ public class DayService {
                     Board targetBoard = boardRepository.findById(id).orElse(null);
                     if (Objects.nonNull(targetBoard)) {
                         if (Objects.nonNull(targetDay)) {
+                            // 이미지 변경이 없는 경우
                             List<Long> listPlaceId = placeRepository.listPlaceIdByDay(targetDay.getId());
-                            list = imgService.dayModifyImg(listPlaceId.get(j),request,day,j);
+                            if(Objects.isNull(file)) {
+                                list = imgService.dayModifyImg(listPlaceId.get(j), request, day, j);
+                            }
                             Place place = Place.builder().id(listPlaceId.get(j)).day(targetDay).name(request.getParameter(day + "_" + j + "_" + "name"))
                                     .address(request.getParameter(day + "_" + j + "_" + "loc")).cost(Integer.valueOf(request.getParameter(day + "_" + j + "_" + "cost")))
                                     .review(request.getParameter(day + "_" + j + "_" + "content")).transportation(request.getParameter(day + "_" + j + "_" + "trans"))

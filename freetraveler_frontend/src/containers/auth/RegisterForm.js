@@ -49,22 +49,16 @@ const RegisterForm = ({ history }) => {
   // 회원가입 성공/실패 처리
   useEffect(() => {
     if (authError) {
-      setError("유효성 안맞음.");
+      const errorMsg = authError.response.data;
+      setError(errorMsg);
       return;
     }
     if (auth) {
-      console.log("회원가입 성공");
-      console.log(auth);
       alert("회원가입 성공!");
       dispatch(check());
+      history.push("/login");
     }
   }, [auth, authError, dispatch]);
-
-  useEffect(() => {
-    if (user) {
-      history.push("/");
-    }
-  }, [user, history]);
 
   return (
     <AuthForm

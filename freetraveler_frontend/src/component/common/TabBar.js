@@ -3,12 +3,16 @@ import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import palette from "../../lib/styles/palette";
+import { Link } from "react-router-dom";
 
 import {
   RiHomeSmile2Line,
   RiHomeSmile2Fill,
   RiUser5Fill,
   RiFileList2Line,
+  RiUserHeartFill,
+  RiUserHeartLine,
 } from "react-icons/ri";
 import {
   RiUser5Line,
@@ -32,7 +36,7 @@ const TabBarStyled = styled.div`
     align-items: center;
     position: fixed;
     bottom: 0;
-    border-top: 1px solid rgb(230, 230, 230);
+    border-top: 1px solid ${palette.gray[4]};
     padding-top: 5px;
     background-color: white;
   }
@@ -45,7 +49,8 @@ const TabBarStyled = styled.div`
     align-items: center;
   }
   .bn-tab {
-    width: 22%;
+    cursor: pointer;
+    width: 15%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -68,6 +73,10 @@ const TabBarStyled = styled.div`
       flex-direction: column;
       align-items: center;
     }
+    .bn-tab {
+      width: 22%;
+      font-size: 12px;
+    }
   }
 `;
 
@@ -77,107 +86,120 @@ const TabBar = (props) => {
 
   const [activeTabs, setActiveTabs] = useState(props.name);
 
-  const tabbarPath = ["/", "/home", "/pick", "/post", "/account"];
+  const tabbarPath = [
+    "/",
+    "/home",
+    "/pick",
+    "/posting/list",
+    "/account",
+    "/follow",
+  ];
 
   const { user } = useSelector(({ user }) => ({
     user: user.user,
   }));
 
   useEffect(() => {
-    //if (user != null) {
-    switch (activeTabs) {
-      case "home":
-        history.push("/");
+    switch (location.pathname) {
+      case "/":
+        setActiveTabs("home");
         break;
-      case "pick":
-        history.push("/pick");
+      case "/home":
+        setActiveTabs("home");
+      case "/pick":
+        setActiveTabs("pick");
         break;
-      case "post":
-        history.push("/post");
+      case "/posting/list":
+        setActiveTabs("post");
         break;
-      case "account":
-        history.push("/account");
+      case "/account":
+        setActiveTabs("account");
         break;
-      default:
+      case "/follow":
+        setActiveTabs("follow");
         break;
     }
-    //}
-  }, [activeTabs, user]);
+  }, [activeTabs, location]);
 
   if (!tabbarPath.includes(history.location.pathname)) {
     return <></>;
   }
+
+  const homeButtonClick = () => {
+    history.push("/");
+  };
+
+  const postButtonClick = () => {
+    history.push({
+      pathname: "/posting/list",
+      search: `page=${0}&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false`,
+    });
+  };
+
+  const pickButtonClick = () => {
+    history.push({
+      pathname: "/pick",
+      search: `page=${0}&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=pick&isMine=false`,
+    });
+  };
+
+  const accountButtonClick = () => {
+    history.push("/account");
+  };
+
+  const followButtonClick = () => {
+    history.push("/follow");
+  };
+
   return (
     <TabBarStyled>
       <div className="bottom-nav">
-        <div className="bn-tab">
+        <div className="bn-tab" onClick={() => homeButtonClick()}>
           <div className="box">
-            {location.pathname == "/home" || location.pathname == "/" ? (
-              <RiHomeSmile2Fill
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("home")}
-              />
+            {activeTabs == "home" ? (
+              <RiHomeSmile2Fill size="25" color="#000" />
             ) : (
-              <RiHomeSmile2Line
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("home")}
-              />
+              <RiHomeSmile2Line size="25" color="#000" />
             )}
           </div>
           <div className="box">HOME</div>
         </div>
-        <div className="bn-tab">
+        <div className="bn-tab" onClick={() => pickButtonClick()}>
           <div className="box">
-            {location.pathname == "/pick" ? (
-              <RiRoadMapFill
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("pick")}
-              />
+            {activeTabs == "pick" ? (
+              <RiRoadMapFill size="25" color="#000" />
             ) : (
-              <RiRoadMapLine
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("pick")}
-              />
+              <RiRoadMapLine size="25" color="#000" />
             )}
           </div>
           <div className="box">MY PICK</div>
         </div>
-        <div className="bn-tab">
+        <div className="bn-tab" onClick={() => postButtonClick()}>
           <div className="box">
-            {location.pathname == "/post" ? (
-              <RiFileList2Fill
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("post")}
-              />
+            {activeTabs == "post" ? (
+              <RiFileList2Fill size="25" color="#000" />
             ) : (
-              <RiFileList2Line
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("post")}
-              />
+              <RiFileList2Line size="25" color="#000" />
             )}
           </div>
           <div className="box">POST</div>
         </div>
-        <div className="bn-tab">
+        <div className="bn-tab" onClick={() => followButtonClick()}>
           <div className="box">
-            {location.pathname == "/account" ? (
-              <RiUser5Fill
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("account")}
-              />
+            {activeTabs == "follow" ? (
+              <RiUserHeartFill size="25" color="#000" />
             ) : (
-              <RiUser5Line
-                size="25"
-                color="#000"
-                onClick={() => setActiveTabs("account")}
-              />
+              <RiUserHeartLine size="25" color="#000" />
+            )}
+          </div>
+          <div className="box">FOLLOW</div>
+        </div>
+        <div className="bn-tab" onClick={() => accountButtonClick()}>
+          <div className="box">
+            {activeTabs == "account" ? (
+              <RiUser5Fill size="25" color="#000" />
+            ) : (
+              <RiUser5Line size="25" color="#000" />
             )}
           </div>
           <div className="box">ACCOUNT</div>

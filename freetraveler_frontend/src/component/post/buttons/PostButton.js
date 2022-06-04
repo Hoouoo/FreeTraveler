@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import palette from "../../../lib/styles/palette";
 
 const StyledButton = styled.button`
   /* 공통 스타일 */
@@ -20,17 +21,34 @@ const StyledButton = styled.button`
   font-size: 1rem;
 
   /* 색상 */
-  background: rgb(0, 241, 180);
+  background: ${palette.mint[1]};
   &:hover {
-    background: rgb(0, 241, 175);
+    background: ${palette.mint[0]};
   }
   &:active {
-    background: rgb(0, 241, 175);
+    background: ${palette.mint[0]};
   }
-
   /* 기타 */
   & + & {
     margin-left: 1rem;
+  }
+  .bottom_button_container {
+    position: fixed;
+    right: 1.2rem;
+    bottom: 0px;
+    z-index: 10;
+    transform: translateY(-5rem);
+    transition-duration: 0.25s, 0.25s;
+    transition-timing-function: cubic-bezier(0.75, 0.25, 0.25, 0.75),
+      cubic-bezier(0.75, 0.25, 0.25, 0.75);
+    transition-delay: initial, initial;
+    transition-property: transform, transform;
+  }
+
+  @media screen and (max-width: 612px) {
+    /* 크기 */
+    height: 2rem;
+    font-size: 13px;
   }
 `;
 

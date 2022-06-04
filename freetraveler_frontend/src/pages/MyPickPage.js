@@ -1,15 +1,15 @@
 import React from "react";
 import Footer from "../component/common/Footer";
+import MyPickContainer from "../containers/post/MypickContainer";
 import PostReadContainer from "../containers/post/PostReadContainer";
-import PostWriteContainer from "../containers/post/PostWriteContainer";
 
-function Home() {
+const MyPickPage = () => {
   return (
     <>
-      <PostWriteContainer id="id" mode="mode"/>
+      <MyPickContainer />
       <Footer />
     </>
   );
-}
+};
 
-export default Home;
+export default MyPickPage;

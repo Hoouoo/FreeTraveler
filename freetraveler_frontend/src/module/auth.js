@@ -76,18 +76,20 @@ const auth = handleActions(
       authError: null, //폼 전환 시 회원 인증  에러 초기화
     }),
     //회원가입 성공
-    [REGISTER_SUCCESS]: (state, { payload: auth }) => ({
-      ...state,
-      authError: null,
-      auth,
-    }),
-    [REGISTER_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      authError: error,
-    }),
+    [REGISTER_SUCCESS]: (state, { payload: auth }) => {
+      return {
+        ...state,
+        auth,
+      };
+    },
+    [REGISTER_FAILURE]: (state, { payload: error }) => {
+      return {
+        ...state,
+        authError: error,
+      };
+    },
     [LOGIN_SUCCESS]: (state, { payload: auth }) => ({
       ...state,
-      authError: null,
       auth,
     }),
     [LOGIN_FAILURE]: (state, { payload: error }) => ({

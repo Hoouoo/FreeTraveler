@@ -9,6 +9,8 @@ import { logout } from "../../module/user";
 import { IoChevronBack } from "react-icons/io5";
 
 const HeaderStyled = styled.div`
+  margin-top: 100px;
+  z-index: 2;
   max-width: 100%;
   margin: 0 auto;
   display: flex;
@@ -22,6 +24,7 @@ const HeaderStyled = styled.div`
   border-bottom: 1px solid rgb(230, 230, 230);
 
   .logo__center {
+    cursor: pointer;
     width: auto;
     height: 35px;
     margin-left: 150px;
@@ -70,6 +73,7 @@ const HeaderStyled = styled.div`
     text-decoration: none;
   }
   a:hover {
+    cursor: pointer;
     text-decoration: none;
   }
   a:focus {
@@ -78,6 +82,10 @@ const HeaderStyled = styled.div`
   a:hover,
   a:active {
     text-decoration: none;
+  }
+
+  div:hover {
+    cursor: pointer;
   }
 
   span {
@@ -149,7 +157,9 @@ function Header({}) {
 
       {/* logo */}
       <div className="logo">
-        <img className="logo__center" src={ftlogo} />
+        <Link to="/" onClick={() => history.push("/")}>
+          <img className="logo__center" src={ftlogo} />
+        </Link>
       </div>
 
       {/* 네비게이션 토글 코드*/}
@@ -166,7 +176,9 @@ function Header({}) {
       <ul className="header__right">
         {user == null && (
           <li>
-            <a href="/login">Login</a>
+            <Link to={"/login"}>
+              <a href="/login">Login</a>
+            </Link>
           </li>
         )}
         {user !== null && (
@@ -174,7 +186,6 @@ function Header({}) {
             <a onClick={Logout}>Logout</a>
           </li>
         )}
-        <li>Search</li>
       </ul>
     </HeaderStyled>
   );

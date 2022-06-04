@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeField, initializeForm, login } from "../../module/auth";
 import AuthForm from "../../component/auth/AuthForm";
-import { withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import { check } from "../../module/user";
 
 const LoginForm = ({ history }) => {
@@ -33,6 +33,7 @@ const LoginForm = ({ history }) => {
     e.preventDefault();
     const { username, password } = form;
     dispatch(login({ username, password }));
+    dispatch(check());
   };
 
   //컴포넌트가 처음 렌더링될 때 form을 초기화함
@@ -47,10 +48,12 @@ const LoginForm = ({ history }) => {
       return;
     }
     if (auth) {
-      console.log("로그인 성공");
       dispatch(check());
     }
-  }, [auth, authError, dispatch]);
+    if (user) {
+      alert("로그인 성공");
+    }
+  }, [auth, user, authError, dispatch, history]);
 
   //로그인되면 자동으로 홈 화면 이동
   useEffect(() => {

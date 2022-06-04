@@ -1,17 +1,19 @@
 import { call, put } from "redux-saga/effects";
 import { startLoading, finishLoading } from "../module/loading";
+import { check } from "../module/user";
 import client from "./api/client";
 import { setCookie } from "./cookie";
+import userAPI from "../module/user";
 
 export const createRequestActionTypes = (type) => {
-  const SUCCESS = "${type}_SUCCESS";
-  const FAILURE = "${type}_FAILURE";
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
   return [type, SUCCESS, FAILURE];
 };
 
 export default function createRequestSaga(type, request) {
-  const SUCCESS = "${type}_SUCCESS";
-  const FAILURE = "${type}_FAILURE";
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
 
   return function* (action) {
     yield put(startLoading(type));
