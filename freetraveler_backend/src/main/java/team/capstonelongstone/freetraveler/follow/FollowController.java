@@ -5,10 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import team.capstonelongstone.freetraveler.account.AccountRepository;
+import team.capstonelongstone.freetraveler.follow.domain.Follow;
 import team.capstonelongstone.freetraveler.follow.dto.FollowResponseDto;
 import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +51,11 @@ public class FollowController {
         if(Objects.isNull(targetList)){
             return ResponseEntity.badRequest().body("잘못된 접근입니다.");
         }
-        return ResponseEntity.ok().body(targetList);
+        HashMap<String, List<FollowResponseDto>> targetReturn = new HashMap<>();
+        for(int idx = 0; idx < targetList.size(); idx++){
+            targetReturn.put("list", Collections.singletonList(targetList.get(idx)));
+        }
+        return ResponseEntity.ok().body(targetReturn);
     }
 
 
