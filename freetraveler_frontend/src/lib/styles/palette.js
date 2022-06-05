@@ -50,6 +50,8 @@ const palette = {
     "#7B00FF",
     "#FF01FF",
   ],
+
+  btn: ["#fdfdfd", "#ebebeb", "#e2e2e2"],
 };
 
 export default palette;

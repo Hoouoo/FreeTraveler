@@ -105,10 +105,10 @@ const ScrollBarButton = styled.button`
   font-size: 12px;
   line-height: normal;
   vertical-align: middle;
-  background-color: #fdfdfd;
+  background-color: ${palette.btn[0]};
   cursor: pointer;
-  border: 1px solid #ebebeb;
-  border-bottom-color: #e2e2e2;
+  border: 1px solid ${palette.btn[1]};
+  border-bottom-color: ${palette.btn[2]};
   border-radius: 0.35em;
 `;
 
