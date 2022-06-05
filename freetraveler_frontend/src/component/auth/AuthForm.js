@@ -232,7 +232,7 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
           autoComplete="new-password"
           name="password"
           placeholder="비밀번호"
-          type="password"
+          // type="password"
           onChange={(e) => {
             onChange(e);
             onChangeInput(e);

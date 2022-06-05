@@ -2,13 +2,6 @@ import React from "react";
 import FollowCard from "../../../component/list/FollowCard";
 import styled from "styled-components";
 
-const FollowCardStyled = styled.div`
-  list-style: none;
-  ul {
-    list-style: none;
-  }
-`;
-
 class FollowCardGenerator {
   constructor() {
     this._array = new Array();
@@ -42,11 +35,7 @@ class FollowCardGenerator {
 
   //렌더링
   render() {
-    return (
-      <FollowCardStyled>
-        <div id="followCardList">{this._array}</div>
-      </FollowCardStyled>
-    );
+    return this._array;
   }
 }
 

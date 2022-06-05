@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FollowCard from "../../component/list/FollowCard";
-import { getFollowList } from "../../module/follow";
+import { addFollow, getFollowList } from "../../module/follow";
 import { faPlus, faUserMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FollowCardGenerator from "./generator/FollowGenerator";
@@ -69,12 +69,17 @@ const SearchBox = styled.div`
 export default function FollowContainer() {
   let [gen, setGen] = useState(new FollowCardGenerator());
   let [render, setRender] = useState(gen.render());
+  let [search, setSearch] = useState("");
 
   const dispatch = useDispatch();
-  const { followList, user } = useSelector(({ follow, user }) => ({
-    followList: follow.getFollowList,
-    user: user.user,
-  }));
+  const { loading, followList, user, loadingAdd, loadingRemove } = useSelector(
+    ({ follow, user, loading }) => ({
+      loadingAdd: loading.follow_ADD_FOLLOW,
+      loadingRemove: loading.follow_REMOVE_FOLLOW,
+      followList: follow.getFollowList,
+      user: user.user,
+    })
+  );
 
   const getData = () => {
     if (user != null) {
@@ -82,18 +87,17 @@ export default function FollowContainer() {
     }
   };
 
-  const searchButtonClick = () => {};
+  const searchButtonClick = (e) => {
+    e.preventDefault();
+    dispatch(addFollow({ id: search }));
+  };
   useEffect(() => {
     getData();
-    gen.addFollowCard({
-      id: 1,
-      name: "사람",
-      gen: gen,
-    });
-    setRender(gen.render());
-  }, []);
+  }, [loadingAdd, loadingRemove]);
 
   useEffect(() => {
+    gen.clear();
+    setRender(gen.render());
     if (
       followList != undefined &&
       followList != null &&
@@ -101,8 +105,8 @@ export default function FollowContainer() {
     ) {
       for (let i = 0; i < followList.list.length; i++) {
         gen.addFollowCard({
-          id: followList.id,
-          name: followList.name,
+          id: followList.list[i].id,
+          name: followList.list[i].name,
           gen: gen,
         });
       }
@@ -110,19 +114,31 @@ export default function FollowContainer() {
     }
   }, [followList]);
 
+  const onChange = (e) => {
+    let { name, value } = e.target;
+    if (name == "searchInput") {
+      setSearch(value);
+    }
+  };
+
   return (
     <div>
       <FollowBox>
         <SearchBox>
-          <SearchButton onClick={() => searchButtonClick()}>
-            <FontAwesomeIcon icon={faPlus} />
-          </SearchButton>
-          <SearchInput placeholder=" 팔로우 대상" />
+          <form onSubmit={(e) => searchButtonClick(e)}>
+            <SearchButton>
+              <FontAwesomeIcon icon={faPlus} />
+            </SearchButton>
+            <SearchInput
+              name="searchInput"
+              value={search}
+              onChange={onChange}
+              placeholder=" 팔로우 대상"
+            />
+          </form>
         </SearchBox>
-        <FollowGridBox>
-          <FollowCard />
-          {render}
-        </FollowGridBox>
+
+        <FollowGridBox>{render}</FollowGridBox>
       </FollowBox>
     </div>
   );

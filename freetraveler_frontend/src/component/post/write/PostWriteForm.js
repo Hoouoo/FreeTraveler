@@ -549,7 +549,7 @@ export default function PostWriteForm({ id, mode }) {
     if (postCheck) {
       alert("포스팅 성공");
       history.replace(
-        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false"
+        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false&friend="
       );
       history.push("/posting/read?id=" + postedId);
       dispatch(postCheckFalse());

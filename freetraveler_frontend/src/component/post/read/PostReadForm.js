@@ -862,7 +862,7 @@ export default function PostReadForm({ id }) {
   useEffect(() => {
     if (postRemoveCheck) {
       history.push(
-        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false"
+        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false&friend="
       );
       dispatch(postRemoveCheckFalse());
     }

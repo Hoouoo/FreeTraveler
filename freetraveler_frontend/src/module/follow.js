@@ -6,11 +6,11 @@ import * as followAPI from "../lib/api/follow";
 import { takeLatest } from "redux-saga/effects";
 
 const [ADD_FOLLOW, ADD_FOLLOW_SUCCESS, ADD_FOLLOW_FAILURE] =
-  createRequestActionTypes("follow/ADD_FOLLOW");
+  createRequestActionTypes("follow_ADD_FOLLOW");
 const [REMOVE_FOLLOW, REMOVE_FOLLOW_SUCCESS, REMOVE_FOLLOW_FAILURE] =
-  createRequestActionTypes("follow//REMOVE_FOLLOW");
+  createRequestActionTypes("follow_REMOVE_FOLLOW");
 const [GET_FOLLOW_LIST, GET_FOLLOW_LIST_SUCCESS, GET_FOLLOW_LIST_FAILURE] =
-  createRequestActionTypes("follow/GET_FOLLOW_LIST");
+  createRequestActionTypes("follow_GET_FOLLOW_LIST");
 
 export const addFollow = createAction(ADD_FOLLOW, (data) => data);
 export const removeFollow = createAction(REMOVE_FOLLOW, (data) => data);

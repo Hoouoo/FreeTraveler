@@ -132,14 +132,14 @@ const TabBar = (props) => {
   const postButtonClick = () => {
     history.push({
       pathname: "/posting/list",
-      search: `page=${0}&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false`,
+      search: `page=${0}&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false&friend=`,
     });
   };
 
   const pickButtonClick = () => {
     history.push({
       pathname: "/pick",
-      search: `page=${0}&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=pick&isMine=false`,
+      search: `page=${0}&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=pick&isMine=false&friend=`,
     });
   };
 

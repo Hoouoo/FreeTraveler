@@ -5,6 +5,7 @@ import { faPlus, faUserMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { removeFollow } from "../../module/follow";
+import { useHistory } from "react-router-dom";
 
 const FollowBox = styled.div`
   width: auto;
@@ -125,13 +126,18 @@ const SearchBox = styled.div`
 
 const FollowCard = ({ id = "id", name = "작성자", gen = null, index = 0 }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const followRemoveAction = () => {
     gen.remove(index);
-    dispatch(removeFollow({ id: id }));
+    dispatch(removeFollow({ data: { id: id } }));
   };
 
-  const searchButtonClick = () => {};
+  const gotoFriendPost = () => {
+    history.push(
+      `/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false&friend=${id}`
+    );
+  };
 
   return (
     // <FollowBox>
@@ -147,12 +153,22 @@ const FollowCard = ({ id = "id", name = "작성자", gen = null, index = 0 }) =>
     // </FollowBox>
 
     <FollowCardBox>
-      <FollowSubGridBox>
+      <FollowSubGridBox
+        onClick={() => {
+          gotoFriendPost();
+        }}
+      >
         <FollowIdText>{id}</FollowIdText>
       </FollowSubGridBox>
 
       <FollowSubGridBox>
-        <FollowNameText>{name}</FollowNameText>
+        <FollowNameText
+          onClick={() => {
+            gotoFriendPost();
+          }}
+        >
+          {name}
+        </FollowNameText>
         <FollowMinusButton onClick={() => followRemoveAction()}>
           <FontAwesomeIcon icon={faUserMinus} />
         </FollowMinusButton>
