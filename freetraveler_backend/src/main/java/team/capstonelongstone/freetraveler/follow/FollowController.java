@@ -3,12 +3,17 @@ package team.capstonelongstone.freetraveler.follow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import team.capstonelongstone.freetraveler.account.AccountRepository;
+import team.capstonelongstone.freetraveler.follow.domain.Follow;
+import team.capstonelongstone.freetraveler.follow.dto.FollowResponseDto;
 import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 정순범
@@ -26,14 +31,32 @@ public class FollowController {
 
     @CheckSession
     @PostMapping("/follow")
-    public ResponseEntity addFollow(HttpServletRequest request, String targetId){
-        return followService.addFollow(request,targetId);
+    public ResponseEntity addFollow(HttpServletRequest request,@RequestBody  HashMap<String, String> id){
+
+        return followService.addFollow(request,id.get("id"));
     }
 
     @CheckSession
     @DeleteMapping("/follow")
-    public ResponseEntity deleteFollow(HttpServletRequest request,String targetId){
+    public ResponseEntity deleteFollow(HttpServletRequest request, @RequestBody HashMap<String, HashMap<String, String>> id){
+        String targetId = id.get("data").get("id");
+
         return followService.deleteFollow(request, targetId);
     }
+
+    @CheckSession
+    @PostMapping("/follow/list")
+    public ResponseEntity<?> getFollowList(@RequestBody HashMap<String, String> targetId){
+        List<FollowResponseDto> targetList = followService.listFollow(targetId.get("id"));
+        if(Objects.isNull(targetList)){
+            return ResponseEntity.badRequest().body("잘못된 접근입니다.");
+        }
+        HashMap<String, List<FollowResponseDto>> targetReturn = new HashMap<>();
+        for(int idx = 0; idx < targetList.size(); idx++){
+            targetReturn.put("list", Collections.singletonList(targetList.get(idx)));
+        }
+        return ResponseEntity.ok().body(targetReturn);
+    }
+
 
 }

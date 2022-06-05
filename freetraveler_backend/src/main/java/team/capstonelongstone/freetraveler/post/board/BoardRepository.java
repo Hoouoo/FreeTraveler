@@ -57,4 +57,9 @@ public interface BoardRepository extends JpaRepository<Board,Long>{
     Page<Board> findAllIsMine(Pageable pageableMine,
                               @Param("id")Long id);
 
+    @Query("select b from Board as b where b.author.userId=:friendsId and b.postName like %:search%")
+    Page<Board> findAllByFriend(Pageable pageableMine,
+                              @Param("friendsId")String friendsId,
+                                @Param("search")String search);
+
 }
