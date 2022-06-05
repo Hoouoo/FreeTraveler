@@ -52,9 +52,7 @@ public class FollowController {
             return ResponseEntity.badRequest().body("잘못된 접근입니다.");
         }
         HashMap<String, List<FollowResponseDto>> targetReturn = new HashMap<>();
-        for(int idx = 0; idx < targetList.size(); idx++){
-            targetReturn.put("list", Collections.singletonList(targetList.get(idx)));
-        }
+        targetReturn.put("list", targetList);
         return ResponseEntity.ok().body(targetReturn);
     }
 
