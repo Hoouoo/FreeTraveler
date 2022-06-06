@@ -142,7 +142,6 @@ public class ImgService {
         if (Objects.nonNull(targetBoard)){
             ImgUUID = targetBoard.getAuthor().getUserId() + "_" + day + "_" + j + "_" + targetBoard.getId();
         }
-
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
         uploadImg(file, ImgUUID, suffix);
