@@ -97,6 +97,19 @@ public class ImgService {
     }
 
     /**
+     * board 수정 시 이미지가 저장되는 경우
+     */
+    public List<String> boardModifyImg(String name, MultipartFile file) throws IOException {
+
+        String ImgUUID = name + "_" + (getImgId()+1); //대표 이미지 UUID
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
+        uploadImg(file, ImgUUID, suffix);
+
+        return getImgPath_Name(ImgUUID, suffix);
+
+    }
+
+    /**
      * 보드 수정 시 사용할 메서드
      */
     public List<String> boardModifyImg(Long id, HttpServletRequest request) throws IOException{
@@ -134,7 +147,17 @@ public class ImgService {
         uploadImg(file, ImgUUID, suffix);
         return getImgPath_Name(ImgUUID, suffix);
     }
+    /**
+     * day, place 저장
+     */
+    public List<String> dayModifyImg(String name, HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
 
+        String ImgUUID = name + "_" + day + "_" + j + "_" + getImgId();
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
+
+        uploadImg(file, ImgUUID, suffix);
+        return getImgPath_Name(ImgUUID, suffix);
+    }
 
     public List<String> dayModifyImg(Long placeId, HttpServletRequest request, int day, int j) throws IOException {
 
