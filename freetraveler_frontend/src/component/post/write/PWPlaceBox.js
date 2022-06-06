@@ -8,6 +8,7 @@ import { FormControl, TextField, NativeSelect } from "@mui/material";
 import DaumPostcode from "react-daum-postcode";
 import { IoSearchSharp } from "react-icons/io5";
 import axios from "axios";
+import palette from "../../../lib/styles/palette";
 
 // const load_url = function (url) {
 //   var req = new XMLHttpRequest();
@@ -70,6 +71,7 @@ const PWPlaceBoxTemplate = styled.div`
       padding-left: 15%;
       padding-right: 15%;
     }
+    /* margin: 0; */
   }
   @media screen and (min-width: 1012px) {
     .button {
@@ -103,6 +105,17 @@ const PostInputTitle = styled.div`
 const PostInput = styled.div`
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+  .file {
+    /* padding: 0.2em 0.5em; */
+    color: black;
+    font-size: 12px;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #fdfdfd;
+    cursor: pointer;
+    border: 1px solid #ebebeb;
+    border-bottom-color: #e2e2e2;
+  }
 `;
 
 const PlaceRemoveBtn = styled.div`
@@ -130,6 +143,45 @@ const ErrorMesageBox = styled.div`
   color: red;
   margin-bottom: 20px;
   font-size: 10pt;
+`;
+
+const FileInputBox = styled.div`
+  border: 1px solid gray;
+  padding: 1rem 1rem;
+`;
+
+const FileInput = styled.div`
+  label {
+    /* cursor: pointer;
+    padding-bottom: -5px;
+    display: inline-block;
+    color: gray;
+    font-size: 15px; */
+    /* padding: 0.2em 0.5em; */
+    color: black;
+    font-size: 12px;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #fdfdfd;
+    cursor: pointer;
+    border: 1px solid #ebebeb;
+    border-bottom-color: #e2e2e2;
+    /* width: 100%;
+    height: 30px;
+    margin-left: 0.5rem;
+    border-bottom: 1px solid ${palette.mint[0]}; */
+    :hover {
+      color: black;
+    }
+  }
+  input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+  }
 `;
 
 export default function PWPlaceBox({ did, pid, gen, data }) {
@@ -460,6 +512,20 @@ export default function PWPlaceBox({ did, pid, gen, data }) {
       <PostPreviewImage>
         <img src={previewImg} />
       </PostPreviewImage>
+      {/* <FileInputBox>
+        <FileInput>
+          <label for="file">파일찾기</label>
+          <input
+            id={did + "_" + pid + "_img"}
+            name={did + "_" + pid + "_img"}
+            type="file"
+            onClick={() => onClosePost()}
+            accept="image/*"
+            onChange={onChange}
+          />
+        </FileInput>
+      </FileInputBox> */}
+
       <PostInput>
         <TextField
           fullWidth

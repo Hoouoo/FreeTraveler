@@ -77,7 +77,8 @@ public class BoardService {
     public void modifyBoard(Long id,HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws IOException {
 
         HttpSession session=request.getSession();
-        Account account = (Account) session.getAttribute("account");
+        Board accountByBoard = boardRepository.findById(id).orElse(null);
+        Account account = Objects.requireNonNull(accountByBoard).getAuthor();
 
         String postName = request.getParameter("postName");
         Integer totalDays = Integer.valueOf(request.getParameter("totalDays"));
@@ -107,7 +108,8 @@ public class BoardService {
                 boardRepository.save(targetBoard);
             });
         }else{
-            List<String>list = imgService.boardSaveImg(request, file);
+//            List<String>list = imgService.boardSaveImg(request, file);
+            List<String>list = imgService.boardModifyImg(id, file);
             int finalSumTotalCost = sumTotalCost;
             boardRepository.findById(id).ifPresent(target -> {
                 BoardDto boardDto = BoardDto.builder().postName(postName).totalDays(totalDays).totalCost(finalSumTotalCost).comment(comment).goodCnt(0)

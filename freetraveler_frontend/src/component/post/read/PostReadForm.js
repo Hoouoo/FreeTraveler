@@ -868,6 +868,7 @@ export default function PostReadForm({ id }) {
   useEffect(() => {
     //setData(select);
     //캐시 비우기
+    gen.clear();
     getData();
   }, []);
 
@@ -910,7 +911,9 @@ export default function PostReadForm({ id }) {
       }
 
       setIsCrossView(data.isCross);
-      setIsMyPost(user.userId == data.author);
+      if (user != null) {
+        setIsMyPost(user.userId == data.author);
+      }
     }
   }, [data, location]);
 
@@ -1053,9 +1056,11 @@ export default function PostReadForm({ id }) {
                 {"  "}내 글
               </div>
             </MyPost>
-            <br />
+            {isCrossView == false && isMyPost == false && <br />}
             {data.time}
-            {(user.userId == data.author || data.isCross == true) && (
+            {(user != null
+              ? user.userId == data.author /*|| data.isCross == true*/
+              : false) && (
               <MenuBar>
                 <div className="menubar">
                   <li>
@@ -1081,17 +1086,16 @@ export default function PostReadForm({ id }) {
                               {/* </ModifyButton> */}
                             </a>
                           </li>
+                          {/*
                           <li className="menubar-border-bottom">
                             <a onClick={() => linkToModifyList()}>
-                              {/* <ModifyButton onClick={() => linkToModify()}> */}
 
                               <div className="menubar-dark-text">
                                 수정 로그 보기
                               </div>
-
-                              {/* </ModifyButton> */}
-                            </a>
+                           </a>
                           </li>
+                          */}
                           <li>
                             <a onClick={() => deleteBoard()}>
                               {/* <DeleteButton onClick={() => deleteBoard()}> */}

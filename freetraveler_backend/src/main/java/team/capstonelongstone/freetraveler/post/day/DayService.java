@@ -2,6 +2,7 @@ package team.capstonelongstone.freetraveler.post.day;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import java.util.Objects;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DayService {
 
     private final DayRepository dayRepository;
@@ -41,9 +43,9 @@ public class DayService {
     public void generateDay(Long id, HttpServletRequest request, Board board) throws JSONException, IOException {
 
         Integer totalDays = Integer.valueOf(request.getParameter("totalDays"));
-
         for (int day = 0; day < totalDays; day++) {
             String varPlength = day + "_plength";
+
             Integer _plength = Integer.valueOf(request.getParameter(varPlength));
             Day newDay = Day.builder().day(day + 1).board(board).build();
             // 보드 Id와 day(일수)를 통해 보드 id와 몇 일인지 가지는 Day(객체) Entity를 추출
@@ -68,9 +70,7 @@ public class DayService {
                  * 수정 부분
                  */
                 if (Objects.nonNull(id)) {
-
                     Board targetBoard = boardRepository.findById(id).orElse(null);
-                    list = imgService.daySaveImg(request, file, day, j);
                     if (Objects.nonNull(targetBoard)) {
                         if (Objects.nonNull(targetDay)) {
                             // 이미지 변경이 없는 경우
@@ -78,11 +78,20 @@ public class DayService {
                             if(Objects.isNull(file)) {
                                 list = imgService.dayModifyImg(listPlaceId.get(j), request, day, j);
                             }
-                            Place place = Place.builder().id(listPlaceId.get(j)).day(targetDay).name(request.getParameter(day + "_" + j + "_" + "name"))
-                                    .address(request.getParameter(day + "_" + j + "_" + "loc")).cost(Integer.valueOf(request.getParameter(day + "_" + j + "_" + "cost")))
-                                    .review(request.getParameter(day + "_" + j + "_" + "content")).transportation(request.getParameter(day + "_" + j + "_" + "trans"))
-                                    .lat(latLng.get(0)).lng(latLng.get(1)).placeImgPath(list.get(0)).placeImgName(list.get(1)).build();
-                            placeRepository.save(place);
+                            try {
+                                Place place = Place.builder().id(listPlaceId.get(j)).day(targetDay).name(request.getParameter(day + "_" + j + "_" + "name"))
+                                        .address(request.getParameter(day + "_" + j + "_" + "loc")).cost(Integer.valueOf(request.getParameter(day + "_" + j + "_" + "cost")))
+                                        .review(request.getParameter(day + "_" + j + "_" + "content")).transportation(request.getParameter(day + "_" + j + "_" + "trans"))
+                                        .lat(latLng.get(0)).lng(latLng.get(1)).placeImgPath(list.get(0)).placeImgName(list.get(1)).build();
+                                placeRepository.save(place);
+                            }catch(Exception e){
+                                log.info(e.getMessage());
+                                Place place = Place.builder().day(targetDay).name(request.getParameter(day + "_" + j + "_" + "name"))
+                                        .address(request.getParameter(day + "_" + j + "_" + "loc")).cost(Integer.valueOf(request.getParameter(day + "_" + j + "_" + "cost")))
+                                        .review(request.getParameter(day + "_" + j + "_" + "content")).transportation(request.getParameter(day + "_" + j + "_" + "trans"))
+                                        .lat(latLng.get(0)).lng(latLng.get(1)).placeImgPath(list.get(0)).placeImgName(list.get(1)).build();
+                                placeRepository.save(place);
+                            }
                         }
                         // 수정인데 추가인 경우
                         else {
@@ -99,6 +108,16 @@ public class DayService {
                         for (Day target : targetDiffDay) {
                             if (totalDays < target.getDay()) {
                                 deleteDay(target.getId());
+                            }
+                            // place 삭제
+                            List<Place> targetPlace = placeRepository.listPlaceByDayIdAndDay(target.getId(), target.getDay());
+                            if(!targetPlace.isEmpty()){
+                                System.out.println("준비됐나요 : listsize" + targetPlace.size());
+                                System.out.println("준비됐나요 : _plength" + _plength);
+                                for(int deletePlaceIdx = targetPlace.size()-1; deletePlaceIdx >= _plength; deletePlaceIdx--){
+                                    System.out.println("준비됐어요");
+                                    deletePlace(targetPlace.get(deletePlaceIdx).getId());
+                                }
                             }
                         }
                     }
@@ -120,6 +139,10 @@ public class DayService {
 
     public void deleteDay(Long dayId) {
         dayRepository.findById(dayId).ifPresent(dayRepository::delete);
+    }
+
+    public void deletePlace(Long placeId){
+        placeRepository.findById(placeId).ifPresent(placeRepository::delete);
     }
 
 

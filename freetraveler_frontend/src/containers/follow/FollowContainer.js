@@ -15,6 +15,7 @@ const FollowBox = styled.div`
   margin-top: -10px;
   margin-left: 10%;
   margin-right: 10%;
+  padding-bottom: 100%;
   background-color: white;
   @media screen and (max-width: 612px) {
     padding-top: 35px;
@@ -86,7 +87,7 @@ const SearchButton = styled.div`
   /* display: inline-block;
   cursor: pointer; */
   font-weight: 900;
-  background-color: white;
+  background-color: none;
   border: none;
   cursor: pointer;
   position: absolute;
@@ -153,12 +154,13 @@ export default function FollowContainer() {
           id: followList.list[i].id,
           name: followList.list[i].name,
           isCross: followList.list[i].isCross,
+          isFollow: isFollow,
           gen: gen,
         });
       }
       setRender(gen.render());
     }
-  }, [followList]);
+  }, [followList, isFollow]);
 
   const onChange = (e) => {
     let { name, value } = e.target;

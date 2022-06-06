@@ -128,6 +128,7 @@ const FollowCross = styled.div`
   }
 
   .is-not-cross {
+    display: inline-block;
     display: none;
   }
 `;
@@ -136,6 +137,7 @@ const FollowCard = ({
   id = "id",
   name = "작성자",
   isCross = "false",
+  isFollow,
   gen = null,
   index = 0,
 }) => {
@@ -188,9 +190,11 @@ const FollowCard = ({
         >
           {name}
         </FollowNameText>
-        <FollowMinusButton onClick={() => followRemoveAction()}>
-          <FontAwesomeIcon icon={faUserMinus} />
-        </FollowMinusButton>
+        {isFollow && (
+          <FollowMinusButton onClick={() => followRemoveAction()}>
+            <FontAwesomeIcon icon={faUserMinus} />
+          </FollowMinusButton>
+        )}
       </FollowSubGridBox>
     </FollowCardBox>
   );

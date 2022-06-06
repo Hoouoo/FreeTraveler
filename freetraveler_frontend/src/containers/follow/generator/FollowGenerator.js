@@ -16,6 +16,7 @@ class FollowCardGenerator {
           id={followCard.id}
           name={followCard.name}
           isCross={followCard.isCross}
+          isFollow={followCard.isFollow}
           gen={followCard.gen}
           index={this._index}
         />

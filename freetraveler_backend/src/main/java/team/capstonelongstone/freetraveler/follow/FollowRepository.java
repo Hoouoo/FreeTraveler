@@ -23,4 +23,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     Optional<Follow> getFollower(@Param("followId") String followId,
                                  @Param("myAccount") String myAccount);
 
+    @Query("select f from Follow as f where f.targetId = :targetId")
+    List<Follow> listFollower(@Param("targetId") String targetId);
+
 }
