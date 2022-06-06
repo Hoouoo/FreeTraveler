@@ -70,7 +70,7 @@ public class DayService {
                 if (Objects.nonNull(id)) {
 
                     Board targetBoard = boardRepository.findById(id).orElse(null);
-                    list = imgService.daySaveImg(id, request, file, day, j);
+                    list = imgService.daySaveImg(request, file, day, j);
                     if (Objects.nonNull(targetBoard)) {
                         if (Objects.nonNull(targetDay)) {
                             // 이미지 변경이 없는 경우

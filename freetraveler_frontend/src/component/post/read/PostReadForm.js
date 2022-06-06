@@ -150,41 +150,39 @@ const TitleText = styled.div`
 `;
 
 const TitleLine = styled.div`
-  display: grid;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  /* display: grid;
   grid-template-columns: 70% 15% 15%;
   grid-template-rows: 50% 0;
   @media screen and (max-width: 1000px) {
     grid-template-columns: 70% 5% 25%;
     grid-template-rows: 30% 5% 0;
-  }
+  } */
 `;
 
 const IconForm = styled.div`
-  margin-top: 40px;
-  width: 100%;
-  height: 100%;
+  /* margin-top: 40px; */
+  /* width: 100%; */
+  /* height: 100%; */
   float: right;
-  font-size: 20px;
+
+  /* flex-wrap: nowrap; */
+  /* font-size: 20px; */
   .origin-color {
-    width: 100px;
+    /* width: 100px; */
     color: ${palette.gray[13]};
-    /* background-color: white;
-    border-radius: 4px;
-    border: 1px solid ${palette.gray[14]}; */
+    /* background-color: lette.gray[14]}; */
   }
   .like-color {
-    width: 100px;
+    /* width: 100px; */
     color: ${palette.mint[0]};
-    /* background-color: white;
-    border-radius: 4px;
-    border: 1px solid ${palette.gray[14]}; */
+    /* background-color: whlette.gray[14]}; */
   }
   .pick-color {
-    width: 100px;
+    /* width: 100px; */
     color: ${palette.pink[0]};
-    /* background-color: white;
-    border-radius: 4px;
-    border: 1px solid rgba(64, 64, 64, 50%); */
+    /* background-colorgba(64, 64, 64, 50%); */
   }
   .num-font-size {
     margin: 5px;
@@ -193,26 +191,26 @@ const IconForm = styled.div`
   }
   @media screen and (max-width: 1124px) {
     .pick-color {
-      width: 100px;
-      margin-left: -30px;
+      /* width: 100px; */
+      /* margin-left: -30px; */
     }
   }
   @media screen and (max-width: 1000px) {
     .pick-color {
-      width: 80px;
-      margin-left: 70%;
+      /* width: 80px; */
+      /* margin-left: 70%; */
     }
     .num-font-size {
-      font-size: 12px;
+      /* font-size: 12px; */
     }
   }
   @media screen and (max-width: 770px) {
     .pick-color {
-      width: 80px;
-      margin-left: 60%;
+      /* width: 80px; */
+      /* margin-left: 60%; */
     }
     .num-font-size {
-      font-size: 12px;
+      /* font-size: 12px; */
     }
   }
 `;
@@ -550,6 +548,9 @@ const MyPost = styled.div`
 const { kakao } = window;
 
 const PostInput = styled.input``;
+const TestForm = styled.input`
+  float: right;
+`;
 
 //goodcheck
 
@@ -996,8 +997,9 @@ export default function PostReadForm({ id }) {
             <img className="image-inbox" src={data.repimg} />
           </div>
         </ImgForm>
+        <TitleText>{data.postName}</TitleText>
+
         <TitleLine>
-          <TitleText>{data.postName}</TitleText>
           <IconForm>
             <div
               className="pick-color"
@@ -1026,6 +1028,8 @@ export default function PostReadForm({ id }) {
               </label>
             </div>
           </IconForm>
+          <br />
+          <br />
         </TitleLine>
         <TitleObjectText>
           <TotalText>

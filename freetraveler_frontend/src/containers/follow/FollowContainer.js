@@ -10,7 +10,7 @@ import palette from "../../lib/styles/palette";
 
 const FollowBox = styled.div`
   width: auto;
-  min-height: auto;
+  /* min-height: 10px; */
   padding: 35px;
   margin-top: -10px;
   margin-left: 10%;
