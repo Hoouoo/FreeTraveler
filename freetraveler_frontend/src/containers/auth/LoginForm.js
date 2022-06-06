@@ -9,12 +9,15 @@ const LoginForm = ({ history }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
 
-  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
-    form: auth.login,
-    auth: auth.auth,
-    authError: auth.authError,
-    user: user.user,
-  }));
+  const { form, auth, authError, user, loadingLogin } = useSelector(
+    ({ auth, user, loading }) => ({
+      loadingLogin: loading.auth_LOGIN,
+      form: auth.login,
+      auth: auth.auth,
+      authError: auth.authError,
+      user: user.user,
+    })
+  );
 
   //인풋 변경 이벤트 핸들러
   const onChange = (e) => {
@@ -47,17 +50,13 @@ const LoginForm = ({ history }) => {
       setError("로그인 실패");
       return;
     }
-    if (auth) {
-      dispatch(check());
-    }
-    if (user) {
-      alert("로그인 성공");
-    }
-  }, [auth, user, authError, dispatch, history]);
+    dispatch(check());
+  }, [auth, user, authError, dispatch, history, loadingLogin]);
 
   //로그인되면 자동으로 홈 화면 이동
   useEffect(() => {
     if (user) {
+      alert("로그인 성공");
       history.push("/");
     }
   }, [history, user]);

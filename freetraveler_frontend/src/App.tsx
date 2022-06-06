@@ -18,6 +18,7 @@ import PostWritePage from "./pages/PostWritePage";
 import RegisterPage from "./pages/RegisterPage";
 import Search from "./pages/SearchPage";
 import Follow from "./pages/FollowPage";
+import ModifyListPage from "./pages/ModifyListPage";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/posting/modify" component={PostModifyPage}/>
           <Route path="/posting/read" component={PostReadPage} />
           <Route path="/follow" component={Follow} />
+          <Route path="/posting/modify_list" component={ModifyListPage}/>
         </ContentTemplate>
       </Switch>
       <TabBar />

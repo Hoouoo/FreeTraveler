@@ -1,21 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "../../lib/styles/palette";
-import { faPlus, faUserMinus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faUserMinus,
+  faPeopleArrowsLeftRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { removeFollow } from "../../module/follow";
 import { useHistory } from "react-router-dom";
-
-const FollowBox = styled.div`
-  width: auto;
-  height: 100%;
-  padding: 35px;
-  margin-top: -10px;
-  margin-left: 10%;
-  margin-right: 10%;
-  background-color: white;
-`;
 
 const FollowCardBox = styled.div`
   background-color: white;
@@ -98,13 +92,10 @@ const SearchInput = styled.input`
   border-color: ${palette.gray[15]};
   background-color: ${palette.gray[16]};
   color: ${palette.gray[17]};
-  /* line-height: 3.6rem; */
   position: relative;
 `;
 
 const SearchButton = styled.div`
-  /* display: inline-block;
-  cursor: pointer; */
   font-weight: 900;
   background-color: white;
   border: none;
@@ -113,20 +104,53 @@ const SearchButton = styled.div`
   right: 5px;
   z-index: 1;
   color: ${palette.gray[17]};
-  /* top: 50%; */
   transform: translatey(35%);
 `;
 
 const SearchBox = styled.div`
   position: relative;
   margin: 10px;
-  /* grid-template-columns: 5% 95%; */
-  /* display: grid; */
 `;
 
-const FollowCard = ({ id = "id", name = "작성자", gen = null, index = 0 }) => {
+const FollowCross = styled.div`
+  .is-cross {
+    display: inline-block;
+    padding: 0.2em 0.8em;
+    color: blue;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: normal;
+    vertical-align: middle;
+    /* background-color: ${palette.btn[0]};
+    border: 1px solid ${palette.btn[1]};
+    border-bottom-color: ${palette.btn[2]}; */
+    border-radius: 0.35em;
+  }
+
+  .is-not-cross {
+    display: none;
+  }
+`;
+
+const FollowCard = ({
+  id = "id",
+  name = "작성자",
+  isCross = "false",
+  gen = null,
+  index = 0,
+}) => {
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const [isCrossView, setIsCrossView] = useState(false);
+
+  useEffect(() => {
+    if (isCross == false) {
+      setIsCrossView(false);
+    } else {
+      setIsCrossView(true);
+    }
+  }, []);
 
   const followRemoveAction = () => {
     gen.remove(index);
@@ -140,18 +164,6 @@ const FollowCard = ({ id = "id", name = "작성자", gen = null, index = 0 }) =>
   };
 
   return (
-    // <FollowBox>
-    //   <SearchBox>
-    //     <SearchButton onClick={() => searchButtonClick()}>
-    //       <FontAwesomeIcon icon={faPlus} />
-    //     </SearchButton>
-    //     <SearchInput
-    //       placeholder=" 팔로우 대상"
-    //     />
-    //   </SearchBox>
-    //   {followRenderBox}
-    // </FollowBox>
-
     <FollowCardBox>
       <FollowSubGridBox
         onClick={() => {
@@ -159,6 +171,13 @@ const FollowCard = ({ id = "id", name = "작성자", gen = null, index = 0 }) =>
         }}
       >
         <FollowIdText>{id}</FollowIdText>
+
+        <FollowCross>
+          <div className={isCrossView ? "is-cross" : "is-not-cross"}>
+            <FontAwesomeIcon icon={faPeopleArrowsLeftRight} color="black" />
+            {"  "}맞팔로우
+          </div>
+        </FollowCross>
       </FollowSubGridBox>
 
       <FollowSubGridBox>
@@ -173,7 +192,6 @@ const FollowCard = ({ id = "id", name = "작성자", gen = null, index = 0 }) =>
           <FontAwesomeIcon icon={faUserMinus} />
         </FollowMinusButton>
       </FollowSubGridBox>
-      {/* </FollowGridBox> */}
     </FollowCardBox>
   );
 };

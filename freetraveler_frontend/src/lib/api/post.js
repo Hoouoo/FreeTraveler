@@ -27,3 +27,7 @@ export const mypick = (data) =>
   client.post("/post/pick", data, {
     withCredentials: true,
   });
+
+export const getModifyList = (data) => {
+  client.post("/post/modify/list", data, { withCredentials: true });
+};

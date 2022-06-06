@@ -44,6 +44,9 @@ const [MYPICK, MYPICK_SUCCESS, MYPICK_FAILURE] =
 const [GOOD, GOOD_SUCCESS, GOOD_FAILURE] =
   createRequestActionTypes("post/GOOD");
 
+const [GET_MODIFY_LIST, GET_MODIFY_LIST_SUCCESS, GET_MODIFY_LIST_FAILURE] =
+  createRequestActionTypes("post/GET_MODIFY_LIST");
+
 export const changeField = createAction(
   CHANGE_FEILD,
   ({ form, key, value }) => ({
@@ -76,6 +79,9 @@ const initialState = {
 
   postGood: {},
   postGoodError: null,
+
+  modifyList: null,
+  modifyListError: null,
 };
 
 //액션 생성
@@ -89,6 +95,8 @@ export const clearModBuffer = createAction(CLEAR_MODBUFFER, (data) => data);
 
 export const postCheckTrue = createAction(POST_CHECK_TRUE, (data) => data);
 export const postCheckFalse = createAction(POST_CHECK_FALSE, (data) => data);
+
+export const getModifyList = createAction(GET_MODIFY_LIST, (data) => data);
 
 export const postRemoveCheckTrue = createAction(
   POST_REMOVE_CHECK_TRUE,
@@ -124,6 +132,11 @@ const removePostSaga = createRequestSaga(REMOVE_POST, postAPI.removePost);
 const goodSaga = createRequestSaga(GOOD, postAPI.good);
 const mypickSaga = createRequestSaga(MYPICK, postAPI.mypick);
 
+const getModifyListSaga = createRequestSaga(
+  GET_MODIFY_LIST,
+  postAPI.getModifyList
+);
+
 export function* postingSaga() {
   yield takeLatest(POST, postSaga);
   yield takeLatest(GET_POSTLIST, getPostListSaga);
@@ -131,6 +144,7 @@ export function* postingSaga() {
   yield takeLatest(REMOVE_POST, removePostSaga);
   yield takeLatest(GOOD, goodSaga);
   yield takeLatest(MYPICK, mypickSaga);
+  yield takeLatest(GET_MODIFY_LIST, getModifyListSaga);
 }
 
 const posting = handleActions(
@@ -238,6 +252,12 @@ const posting = handleActions(
       ...state,
       postList: "",
     }),
+    [GET_MODIFY_LIST_SUCCESS]: (state, { payload: data }) => {
+      return { ...state, modifyList: data, modifyListError: null };
+    },
+    [GET_MODIFY_LIST_FAILURE]: (state, { payload: error }) => {
+      return { ...state, modifyList: null, modifyListError: error };
+    },
   },
   initialState
 );

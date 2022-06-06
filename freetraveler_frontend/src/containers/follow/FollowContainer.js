@@ -10,12 +10,50 @@ import palette from "../../lib/styles/palette";
 
 const FollowBox = styled.div`
   width: auto;
-  height: 100%;
+  min-height: auto;
   padding: 35px;
   margin-top: -10px;
   margin-left: 10%;
   margin-right: 10%;
   background-color: white;
+  @media screen and (max-width: 612px) {
+    padding-top: 35px;
+    margin-top: -10px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+`;
+
+const FollowFollowerGrid = styled.div`
+  display: grid;
+  grid-template-columns: 50% 50%;
+  justify-content: center;
+  align-items: center;
+  padding: 1px;
+
+  text-align: center;
+`;
+
+const FollowFollowingButton = styled.button`
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  display: inline-block;
+  padding: 10px;
+  position: relative;
+  text-align: center;
+  .text {
+    font-size: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .checked {
+    border-bottom: 1px solid black;
+  }
+  :hover {
+    color: gray;
+  }
+  /* transition: background 600ms ease, color 600ms ease; */
 `;
 
 const FollowGridBox = styled.div`
@@ -71,6 +109,8 @@ export default function FollowContainer() {
   let [render, setRender] = useState(gen.render());
   let [search, setSearch] = useState("");
 
+  const [isFollow, setIsFollow] = useState(true);
+
   const dispatch = useDispatch();
   const { loading, followList, user, loadingAdd, loadingRemove } = useSelector(
     ({ follow, user, loading }) => ({
@@ -83,17 +123,22 @@ export default function FollowContainer() {
 
   const getData = () => {
     if (user != null) {
-      dispatch(getFollowList({ id: user.userId }));
+      dispatch(getFollowList({ id: user.userId, isFollow: isFollow }));
     }
   };
 
-  const searchButtonClick = (e) => {
+  const searchSubmit = (e) => {
     e.preventDefault();
     dispatch(addFollow({ id: search }));
   };
+
+  const searchButtonClick = () => {
+    dispatch(addFollow({ id: search }));
+  };
+
   useEffect(() => {
     getData();
-  }, [loadingAdd, loadingRemove]);
+  }, [loadingAdd, loadingRemove, isFollow]);
 
   useEffect(() => {
     gen.clear();
@@ -107,6 +152,7 @@ export default function FollowContainer() {
         gen.addFollowCard({
           id: followList.list[i].id,
           name: followList.list[i].name,
+          isCross: followList.list[i].isCross,
           gen: gen,
         });
       }
@@ -121,23 +167,44 @@ export default function FollowContainer() {
     }
   };
 
+  const followButtonClick = () => {
+    setIsFollow(false);
+  };
+
+  const followingButtonClick = () => {
+    setIsFollow(true);
+  };
+
   return (
     <div>
       <FollowBox>
-        <SearchBox>
-          <form onSubmit={(e) => searchButtonClick(e)}>
-            <SearchButton>
-              <FontAwesomeIcon icon={faPlus} />
-            </SearchButton>
-            <SearchInput
-              name="searchInput"
-              value={search}
-              onChange={onChange}
-              placeholder=" 팔로우 대상"
-            />
-          </form>
-        </SearchBox>
-
+        <FollowFollowerGrid>
+          <FollowFollowingButton onClick={() => followButtonClick()}>
+            <div className={isFollow == false ? "checked text" : "text"}>
+              팔로워
+            </div>
+          </FollowFollowingButton>
+          <FollowFollowingButton onClick={() => followingButtonClick()}>
+            <div className={isFollow == true ? "checked text" : "text"}>
+              팔로잉
+            </div>
+          </FollowFollowingButton>
+        </FollowFollowerGrid>
+        {isFollow == true && (
+          <SearchBox>
+            <form onSubmit={(e) => searchSubmit(e)}>
+              <SearchButton onClick={() => searchButtonClick()}>
+                <FontAwesomeIcon icon={faPlus} />
+              </SearchButton>
+              <SearchInput
+                name="searchInput"
+                value={search}
+                onChange={onChange}
+                placeholder=" 팔로우 대상"
+              />
+            </form>
+          </SearchBox>
+        )}
         <FollowGridBox>{render}</FollowGridBox>
       </FollowBox>
     </div>

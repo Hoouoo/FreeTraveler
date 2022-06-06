@@ -1,22 +1,24 @@
 import React from "react";
-import FollowCard from "../../../component/list/FollowCard";
+import ModifyLogCard from "../ModifyLogCard";
 import styled from "styled-components";
 
-class FollowCardGenerator {
+class ModifyLogCardGenerator {
   constructor() {
     this._array = new Array();
     this._index = 0;
   }
 
   //단일 아이템 카드 삽입
-  addFollowCard(followCard) {
+  addFollowCard(modifyLogCard) {
     this._array[this._index] = (
-      <div key={"followCard_" + this._index} id={"followCard_" + this._index}>
-        <FollowCard
-          id={followCard.id}
-          name={followCard.name}
-          isCross={followCard.isCross}
-          gen={followCard.gen}
+      <div
+        key={"modifyLogCard_" + this._index}
+        id={"modifyLogCard_" + this._index}
+      >
+        <ModifyLogCard
+          id={modifyLogCard.id}
+          time={modifyLogCard.time}
+          gen={modifyLogCard.gen}
           index={this._index}
         />
       </div>
@@ -40,4 +42,4 @@ class FollowCardGenerator {
   }
 }
 
-export default FollowCardGenerator;
+export default ModifyLogCardGenerator;

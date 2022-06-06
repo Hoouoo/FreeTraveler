@@ -15,6 +15,10 @@ import { faThumbsUp as faRegularThumbsUp } from "@fortawesome/free-regular-svg-i
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import {
+  faPeopleArrowsLeftRight,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
+import {
   getPost,
   getPostClear,
   good,
@@ -103,6 +107,10 @@ const TotalText = styled.div`
   margin-bottom: 0.5rem;
   font-size: 1rem;
   width: 100%;
+`;
+
+const UserText = styled.div`
+  float: left;
 `;
 
 const TitleObjectText = styled.div`
@@ -494,6 +502,51 @@ const MenuBar = styled.div`
   }
 `;
 
+const FollowCross = styled.div`
+  float: left;
+  .is-cross {
+    margin-left: 5px;
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    color: blue;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: white;
+    border: 1px solid ${palette.btn[1]};
+    /* border-bottom-color: ${palette.btn[2]}; */
+    border-radius: 0.35em;
+  }
+
+  .is-not-cross {
+    display: none;
+  }
+`;
+
+const MyPost = styled.div`
+  /* float: left; */
+  /* margin-top: -15%; */
+  .is-mypost {
+    margin-left: 5px;
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    color: black;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: white;
+    border: 1px solid ${palette.btn[1]};
+    /* border-bottom-color: ${palette.btn[2]}; */
+    border-radius: 0.35em;
+  }
+
+  .is-not-mypost {
+    display: none;
+  }
+`;
+
 const { kakao } = window;
 
 const PostInput = styled.input``;
@@ -510,6 +563,8 @@ export default function PostReadForm({ id }) {
 
   const [isLikeToggled, setIsLikeToggled] = useState(false);
   const [isPickToggled, setIsPickToggled] = useState(false);
+  const [isCrossView, setIsCrossView] = useState(true);
+  const [isMyPost, setIsMyPost] = useState(true);
 
   const [isToggled, setIsToggled] = useState(false);
 
@@ -852,6 +907,9 @@ export default function PostReadForm({ id }) {
       } else {
         setIsPickToggled(false);
       }
+
+      setIsCrossView(data.isCross);
+      setIsMyPost(user.userId == data.author);
     }
   }, [data, location]);
 
@@ -871,6 +929,10 @@ export default function PostReadForm({ id }) {
   const linkToModify = function () {
     dispatch(loadModBuffer(data));
     history.push("/posting/modify");
+  };
+
+  const linkToModifyList = function () {
+    history.push(`/posting/modify_list?id=${data.id}`);
   };
 
   const deleteBoard = function () {
@@ -970,29 +1032,58 @@ export default function PostReadForm({ id }) {
             <TitleLogo>
               <VscAccount size="30" color="#000" />
             </TitleLogo>
-            <b>{data.author}</b> <br />
+            {/* <TitleLogo> */}
+            <UserText>
+              <b>{data.author}</b>
+            </UserText>
+            <FollowCross>
+              <div className={isCrossView ? "is-cross" : "is-not-cross"}>
+                <FontAwesomeIcon icon={faPeopleArrowsLeftRight} color="black" />
+                {"  "}맞팔로우
+              </div>
+            </FollowCross>
+
+            <MyPost>
+              <div className={isMyPost ? "is-mypost" : "is-not-mypost"}>
+                <FontAwesomeIcon icon={faBars} color="black" />
+                {"  "}내 글
+              </div>
+            </MyPost>
+            <br />
             {data.time}
-            <MenuBar>
-              <div className="menubar">
-                <li>
-                  <div className="menubar-icon-ml">
-                    <IoMdMore
-                      size="30"
-                      color="#adb5bd"
-                      onClick={() => toggleMenu()}
-                    />
-                  </div>
-                  <ul>
-                    <div
-                      className={isToggled ? "menubar-show" : "menubar-hide"}
-                    >
-                      {user.userId == data.author && (
+            {(user.userId == data.author || data.isCross == true) && (
+              <MenuBar>
+                <div className="menubar">
+                  <li>
+                    <div className="menubar-icon-ml">
+                      <IoMdMore
+                        size="30"
+                        color="#adb5bd"
+                        onClick={() => toggleMenu()}
+                      />
+                    </div>
+                    <ul>
+                      <div
+                        className={isToggled ? "menubar-show" : "menubar-hide"}
+                      >
+                        {/* {(user.userId == data.author || data.isCross == true) && ( */}
                         <div className="menubar-box">
                           <li className="menubar-border-bottom">
                             <a onClick={() => linkToModify()}>
                               {/* <ModifyButton onClick={() => linkToModify()}> */}
 
                               <div className="menubar-dark-text">수정하기</div>
+
+                              {/* </ModifyButton> */}
+                            </a>
+                          </li>
+                          <li className="menubar-border-bottom">
+                            <a onClick={() => linkToModifyList()}>
+                              {/* <ModifyButton onClick={() => linkToModify()}> */}
+
+                              <div className="menubar-dark-text">
+                                수정 로그 보기
+                              </div>
 
                               {/* </ModifyButton> */}
                             </a>
@@ -1005,12 +1096,12 @@ export default function PostReadForm({ id }) {
                             </a>
                           </li>
                         </div>
-                      )}
-                    </div>
-                  </ul>
-                </li>
-              </div>
-            </MenuBar>
+                      </div>
+                    </ul>
+                  </li>
+                </div>
+              </MenuBar>
+            )}
           </TotalText>
         </TitleObjectText>
         <TextLine />

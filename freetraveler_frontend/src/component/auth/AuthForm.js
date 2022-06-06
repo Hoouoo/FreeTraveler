@@ -125,7 +125,6 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
     }
     for (let i = 0; i < passing.length; i++) {
       if (passing[i] == false) {
-        console.log(passing[i]);
         tick = false;
       }
     }
@@ -232,7 +231,7 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
           autoComplete="new-password"
           name="password"
           placeholder="비밀번호"
-          // type="password"
+          type="password"
           onChange={(e) => {
             onChange(e);
             onChangeInput(e);
