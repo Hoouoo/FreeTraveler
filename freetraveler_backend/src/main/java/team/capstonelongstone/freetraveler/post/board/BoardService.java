@@ -146,8 +146,8 @@ public class BoardService {
         }
 
         Sort sort = null;
-        if(postListDTO.getOrderBy().equals("asc")) {
-            if(postListDTO.getSort().equals("recent")) {
+        if(postListDTO.getOrderBy().equals("asc")|| postListDTO.getOrderBy().equals("")) {
+            if(postListDTO.getSort().equals("recent") || postListDTO.getSort().equals("")) {
                 sort = Sort.by(Sort.Direction.ASC, "createdDate");
             }
             else {
@@ -155,7 +155,7 @@ public class BoardService {
             }
         }
         else{ //desc
-            if(postListDTO.getSort().equals("recent")){
+            if(postListDTO.getSort().equals("recent") || postListDTO.getSort().equals("")){
                 sort = Sort.by(Sort.Direction.DESC, "createdDate");
             }
             else {
@@ -189,7 +189,6 @@ public class BoardService {
         }
 
         if(postListDTO.getIsMine().equals("true")){
-            System.out.println("isMine");
             if(postListDTO.getOrderBy().equals("asc")) {
                 System.out.println("asc");
                 sort = Sort.by(Sort.Direction.ASC, "createdDate");
@@ -198,6 +197,10 @@ public class BoardService {
             }
             Pageable pageableMine= PageRequest.of(postListDTO.getPage(), postListDTO.getPageSize(),sort);
             all = boardRepository.findAllIsMine(pageableMine, account.getId());
+        }
+
+        if(!postListDTO.getFriend().isEmpty()){ //친구 아이디 들어올 때
+            all=boardRepository.findAllByFriend(pageable,postListDTO.getFriend(),postListDTO.getSearch());
         }
 
         int boardSize=0;
