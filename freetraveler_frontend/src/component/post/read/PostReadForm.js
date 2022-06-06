@@ -15,6 +15,10 @@ import { faThumbsUp as faRegularThumbsUp } from "@fortawesome/free-regular-svg-i
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import {
+  faPeopleArrowsLeftRight,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
+import {
   getPost,
   getPostClear,
   good,
@@ -105,6 +109,10 @@ const TotalText = styled.div`
   width: 100%;
 `;
 
+const UserText = styled.div`
+  float: left;
+`;
+
 const TitleObjectText = styled.div`
   margin: 0 0 -5px 0;
   text-align: left;
@@ -142,41 +150,39 @@ const TitleText = styled.div`
 `;
 
 const TitleLine = styled.div`
-  display: grid;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  /* display: grid;
   grid-template-columns: 70% 15% 15%;
   grid-template-rows: 50% 0;
   @media screen and (max-width: 1000px) {
     grid-template-columns: 70% 5% 25%;
     grid-template-rows: 30% 5% 0;
-  }
+  } */
 `;
 
 const IconForm = styled.div`
-  margin-top: 40px;
-  width: 100%;
-  height: 100%;
+  /* margin-top: 40px; */
+  /* width: 100%; */
+  /* height: 100%; */
   float: right;
-  font-size: 20px;
+
+  /* flex-wrap: nowrap; */
+  /* font-size: 20px; */
   .origin-color {
-    width: 100px;
+    /* width: 100px; */
     color: ${palette.gray[13]};
-    /* background-color: white;
-    border-radius: 4px;
-    border: 1px solid ${palette.gray[14]}; */
+    /* background-color: lette.gray[14]}; */
   }
   .like-color {
-    width: 100px;
+    /* width: 100px; */
     color: ${palette.mint[0]};
-    /* background-color: white;
-    border-radius: 4px;
-    border: 1px solid ${palette.gray[14]}; */
+    /* background-color: whlette.gray[14]}; */
   }
   .pick-color {
-    width: 100px;
+    /* width: 100px; */
     color: ${palette.pink[0]};
-    /* background-color: white;
-    border-radius: 4px;
-    border: 1px solid rgba(64, 64, 64, 50%); */
+    /* background-colorgba(64, 64, 64, 50%); */
   }
   .num-font-size {
     margin: 5px;
@@ -185,26 +191,26 @@ const IconForm = styled.div`
   }
   @media screen and (max-width: 1124px) {
     .pick-color {
-      width: 100px;
-      margin-left: -30px;
+      /* width: 100px; */
+      /* margin-left: -30px; */
     }
   }
   @media screen and (max-width: 1000px) {
     .pick-color {
-      width: 80px;
-      margin-left: 70%;
+      /* width: 80px; */
+      /* margin-left: 70%; */
     }
     .num-font-size {
-      font-size: 12px;
+      /* font-size: 12px; */
     }
   }
   @media screen and (max-width: 770px) {
     .pick-color {
-      width: 80px;
-      margin-left: 60%;
+      /* width: 80px; */
+      /* margin-left: 60%; */
     }
     .num-font-size {
-      font-size: 12px;
+      /* font-size: 12px; */
     }
   }
 `;
@@ -494,9 +500,57 @@ const MenuBar = styled.div`
   }
 `;
 
+const FollowCross = styled.div`
+  float: left;
+  .is-cross {
+    margin-left: 5px;
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    color: blue;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: white;
+    border: 1px solid ${palette.btn[1]};
+    /* border-bottom-color: ${palette.btn[2]}; */
+    border-radius: 0.35em;
+  }
+
+  .is-not-cross {
+    display: none;
+  }
+`;
+
+const MyPost = styled.div`
+  /* float: left; */
+  /* margin-top: -15%; */
+  .is-mypost {
+    margin-left: 5px;
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    color: black;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: white;
+    border: 1px solid ${palette.btn[1]};
+    /* border-bottom-color: ${palette.btn[2]}; */
+    border-radius: 0.35em;
+  }
+
+  .is-not-mypost {
+    display: none;
+  }
+`;
+
 const { kakao } = window;
 
 const PostInput = styled.input``;
+const TestForm = styled.input`
+  float: right;
+`;
 
 //goodcheck
 
@@ -510,6 +564,8 @@ export default function PostReadForm({ id }) {
 
   const [isLikeToggled, setIsLikeToggled] = useState(false);
   const [isPickToggled, setIsPickToggled] = useState(false);
+  const [isCrossView, setIsCrossView] = useState(true);
+  const [isMyPost, setIsMyPost] = useState(true);
 
   const [isToggled, setIsToggled] = useState(false);
 
@@ -812,6 +868,7 @@ export default function PostReadForm({ id }) {
   useEffect(() => {
     //setData(select);
     //캐시 비우기
+    gen.clear();
     getData();
   }, []);
 
@@ -852,6 +909,11 @@ export default function PostReadForm({ id }) {
       } else {
         setIsPickToggled(false);
       }
+
+      setIsCrossView(data.isCross);
+      if (user != null) {
+        setIsMyPost(user.userId == data.author);
+      }
     }
   }, [data, location]);
 
@@ -862,7 +924,7 @@ export default function PostReadForm({ id }) {
   useEffect(() => {
     if (postRemoveCheck) {
       history.push(
-        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false"
+        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false&friend="
       );
       dispatch(postRemoveCheckFalse());
     }
@@ -871,6 +933,10 @@ export default function PostReadForm({ id }) {
   const linkToModify = function () {
     dispatch(loadModBuffer(data));
     history.push("/posting/modify");
+  };
+
+  const linkToModifyList = function () {
+    history.push(`/posting/modify_list?id=${data.id}`);
   };
 
   const deleteBoard = function () {
@@ -934,8 +1000,9 @@ export default function PostReadForm({ id }) {
             <img className="image-inbox" src={data.repimg} />
           </div>
         </ImgForm>
+        <TitleText>{data.postName}</TitleText>
+
         <TitleLine>
-          <TitleText>{data.postName}</TitleText>
           <IconForm>
             <div
               className="pick-color"
@@ -964,29 +1031,51 @@ export default function PostReadForm({ id }) {
               </label>
             </div>
           </IconForm>
+          <br />
+          <br />
         </TitleLine>
         <TitleObjectText>
           <TotalText>
             <TitleLogo>
               <VscAccount size="30" color="#000" />
             </TitleLogo>
-            <b>{data.author}</b> <br />
+            {/* <TitleLogo> */}
+            <UserText>
+              <b>{data.author}</b>
+            </UserText>
+            <FollowCross>
+              <div className={isCrossView ? "is-cross" : "is-not-cross"}>
+                <FontAwesomeIcon icon={faPeopleArrowsLeftRight} color="black" />
+                {"  "}맞팔로우
+              </div>
+            </FollowCross>
+
+            <MyPost>
+              <div className={isMyPost ? "is-mypost" : "is-not-mypost"}>
+                <FontAwesomeIcon icon={faBars} color="black" />
+                {"  "}내 글
+              </div>
+            </MyPost>
+            {isCrossView == false && isMyPost == false && <br />}
             {data.time}
-            <MenuBar>
-              <div className="menubar">
-                <li>
-                  <div className="menubar-icon-ml">
-                    <IoMdMore
-                      size="30"
-                      color="#adb5bd"
-                      onClick={() => toggleMenu()}
-                    />
-                  </div>
-                  <ul>
-                    <div
-                      className={isToggled ? "menubar-show" : "menubar-hide"}
-                    >
-                      {user.userId == data.author && (
+            {(user != null
+              ? user.userId == data.author /*|| data.isCross == true*/
+              : false) && (
+              <MenuBar>
+                <div className="menubar">
+                  <li>
+                    <div className="menubar-icon-ml">
+                      <IoMdMore
+                        size="30"
+                        color="#adb5bd"
+                        onClick={() => toggleMenu()}
+                      />
+                    </div>
+                    <ul>
+                      <div
+                        className={isToggled ? "menubar-show" : "menubar-hide"}
+                      >
+                        {/* {(user.userId == data.author || data.isCross == true) && ( */}
                         <div className="menubar-box">
                           <li className="menubar-border-bottom">
                             <a onClick={() => linkToModify()}>
@@ -997,6 +1086,16 @@ export default function PostReadForm({ id }) {
                               {/* </ModifyButton> */}
                             </a>
                           </li>
+                          {/*
+                          <li className="menubar-border-bottom">
+                            <a onClick={() => linkToModifyList()}>
+
+                              <div className="menubar-dark-text">
+                                수정 로그 보기
+                              </div>
+                           </a>
+                          </li>
+                          */}
                           <li>
                             <a onClick={() => deleteBoard()}>
                               {/* <DeleteButton onClick={() => deleteBoard()}> */}
@@ -1005,12 +1104,12 @@ export default function PostReadForm({ id }) {
                             </a>
                           </li>
                         </div>
-                      )}
-                    </div>
-                  </ul>
-                </li>
-              </div>
-            </MenuBar>
+                      </div>
+                    </ul>
+                  </li>
+                </div>
+              </MenuBar>
+            )}
           </TotalText>
         </TitleObjectText>
         <TextLine />

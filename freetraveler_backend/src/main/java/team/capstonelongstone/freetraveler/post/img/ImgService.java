@@ -97,12 +97,28 @@ public class ImgService {
     }
 
     /**
+     * board 수정 시 이미지가 저장되는 경우
+     */
+    public List<String> boardModifyImg(Long id, MultipartFile file) throws IOException {
+
+        // 이미지가 null 일 경우
+        Board targetBoard = boardRepository.findById(id).orElse(null);
+        if(Objects.nonNull(targetBoard)) {
+            String ImgUUID = targetBoard.getRepImgName().substring(0, targetBoard.getRepImgName().lastIndexOf(".")); //대표 이미지 UUID
+            String suffix = targetBoard.getRepImgName().substring(targetBoard.getRepImgName().lastIndexOf("."));
+            uploadImg(file, ImgUUID, suffix);
+
+            return getImgPath_Name(ImgUUID, suffix);
+        }else{
+            return null;
+        }
+
+    }
+
+    /**
      * 보드 수정 시 사용할 메서드
      */
     public List<String> boardModifyImg(Long id, HttpServletRequest request) throws IOException{
-
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
 
         // 이미지가 null 일 경우
         Board targetBoard = boardRepository.findById(id).orElse(null);
@@ -120,6 +136,7 @@ public class ImgService {
      */
     public List<String> daySaveImg(HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
 
+
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
@@ -129,8 +146,30 @@ public class ImgService {
         uploadImg(file, ImgUUID, suffix);
         return getImgPath_Name(ImgUUID, suffix);
     }
+//    /**
+//     * day, place 저장
+//     */
+//    public List<String> daySaveImg(Long boardId, HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
+//
+//        Board board = boardRepository.findById(boardId).orElse(null);
+//        if(Objects.nonNull(board)){
+//            // null로 주되, day
+//            return null;
+//        }
+//
+//        HttpSession session = request.getSession();
+//        Account account = (Account) session.getAttribute("account");
+//
+//        String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" + getImgId();
+//        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
+//
+//        uploadImg(file, ImgUUID, suffix);
+//        return getImgPath_Name(ImgUUID, suffix);
+//    }
 
-
+    /**
+     * day, place 저장
+     */
     public List<String> dayModifyImg(Long placeId, HttpServletRequest request, int day, int j) throws IOException {
 
         HttpSession session = request.getSession();
@@ -146,6 +185,22 @@ public class ImgService {
         String suffix = targetPlace.getPlaceImgName().substring(targetPlace.getPlaceImgName().lastIndexOf("."));
         return getImgPath_Name(ImgUUID, suffix);
     }
+
+    /**
+     * day, place 저장
+     */
+    public List<String> dayModifyImg(Long placeId,  MultipartFile file, int day, int j) throws IOException {
+        Place targetPlace = placeRepository.findById(placeId).orElse(null);
+        if(Objects.isNull(targetPlace)){
+            return null;
+        }
+        String ImgUUID = Objects.requireNonNull(targetPlace).getPlaceImgName().substring(0, targetPlace.getPlaceImgName().lastIndexOf("."));
+        String suffix = targetPlace.getPlaceImgName().substring(targetPlace.getPlaceImgName().lastIndexOf("."));
+
+        uploadImg(file, ImgUUID, suffix);
+        return getImgPath_Name(ImgUUID, suffix);
+    }
+
 
     /**
      * 이미지 삭제

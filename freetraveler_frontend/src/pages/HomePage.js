@@ -97,6 +97,7 @@ function HomePage() {
         method: "",
         isMyPick: "all",
         isMine: "false",
+        friend: "",
       },
     };
 

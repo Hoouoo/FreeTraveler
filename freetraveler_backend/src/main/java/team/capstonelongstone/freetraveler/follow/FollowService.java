@@ -100,4 +100,17 @@ public class FollowService {
         }
         return returnList;
     }
+
+    public List<FollowResponseDto> listFollower(String myAccount){
+        // 나를 팔로우 한사람 리스트
+        List<Follow> targetFollow = followRepository.listFollower(myAccount);
+        List<FollowResponseDto> returnList = new ArrayList<>();
+        for (Follow follow : targetFollow) {
+            String targetUserName = accountRepository.getUserName(follow.getAccount().getUserId());
+            boolean isCross = followRepository.getFollower(myAccount, follow.getTargetId()).isPresent();
+            FollowResponseDto target = FollowResponseDto.builder().id(follow.getAccount().getUserId()).isCross(isCross).name(targetUserName).build();
+            returnList.add(target);
+        }
+        return returnList;
+    }
 }

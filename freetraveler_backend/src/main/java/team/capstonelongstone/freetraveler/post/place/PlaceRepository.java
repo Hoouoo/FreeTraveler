@@ -22,4 +22,9 @@ public interface PlaceRepository extends JpaRepository<Place,Long> {
     @Query("select p.id from Place as p where p.day.id = :dayId")
     List<Long> listPlaceIdByDay(@Param("dayId") Long dayId);
 
+    @Query("select p from Place as p where p.day.id = :dayId and p.day.day = :day")
+    List<Place> listPlaceByDayIdAndDay(@Param("dayId") Long dayId,
+                                     @Param("day") int day);
+
+
 }

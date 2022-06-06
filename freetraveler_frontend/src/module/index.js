@@ -10,6 +10,7 @@ import account, { accountSaga } from "./account";
 
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import follow, { followSaga } from "./follow";
 
 const persistConfig = {
   key: "root",
@@ -23,10 +24,17 @@ const rootReducer = combineReducers({
   user,
   post,
   account,
+  follow,
 });
 
 export function* rootSaga() {
-  yield all([authSaga(), userSaga(), postingSaga(), accountSaga()]);
+  yield all([
+    authSaga(),
+    userSaga(),
+    postingSaga(),
+    accountSaga(),
+    followSaga(),
+  ]);
 }
 
 export default persistReducer(persistConfig, rootReducer);

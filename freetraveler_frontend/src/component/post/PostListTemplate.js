@@ -183,6 +183,7 @@ export default function PostListTemplate({ id, isPick = "all" }) {
   const [currentPage, setCurrentPage] = useState(0);
 
   let [search, setSearch] = useState("");
+  let [friend, setFriend] = useState("");
 
   const history = useHistory();
   const location = useLocation();
@@ -218,8 +219,11 @@ export default function PostListTemplate({ id, isPick = "all" }) {
         method: query.method,
         isMyPick: query.isMyPick,
         isMine: query.isMine,
+        friend: query.friend,
       },
     };
+
+    setFriend(query.friend);
 
     console.log(request);
     // console.log(location);
@@ -262,7 +266,7 @@ export default function PostListTemplate({ id, isPick = "all" }) {
       const pageClick = function () {
         history.push({
           pathname: "/posting/list",
-          search: `page=${i}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=${isPick}&isMine=false`,
+          search: `page=${i}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=${isPick}&isMine=false&friend=${friend}`,
         });
         setCurrentPage(i);
       };
@@ -298,7 +302,7 @@ export default function PostListTemplate({ id, isPick = "all" }) {
   const searchButtonClick = () => {
     history.push({
       pathname: "/posting/list",
-      search: `page=${0}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=${isPick}&isMine=false`,
+      search: `page=${0}&pageSize=${6}&sort=recent&orderBy=desc&search=${search}&method=&isMyPick=${isPick}&isMine=false&friend=${friend}`,
     });
   };
 

@@ -48,7 +48,7 @@ const ItemCardStyled = styled.div`
     background-color: rgb(233, 233, 233);
   }
   .itemcard_comment {
-    display: flex;
+    /* display: flex; */
     background-image: initial;
     background-position-x: initial;
     background-position-y: initial;
@@ -73,10 +73,16 @@ const ItemCardStyled = styled.div`
     line-height: 24px;
     color: ${palette.gray[10]};
   }
+  .grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr;
+  }
   .comment {
-    /* float: right; */
     /* padding: 15px; */
-    width: 300px;
+    /* float: left; */
+
+    width: auto;
     font-weight: 700;
     font-size: 13px;
     line-height: 24px;
@@ -355,16 +361,18 @@ function ItemCard({
 
       <div className="itemcard_comment">
         <div className="comment_title">STORY</div>
-        <div className="comment">{comment /*경험자의 한마디*/}</div>
-        <IconForm>
-          <div className="content_pick">
-            <div className="pick-color">
-              <FontAwesomeIcon
-                icon={!(isPick == "true") ? faRegularHeart : faSolidHeart}
-              />
+        <div className="grid">
+          <div className="comment">{comment /*경험자의 한마디*/}</div>
+          <IconForm>
+            <div className="content_pick">
+              <div className="pick-color">
+                <FontAwesomeIcon
+                  icon={!(isPick == "true") ? faRegularHeart : faSolidHeart}
+                />
+              </div>
             </div>
-          </div>
-        </IconForm>
+          </IconForm>
+        </div>
       </div>
       {/* </div> */}
     </ItemCardStyled>

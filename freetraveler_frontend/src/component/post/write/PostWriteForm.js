@@ -18,6 +18,79 @@ import DayButton from "../buttons/DayButton";
 import PostButton from "../buttons/PostSubButton";
 import { useHistory } from "react-router-dom";
 
+const DayGrid = styled.div`
+  display: grid;
+  grid-template-columns: 48% 48%;
+  margin-left: -1%;
+  justify-content: center;
+  align-items: center;
+  /* padding: 1px; */
+
+  text-align: center;
+  @media screen and (max-width: 612px) {
+    grid-template-columns: 45% 45%;
+  }
+`;
+
+const DayGrid2 = styled.div`
+  margin-left: 0.3%;
+  display: grid;
+  grid-template-columns: 98.5%;
+  justify-content: center;
+  align-items: center;
+  /* padding: 1px; */
+
+  text-align: center;
+  @media screen and (max-width: 612px) {
+    margin-left: 6%;
+    /* margin-right: 0;
+    padding-left: 100px; */
+    /* padding-right: 200px; */
+  }
+`;
+
+const SubmitBarStyled = styled.button`
+  box-shadow: 0 1 8px rgba(0, 0, 0, 0.025);
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  font-weight: 700;
+  bottom: 0;
+  border-top: 1px solid ${palette.gray[4]};
+  padding-top: 5px;
+  background-color: white;
+  font-size: 17px;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${palette.btn[1]};
+  }
+
+  @media screen and (max-width: 612px) {
+    height: 45px;
+    font-size: 15px;
+  }
+`;
+// const SubmitBtn = styled.button`
+//   cursor: pointer;
+//   font-size: 17px;
+//   border: none;
+//   background-color: white;
+//   font-weight: 700;
+//   @media screen and (max-width: 612px) {
+//     height: 45px;
+//     font-size: 15px;
+//   }
+// `;
+
 const POWBox = styled.div`
   display: flex;
   width: auto;
@@ -51,8 +124,8 @@ const PWOABox = styled.div`
   @media screen and (max-width: 650px) {
     padding: 0px;
     padding-top: 70px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 0;
+    margin-right: 0;
   }
   @media screen and (min-width: 650px) {
     display: flex;
@@ -64,7 +137,7 @@ const PWOABox = styled.div`
 
 const PWDayBox = styled.div``;
 
-const PWForm = styled.form`
+const PWForm = styled.div`
   /* display: flex;
   justify-content: center;
   align-items: center; */
@@ -80,6 +153,8 @@ const PWForm = styled.form`
     margin-right: 15%;
   }
 `;
+
+const PWFormed = styled.form``;
 
 const ScrollBar = styled.div`
   cursor: pointer;
@@ -105,10 +180,10 @@ const ScrollBarButton = styled.button`
   font-size: 12px;
   line-height: normal;
   vertical-align: middle;
-  background-color: #fdfdfd;
+  background-color: ${palette.btn[0]};
   cursor: pointer;
-  border: 1px solid #ebebeb;
-  border-bottom-color: #e2e2e2;
+  border: 1px solid ${palette.btn[1]};
+  border-bottom-color: ${palette.btn[2]};
   border-radius: 0.35em;
 `;
 
@@ -131,17 +206,31 @@ const PostInput = styled.input`
 
 const FileInput = styled.div`
   label {
+    cursor: pointer;
+    padding-bottom: -5px;
+    /* margin: 0 40px 6px; */
     display: inline-block;
-    padding: 0.2em 0.5em;
-    color: black;
+    /* text-align: left; */
+    color: gray;
+    font-size: 15px;
+    /* padding: 0.2em 0.5em; */
+    /* color: black;
     font-size: 12px;
     line-height: normal;
     vertical-align: middle;
     background-color: #fdfdfd;
     cursor: pointer;
     border: 1px solid #ebebeb;
-    border-bottom-color: #e2e2e2;
-    border-radius: 0.35em;
+    border-bottom-color: #e2e2e2; */
+    width: 100%;
+    height: 30px;
+    margin-left: 0.5rem;
+    /* margin-bottom: 1rem; */
+    border-bottom: 1px solid ${palette.mint[0]};
+    /* border-radius: 0.35em; */
+    :hover {
+      color: black;
+    }
   }
   input[type="file"] {
     position: absolute;
@@ -429,7 +518,6 @@ export default function PostWriteForm({ id, mode }) {
           <img id="repImg" src={repImgPreview} />
         </PostPreviewImage>
         <FileInput>
-          {/* <input class="upload-name" value="첨부파일" placeholder="첨부파일" /> */}
           <label for="file">파일찾기</label>
           <input
             name="repImg"
@@ -549,7 +637,7 @@ export default function PostWriteForm({ id, mode }) {
     if (postCheck) {
       alert("포스팅 성공");
       history.replace(
-        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false"
+        "/posting/list?page=0&pageSize=6&sort=recent&orderBy=desc&search=&method=&isMyPick=all&isMine=false&friend="
       );
       history.push("/posting/read?id=" + postedId);
       dispatch(postCheckFalse());
@@ -561,21 +649,29 @@ export default function PostWriteForm({ id, mode }) {
     <div id="scrollup">
       {OABox}
       <br />
-      <PWForm method="post" onSubmit={onSubmit}>
-        {DBox}
-        {days}
-        <DayButton type="button" onClick={() => dayAddAction()}>
-          <BtnBox>하루 추가</BtnBox>
-        </DayButton>
-        <DayButton type="button" onClick={() => dayRemoveAction()}>
-          <BtnBox>하루 삭제</BtnBox>
-        </DayButton>
+      <PWFormed method="post" onSubmit={onSubmit}>
+        <PWForm method="post" onSubmit={onSubmit}>
+          {DBox}
+          {days}
+          <DayGrid>
+            <DayButton type="button" onClick={() => dayAddAction()}>
+              <BtnBox>하루 추가</BtnBox>
+            </DayButton>
+            <DayButton type="button" onClick={() => dayRemoveAction()}>
+              <BtnBox>하루 삭제</BtnBox>
+            </DayButton>
+          </DayGrid>
 
-        <br />
-        <PostButton type="submit">
-          <BtnBox>제출하기</BtnBox>
-        </PostButton>
-      </PWForm>
+          <br />
+        </PWForm>
+
+        {/* <DayGrid2>
+          <PostButton type="submit">
+            <BtnBox>제출하기</BtnBox>
+          </PostButton>
+        </DayGrid2> */}
+        <SubmitBarStyled type="submit">작성하기</SubmitBarStyled>
+      </PWFormed>
     </div>
     // </POWBox>
   );

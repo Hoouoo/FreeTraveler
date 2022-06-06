@@ -7,15 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import team.capstonelongstone.freetraveler.account.AccountRepository;
 import team.capstonelongstone.freetraveler.account.domain.Account;
 import team.capstonelongstone.freetraveler.follow.domain.Follow;
+import team.capstonelongstone.freetraveler.follow.dto.FollowRequestDto;
 import team.capstonelongstone.freetraveler.follow.dto.FollowResponseDto;
 import team.capstonelongstone.freetraveler.interceptor.CheckSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author 정순범
@@ -48,16 +46,22 @@ public class FollowController {
 
     @CheckSession
     @PostMapping("/follow/list")
-    public ResponseEntity<?> getFollowList(HttpSession session, @RequestBody HashMap<String, String> targetId){
+    public ResponseEntity<?> getFollowList(HttpSession session, @RequestBody FollowRequestDto requestDto) {
         Account account = (Account) session.getAttribute("account");
-        List<FollowResponseDto> targetList = followService.listFollow(targetId.get("id"),account.getUserId());
-        if(Objects.isNull(targetList)){
+        List<FollowResponseDto> targetList = new ArrayList<>();
+        if (requestDto.isFollow()) {
+            targetList = followService.listFollow(requestDto.getId(), account.getUserId());
+        } else {
+            targetList = followService.listFollower(account.getUserId());
+        }
+        if (Objects.isNull(targetList)) {
             return ResponseEntity.badRequest().body("잘못된 접근입니다.");
         }
         HashMap<String, List<FollowResponseDto>> targetReturn = new HashMap<>();
         targetReturn.put("list", targetList);
         return ResponseEntity.ok().body(targetReturn);
-    }
 
+//        List<FollowResponseDto> targetList = followService.listFollow(targetId.get("id"),account.getUserId());
+    }
 
 }
