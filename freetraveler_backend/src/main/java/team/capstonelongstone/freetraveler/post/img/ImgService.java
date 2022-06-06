@@ -131,6 +131,21 @@ public class ImgService {
     /**
      * day, place 저장
      */
+    public List<String> daySaveImg(HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
+
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" + getImgId();
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
+
+        uploadImg(file, ImgUUID, suffix);
+        return getImgPath_Name(ImgUUID, suffix);
+    }
+
+    /**
+     * day, place 저장
+     */
     public List<String> daySaveImg(Long id, HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
 
         HttpSession session = request.getSession();
@@ -139,7 +154,7 @@ public class ImgService {
         Board targetBoard = boardRepository.findById(id).orElse(null);
         String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" + getImgId();
 
-        if (Objects.nonNull(targetBoard)){
+        if (Objects.nonNull(id) && Objects.nonNull(targetBoard)){
             ImgUUID = targetBoard.getAuthor().getUserId() + "_" + day + "_" + j + "_" + targetBoard.getId();
         }
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
