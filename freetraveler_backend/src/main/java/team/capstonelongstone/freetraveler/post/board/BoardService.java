@@ -1,7 +1,6 @@
 package team.capstonelongstone.freetraveler.post.board;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +33,6 @@ import java.util.Objects;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -78,15 +76,15 @@ public class BoardService {
 
     public void modifyBoard(Long id,HttpServletRequest request, @RequestParam("repImg")MultipartFile file) throws IOException {
 
-//        HttpSession session=request.getSession();
-//        Account account = (Account) session.getAttribute("account");
+        HttpSession session=request.getSession();
+        Account account = (Account) session.getAttribute("account");
 
         String postName = request.getParameter("postName");
         Integer totalDays = Integer.valueOf(request.getParameter("totalDays"));
         String comment = request.getParameter("comment");
         String totalTrans=request.getParameter("totalTrans");
 
-        Account author = Objects.requireNonNull(boardRepository.findById(id).orElse(null)).getAuthor();
+        Account author = account;
         int sumTotalCost = 0;
 
         for (int day=0;day<totalDays;day++) {
@@ -98,7 +96,6 @@ public class BoardService {
             }
         }
 
-        // 파일이 없는경우
         if(Objects.isNull(file)) {
             List<String>list = imgService.boardModifyImg(id, request);
             int finalSumTotalCost = sumTotalCost;
@@ -110,14 +107,9 @@ public class BoardService {
                 boardRepository.save(targetBoard);
             });
         }else{
+            List<String>list = imgService.boardSaveImg(request, file);
             int finalSumTotalCost = sumTotalCost;
             boardRepository.findById(id).ifPresent(target -> {
-                List<String>list = null;
-                try {
-                    list = imgService.boardModifyImg(target.getAuthor().getUserId(), file);
-                } catch (IOException e) {
-                    log.info(e.getMessage());
-                }
                 BoardDto boardDto = BoardDto.builder().postName(postName).totalDays(totalDays).totalCost(finalSumTotalCost).comment(comment).goodCnt(0)
                         .author(author).totalTrans(totalTrans).repImgPath(list.get(0)).repImgName(list.get(1)).build();
 
@@ -154,8 +146,8 @@ public class BoardService {
         }
 
         Sort sort = null;
-        if(postListDTO.getOrderBy().equals("asc")) {
-            if(postListDTO.getSort().equals("recent")) {
+        if(postListDTO.getOrderBy().equals("asc")|| postListDTO.getOrderBy().equals("")) {
+            if(postListDTO.getSort().equals("recent") || postListDTO.getSort().equals("")) {
                 sort = Sort.by(Sort.Direction.ASC, "createdDate");
             }
             else {
@@ -163,7 +155,7 @@ public class BoardService {
             }
         }
         else{ //desc
-            if(postListDTO.getSort().equals("recent")){
+            if(postListDTO.getSort().equals("recent") || postListDTO.getSort().equals("")){
                 sort = Sort.by(Sort.Direction.DESC, "createdDate");
             }
             else {
@@ -197,7 +189,6 @@ public class BoardService {
         }
 
         if(postListDTO.getIsMine().equals("true")){
-            System.out.println("isMine");
             if(postListDTO.getOrderBy().equals("asc")) {
                 System.out.println("asc");
                 sort = Sort.by(Sort.Direction.ASC, "createdDate");
@@ -206,6 +197,10 @@ public class BoardService {
             }
             Pageable pageableMine= PageRequest.of(postListDTO.getPage(), postListDTO.getPageSize(),sort);
             all = boardRepository.findAllIsMine(pageableMine, account.getId());
+        }
+
+        if(!postListDTO.getFriend().isEmpty()){ //친구 아이디 들어올 때
+            all=boardRepository.findAllByFriend(pageable,postListDTO.getFriend(),postListDTO.getSearch());
         }
 
         int boardSize=0;
