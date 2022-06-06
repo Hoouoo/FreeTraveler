@@ -9,6 +9,7 @@ import team.capstonelongstone.freetraveler.follow.domain.Follow;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
@@ -17,5 +18,9 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     @Query("select f from Follow as f where f.account.userId = :targetId")
     List<Follow> listMyId(@Param("targetId") String targetId);
+
+    @Query("select f from Follow as f where f.targetId = :myAccount and f.account.userId = :followId")
+    Optional<Follow> getFollower(@Param("followId") String followId,
+                                 @Param("myAccount") String myAccount);
 
 }
