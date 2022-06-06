@@ -7,6 +7,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.capstonelongstone.freetraveler.account.domain.Account;
+import team.capstonelongstone.freetraveler.follow.FollowRepository;
+import team.capstonelongstone.freetraveler.follow.domain.Follow;
+import team.capstonelongstone.freetraveler.follow.dto.FollowResponseDto;
 import team.capstonelongstone.freetraveler.good.GoodRepository;
 import team.capstonelongstone.freetraveler.good.GoodService;
 import team.capstonelongstone.freetraveler.good.domain.Good;
@@ -50,6 +53,8 @@ public class PostService {
 
     @Autowired
     PickRepository pickRepository;
+
+    private final FollowRepository followRepository;
 
     /**
      * 도로명 주소로 위도 경도 뽑는 API
@@ -136,6 +141,16 @@ public class PostService {
             goodStatus="true";
         }
 
+        boolean connectStatus = false;
+        Board targetBoard = boardRepository.findById(id).orElse(null);
+        if (Objects.nonNull(targetBoard)) {
+            boolean followStatus = followRepository.getFollower(targetBoard.getAuthor().getUserId(), account.getUserId()).isPresent();
+            boolean followerStatus = followRepository.getFollower(account.getUserId(), targetBoard.getAuthor().getUserId()).isPresent();
+            if(followStatus && followerStatus){
+                connectStatus = true;
+            }
+        }
+
         JSONObject jsonObject = new JSONObject();
 
         jsonObject.put("id",board.getId());
@@ -150,6 +165,7 @@ public class PostService {
         jsonObject.put("good",board.getGoodCnt());
         jsonObject.put("isGood",goodStatus);
         jsonObject.put("isPick",pickStatus);
+        jsonObject.put("isCross", connectStatus);
 
         //day
         List<Day> allByBoardId = dayRepository.findAllByBoard(board);
