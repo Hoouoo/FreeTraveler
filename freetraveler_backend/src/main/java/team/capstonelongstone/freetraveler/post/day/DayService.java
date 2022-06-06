@@ -59,7 +59,7 @@ public class DayService {
                 MultipartFile file = multipartRequest.getFile(varImg);
                 List<String> list = new ArrayList<>();
                 if (file != null && !file.isEmpty()) {
-                    list = imgService.daySaveImg(id, request, file, day, j);
+                    list = imgService.daySaveImg(request, file, day, j);
                 }
 
                 List<Double> latLng = postService.getLatLng(request.getParameter(day + "_" + j + "_" + "loc"));
