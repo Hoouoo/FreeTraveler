@@ -140,7 +140,7 @@ public class ImgService {
         String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" + getImgId();
 
         if (Objects.nonNull(targetBoard)){
-            ImgUUID = targetBoard.getAuthor().getUserId() + "_" + day + "_" + j + "_" + getImgId();
+            ImgUUID = targetBoard.getAuthor().getUserId() + "_" + day + "_" + j + "_" + targetBoard.getId();
         }
 
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
