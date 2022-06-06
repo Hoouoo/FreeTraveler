@@ -118,17 +118,12 @@ public class ImgService {
     /**
      * day, place 저장
      */
-    public List<String> daySaveImg(Long id, HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
+    public List<String> daySaveImg(HttpServletRequest request, MultipartFile file, int day, int j) throws IOException {
 
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
-        Board targetBoard = boardRepository.findById(id).orElse(null);
         String ImgUUID = account.getUserId() + "_" + day + "_" + j + "_" + getImgId();
-
-        if (Objects.nonNull(targetBoard)){
-            ImgUUID = targetBoard.getAuthor().getUserId() + "_" + day + "_" + j + "_" + targetBoard.getId();
-        }
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length());
 
         uploadImg(file, ImgUUID, suffix);
