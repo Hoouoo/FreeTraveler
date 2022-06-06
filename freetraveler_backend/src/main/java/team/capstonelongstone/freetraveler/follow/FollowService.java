@@ -89,12 +89,13 @@ public class FollowService {
         return findByTargetId;
     }
 
-    public List<FollowResponseDto> listFollow(String targetId){
+    public List<FollowResponseDto> listFollow(String myAccount, String targetId){
         List<Follow> targetFollow = followRepository.listMyId(targetId);
         List<FollowResponseDto> returnList = new ArrayList<>();
         for (Follow follow : targetFollow) {
             String targetUserName = accountRepository.getUserName(follow.getTargetId());
-            FollowResponseDto target = FollowResponseDto.builder().id(follow.getTargetId()).name(targetUserName).build();
+            boolean isCross = followRepository.getFollower(follow.getTargetId(), myAccount).isPresent();
+            FollowResponseDto target = FollowResponseDto.builder().id(follow.getTargetId()).isCross(isCross).name(targetUserName).build();
             returnList.add(target);
         }
         return returnList;

@@ -1,5 +1,6 @@
 package team.capstonelongstone.freetraveler.follow.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
@@ -14,5 +15,6 @@ public class FollowResponseDto {
 
     String id;
     String name;
-
+    @JsonProperty(value = "isCross")
+    boolean isCross; // 맞팔로우 여부
 }
