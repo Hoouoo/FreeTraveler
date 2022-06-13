@@ -1,5 +1,5 @@
 # FreeTraveler
-![image](https://user-images.githubusercontent.com/56144682/173307269-b82d5918-28af-42aa-989e-2023635f717f.png)  
+![image](https://user-images.githubusercontent.com/56144682/173309846-45503513-4340-403c-adfe-d790ab0510df.png)
 여행의 경험을 선사하다 :: FreeTraveler  
 
 ### 프로젝트 소개 및 설명
@@ -21,4 +21,5 @@ Docker-Compose를 이용하여 MariaDB 개발 환경을 구축하였다.
 
 ### 서비스 시연영상  
 #### Gogo플랫폼 시연영상
-<iframe width="640" height="360" src="https://youtu.be/Pyjd2qTV-BY" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+
+[![GOGO 플랫폼 시연 영상](https://user-images.githubusercontent.com/56144682/173309846-45503513-4340-403c-adfe-d790ab0510df.png)](https://youtu.be/Pyjd2qTV-BY)
