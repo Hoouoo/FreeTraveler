@@ -20,5 +20,5 @@ Docker-Compose를 이용하여 MariaDB 개발 환경을 구축하였다.
 ---
 
 ### 서비스 시연영상  
-#### Gogo플랫폼 시연영상
-[![GOGO 플랫폼 시연 영상](https://youtu.be/Pyjd2qTV-BY)](https://youtu.be/Pyjd2qTV-BY)
+#### Gogo플랫폼 시연영상(Youtube 링크 연결)  
+[![GOGO 플랫폼 시연 영상](https://user-images.githubusercontent.com/56144682/173310448-a9b1d347-c3ec-426a-a6f0-dcb4b6212494.png)](https://youtu.be/Pyjd2qTV-BY)
